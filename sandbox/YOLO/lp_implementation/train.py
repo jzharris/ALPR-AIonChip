@@ -5,7 +5,7 @@ import argparse
 import yolo.config as cfg
 from yolo.yolo_net import YOLONet
 from utils.timer import Timer
-from utils.pascal_voc import pascal_voc
+from utils.lp_with_car import lp_with_car
 
 
 class Solver(object):
@@ -66,6 +66,8 @@ class Solver(object):
 
             load_timer.tic()
             images, labels = self.data.get()
+            print(images.shape, labels.shape)
+            exit(0)
             load_timer.toc()
             feed_dict = {self.net.images: images, self.net.labels: labels}
 
@@ -124,10 +126,10 @@ class Solver(object):
 
 def update_config_paths(data_dir, weights_file):
     cfg.DATA_PATH = data_dir
-    cfg.PASCAL_PATH = os.path.join(data_dir, 'pascal_voc')
-    cfg.CACHE_PATH = os.path.join(cfg.PASCAL_PATH, 'cache')
-    cfg.OUTPUT_DIR = os.path.join(cfg.PASCAL_PATH, 'output')
-    cfg.WEIGHTS_DIR = os.path.join(cfg.PASCAL_PATH, 'weights')
+    cfg.LP_W_CAR_PATH = os.path.join(data_dir, 'pascal_voc')
+    cfg.CACHE_PATH = os.path.join(cfg.LP_W_CAR_PATH, 'cache')
+    cfg.OUTPUT_DIR = os.path.join(cfg.LP_W_CAR_PATH, 'output')
+    cfg.WEIGHTS_DIR = os.path.join(cfg.LP_W_CAR_PATH, 'weights')
 
     cfg.WEIGHTS_FILE = os.path.join(cfg.WEIGHTS_DIR, weights_file)
 
@@ -150,9 +152,9 @@ def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = cfg.GPU
 
     yolo = YOLONet()
-    pascal = pascal_voc('train')
+    lp_data = lp_with_car('train')
 
-    solver = Solver(yolo, pascal)
+    solver = Solver(yolo, lp_data)
 
     print('Start training ...')
     solver.train()

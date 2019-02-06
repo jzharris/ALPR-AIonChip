@@ -8,17 +8,22 @@ DATA_PATH = 'data'
 
 # PASCAL_PATH = os.path.join(DATA_PATH, 'pascal_voc')
 PASCAL_PATH = os.path.join(DATA_PATH, 'pascal_voc')
+LP_W_CAR_PATH = os.path.join(DATA_PATH, 'lp_with_car')
 
-CACHE_PATH = os.path.join(PASCAL_PATH, 'cache')
+CACHE_PATH = os.path.join(LP_W_CAR_PATH, 'cache')
 
-OUTPUT_DIR = os.path.join(PASCAL_PATH, 'output')
+OUTPUT_DIR = os.path.join(LP_W_CAR_PATH, 'output')
 
-WEIGHTS_DIR = os.path.join(PASCAL_PATH, 'weights')
+WEIGHTS_DIR = os.path.join(LP_W_CAR_PATH, 'weights')
 
 WEIGHTS_FILE = None
 # WEIGHTS_FILE = os.path.join(DATA_PATH, 'weights', 'YOLO_small.ckpt')
 
-CLASSES = ['LP']
+# CLASSES = ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus',
+#            'car', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse',
+#            'motorbike', 'person', 'pottedplant', 'sheep', 'sofa',
+#            'train', 'tvmonitor']
+CLASSES = ['plate']
 
 FLIPPED = True
 
