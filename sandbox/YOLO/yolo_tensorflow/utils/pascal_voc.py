@@ -120,6 +120,10 @@ class pascal_voc(object):
         tree = ET.parse(filename)
         objs = tree.findall('object')
 
+        # FOR DEBUGGING
+        import matplotlib.pyplot as plt
+        image = copy.deepcopy(im)
+
         for obj in objs:
             bbox = obj.find('bndbox')
             # Make pixel indexes 0-based
@@ -137,4 +141,31 @@ class pascal_voc(object):
             label[y_ind, x_ind, 1:5] = boxes
             label[y_ind, x_ind, 5 + cls_ind] = 1
 
+            # FOR DEBUGGING
+            # ensure that everything looks right...
+            self.draw_result(image, int((x1+x2)/2), int((y1+y2)/2), int((x2 - x1)/2), int((y2 - y1)/2),
+                             h_ratio, w_ratio, obj.find('name').text.lower().strip())
+
+        # FOR DEBUGGING
+        plt.show()
+
         return label, len(objs)
+
+    def draw_result(self, img, x, y, w, h, h_ratio, w_ratio, name='plate'):
+        print(w_ratio, h_ratio)
+        img = cv2.resize(img, (0, 0), fx=w_ratio, fy=h_ratio)
+
+        print(img.shape)
+        print(x, y, w, h)
+
+        cv2.rectangle(img, (x - w, y - h), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(img, (x - w, y - h - 20),
+                      (x + w, y - h), (125, 125, 125), -1)
+        cv2.putText(img, name, (x - w + 5, y - h - 7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+
+        # plot using matplotlib:
+        import matplotlib.pyplot as plt
+        plt.imshow(img, interpolation='nearest')
+        frame1 = plt.gca()
+        frame1.axes.xaxis.set_ticklabels([])
+        frame1.axes.yaxis.set_ticklabels([])

@@ -155,6 +155,8 @@ def main():
     yolo = YOLONet()
     lp_data = lp_with_car('train')
 
+    exit(0)
+
     solver = Solver(yolo, lp_data)
 
     print('Start training ...')

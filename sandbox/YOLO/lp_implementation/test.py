@@ -167,7 +167,7 @@ class Detector(object):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', default="save.ckpt-7000", type=str)
+    parser.add_argument('--weights', default="save.ckpt-15000", type=str)
     parser.add_argument('--weight_dir', default='weights', type=str)
     parser.add_argument('--data_dir', default="data", type=str)
     parser.add_argument('--gpu', default='', type=str)
@@ -184,7 +184,7 @@ def main():
     # detector.camera_detector(cap)
 
     # detect from image file
-    imname = 'test/3.jpg'
+    imname = 'test/1.jpg'
     detector.image_detector(imname)
 
 
