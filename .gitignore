@@ -1,4 +1,5 @@
 .idea/
+.ipynb_checkpoints/
 
-Dataset/win_linux_license_plate_detection_database
+dataset/dataset*
 YOLO/yolo_tensorflow/data
