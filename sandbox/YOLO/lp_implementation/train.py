@@ -10,7 +10,7 @@ from utils.lp_with_car import lp_with_car
 
 class Solver(object):
 
-    def __init__(self, net, data):
+    def __init__(self, net, data, output_dir=None):
         self.net = net
         self.data = data
         self.weights_file = cfg.WEIGHTS_FILE
@@ -21,10 +21,13 @@ class Solver(object):
         self.staircase = cfg.STAIRCASE
         self.summary_iter = cfg.SUMMARY_ITER
         self.save_iter = cfg.SAVE_ITER
-        self.output_dir = os.path.join(
-            cfg.OUTPUT_DIR, datetime.datetime.now().strftime('%Y_%m_%d_%H_%M'))
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
+        if output_dir is not None and os.path.exists(self.output_dir):
+            self.output_dir = output_dir
+        else:
+            self.output_dir = os.path.join(
+                cfg.OUTPUT_DIR, datetime.datetime.now().strftime('%Y_%m_%d_%H_%M'))
+            if not os.path.exists(self.output_dir):
+                os.makedirs(self.output_dir)
         self.save_cfg()
 
         self.variable_to_restore = tf.global_variables()
