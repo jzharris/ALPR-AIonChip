@@ -2,4 +2,6 @@
 .ipynb_checkpoints/
 
 dataset/dataset*
+dataset/saved datasets/
+
 YOLO/yolo_tensorflow/data
