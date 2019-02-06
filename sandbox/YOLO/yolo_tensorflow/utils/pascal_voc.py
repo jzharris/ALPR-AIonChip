@@ -120,10 +120,6 @@ class pascal_voc(object):
         tree = ET.parse(filename)
         objs = tree.findall('object')
 
-        # FOR DEBUGGING
-        import matplotlib.pyplot as plt
-        image = copy.deepcopy(im)
-
         for obj in objs:
             bbox = obj.find('bndbox')
             # Make pixel indexes 0-based
@@ -140,14 +136,6 @@ class pascal_voc(object):
             label[y_ind, x_ind, 0] = 1
             label[y_ind, x_ind, 1:5] = boxes
             label[y_ind, x_ind, 5 + cls_ind] = 1
-
-            # FOR DEBUGGING
-            # ensure that everything looks right...
-            self.draw_result(image, int((x1+x2)/2), int((y1+y2)/2), int((x2 - x1)/2), int((y2 - y1)/2),
-                             h_ratio, w_ratio, obj.find('name').text.lower().strip())
-
-        # FOR DEBUGGING
-        plt.show()
 
         return label, len(objs)
 
