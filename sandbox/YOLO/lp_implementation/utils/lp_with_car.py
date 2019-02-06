@@ -87,7 +87,7 @@ class lp_with_car(object):
                     label, num = self.load_lp_annotation(imname, xmlname)
                     gt_labels.append({'imname': imname, 'label': label})
 
-        print(('Saving gt_labels to: ' + cache_file))
+        print(('Saving {} gt_labels to: {}'.format(len(gt_labels), cache_file)))
         with open(cache_file, 'wb') as f:
             pickle.dump(gt_labels, f)
         return gt_labels

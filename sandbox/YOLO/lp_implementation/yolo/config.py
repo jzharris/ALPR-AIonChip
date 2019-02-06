@@ -15,7 +15,7 @@ OUTPUT_DIR = os.path.join(LP_W_CAR_PATH, 'output')
 WEIGHTS_DIR = os.path.join(LP_W_CAR_PATH, 'weights')
 
 WEIGHTS_FILE = None
-# WEIGHTS_FILE = os.path.join(DATA_PATH, 'weights', 'YOLO_small.ckpt')
+# WEIGHTS_FILE = os.path.join(DATA_PATH, 'weights', 'save.ckpt')
 
 CLASSES = ['plate']
 
@@ -58,7 +58,7 @@ STAIRCASE = True
 
 BATCH_SIZE = 45
 
-MAX_ITER = 15000
+MAX_ITER = 25000
 
 SUMMARY_ITER = 10
 

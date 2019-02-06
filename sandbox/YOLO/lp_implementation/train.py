@@ -153,9 +153,7 @@ def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = cfg.GPU
 
     yolo = YOLONet()
-    lp_data = lp_with_car('train')
-
-    exit(0)
+    lp_data = lp_with_car('test')   # training on test set, which has more images....
 
     solver = Solver(yolo, lp_data)
 
