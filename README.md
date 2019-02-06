@@ -18,6 +18,16 @@
 
     Run the `download_data.sh` script in terminal to download the VOC 2007 dataset.
     
+* ##### Running:
+
+        python train.py --weights YOLO_small.ckpt --gpu 0
+        python test.py --weights YOLO_small.ckpt --gpu 0
+    
 * ##### Debugging:
 
     For help debugging, view their [README instructions](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLO/yolo_tensorflow/README.md)
+    
+* ##### Output:
+
+    ![alt text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLO/yolo_tensorflow/out/cats.png)
+    ![alt text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLO/yolo_tensorflow/out/person.png)
