@@ -66,8 +66,6 @@ class Solver(object):
 
             load_timer.tic()
             images, labels = self.data.get()
-            print(images.shape, labels.shape)
-            exit(0)
             load_timer.toc()
             feed_dict = {self.net.images: images, self.net.labels: labels}
 

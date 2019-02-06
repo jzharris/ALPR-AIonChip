@@ -27,7 +27,7 @@ class lp_with_car(object):
 
     def get(self):
         images = np.zeros((self.batch_size, self.image_size, self.image_size, 3))
-        labels = np.zeros((self.batch_size, self.cell_size, self.cell_size, 25))
+        labels = np.zeros((self.batch_size, self.cell_size, self.cell_size, 6))     # 6 = changes per class load
         count = 0
         while count < self.batch_size:
             imname = self.gt_labels[self.cursor]['imname']
@@ -102,7 +102,7 @@ class lp_with_car(object):
         w_ratio = 1.0 * self.image_size / im.shape[1]
         # im = cv2.resize(im, [self.image_size, self.image_size])
 
-        label = np.zeros((self.cell_size, self.cell_size, 25))
+        label = np.zeros((self.cell_size, self.cell_size, 6)) # 6 relates to number of classes....
         filename = xmlname
         tree = ET.parse(filename)
         objs = tree.findall('object')
