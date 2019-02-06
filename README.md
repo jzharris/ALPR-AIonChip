@@ -2,7 +2,7 @@
 
 #### Final Project
 
-##### Running the project
+##### Running [main] the project
 
 1. ######Creating the datasets:
 
