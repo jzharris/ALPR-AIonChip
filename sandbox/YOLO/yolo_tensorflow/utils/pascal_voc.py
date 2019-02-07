@@ -138,3 +138,22 @@ class pascal_voc(object):
             label[y_ind, x_ind, 5 + cls_ind] = 1
 
         return label, len(objs)
+
+    def draw_result(self, img, x, y, w, h, h_ratio, w_ratio, name='plate'):
+        print(w_ratio, h_ratio)
+        img = cv2.resize(img, (0, 0), fx=w_ratio, fy=h_ratio)
+
+        print(img.shape)
+        print(x, y, w, h)
+
+        cv2.rectangle(img, (x - w, y - h), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(img, (x - w, y - h - 20),
+                      (x + w, y - h), (125, 125, 125), -1)
+        cv2.putText(img, name, (x - w + 5, y - h - 7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+
+        # plot using matplotlib:
+        import matplotlib.pyplot as plt
+        plt.imshow(img, interpolation='nearest')
+        frame1 = plt.gca()
+        frame1.axes.xaxis.set_ticklabels([])
+        frame1.axes.yaxis.set_ticklabels([])

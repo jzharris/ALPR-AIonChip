@@ -89,6 +89,8 @@ class Detector(object):
                 probs[:, :, i, j] = np.multiply(
                     class_probs[:, :, j], scales[:, :, i])
 
+        print('probs\n', probs)
+
         filter_mat_probs = np.array(probs >= self.threshold, dtype='bool')
         filter_mat_boxes = np.nonzero(filter_mat_probs)
         boxes_filtered = boxes[filter_mat_boxes[0],
@@ -165,7 +167,7 @@ class Detector(object):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', default="YOLO_small.ckpt", type=str)
+    parser.add_argument('--weights', default="save.ckpt-15000", type=str)
     parser.add_argument('--weight_dir', default='weights', type=str)
     parser.add_argument('--data_dir', default="data", type=str)
     parser.add_argument('--gpu', default='', type=str)
@@ -182,7 +184,7 @@ def main():
     # detector.camera_detector(cap)
 
     # detect from image file
-    imname = 'test/person.jpg'
+    imname = 'test/1.jpg'
     detector.image_detector(imname)
 
 
