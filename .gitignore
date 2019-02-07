@@ -4,8 +4,6 @@
 main/dataset/dataset*
 main/dataset/saved datasets/
 
-sandbox/YOLO/yolo_tensorflow/data
-
-sandbox/YOLO/lp_implementation/data
-# !sandbox/YOLO/lp_implementation/data/lp_with_car/output_keep/
-# !sandbox/YOLO/lp_implementation/data/weights/
+sandbox/YOLO/*/data
+#sandbox/YOLO/yolo_tensorflow/data
+#sandbox/YOLO/lp_implementation/data
