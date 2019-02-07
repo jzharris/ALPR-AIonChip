@@ -6,6 +6,8 @@ import argparse
 import yolo.config as cfg
 from yolo.yolo_net import YOLONet
 from utils.timer import Timer
+import matplotlib.pyplot as plt
+import copy
 
 
 class Detector(object):
@@ -151,9 +153,10 @@ class Detector(object):
 
             ret, frame = cap.read()
 
-    def image_detector(self, imname, wait=0):
+    def image_detector(self, imname):
         detect_timer = Timer()
-        image = cv2.imread(imname)
+        im = cv2.imread(imname)
+        image = copy.deepcopy(im)
 
         detect_timer.tic()
         result = self.detect(image)
@@ -161,13 +164,13 @@ class Detector(object):
         print(('Average detecting time: {:.3f}s'.format(detect_timer.average_time)))
 
         self.draw_result(image, result)
-        cv2.imshow('Image', image)
-        cv2.waitKey(wait)
+        plt.imshow(image)
+        plt.show()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', default="save.ckpt-15000", type=str)
+    parser.add_argument('--weights', default="save.ckpt-25000", type=str)
     parser.add_argument('--weight_dir', default='weights', type=str)
     parser.add_argument('--data_dir', default="data", type=str)
     parser.add_argument('--gpu', default='', type=str)
@@ -184,7 +187,7 @@ def main():
     # detector.camera_detector(cap)
 
     # detect from image file
-    imname = 'test/1.jpg'
+    imname = 'test/3.jpg'
     detector.image_detector(imname)
 
 

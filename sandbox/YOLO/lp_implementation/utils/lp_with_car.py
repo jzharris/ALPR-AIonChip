@@ -61,9 +61,9 @@ class lp_with_car(object):
         cache_file = os.path.join(self.cache_path, 'lp_w_car_' + self.phase + '_gt_labels.pkl')
 
         if os.path.isfile(cache_file) and not self.rebuild:
-            print(('Loading gt_labels from: ' + cache_file))
             with open(cache_file, 'rb') as f:
                 gt_labels = pickle.load(f)
+            print(('Loading {} gt_labels from: {}'.format(len(gt_labels), cache_file)))
             return gt_labels
 
         print('Processing gt_labels from: ', self.data_paths)
