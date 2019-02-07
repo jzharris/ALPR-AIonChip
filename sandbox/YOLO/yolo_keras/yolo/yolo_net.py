@@ -4,6 +4,11 @@ import yolo.config as cfg
 
 slim = tf.contrib.slim
 
+from keras.layers import Dense, Conv2D, ZeroPadding2D, MaxPooling2D, Flatten, Permute, Dropout, LeakyReLU
+from keras.backend import transpose
+from keras import regularizers
+from keras.initializers import TruncatedNormal
+
 
 class YOLONet(object):
 
@@ -34,13 +39,113 @@ class YOLONet(object):
         self.images = tf.placeholder(tf.float32, [None, self.image_size, self.image_size, 3], name='images')
         self.logits, self.end_points = self.build_network(self.images, num_outputs=self.output_size, alpha=self.alpha,
                                                           is_training=is_training)
-        self.transfer_network(self.end_points)
 
         if is_training:
             self.labels = tf.placeholder(tf.float32, [None, self.cell_size, self.cell_size, 5 + self.num_class])
             self.loss_layer(self.logits, self.labels)
             self.total_loss = tf.losses.get_total_loss()
             tf.summary.scalar('total_loss', self.total_loss)
+
+    def keras_network(self,
+                      images,
+                      num_outputs,
+                      alpha,
+                      keep_prob=0.5,
+                      is_training=True,
+                      scope='yolo'):
+
+        net = ZeroPadding2D(padding=np.array([[0, 0], [3, 3], [3, 3], [0, 0]]), input_shape=images.shape, name='pad_1')
+        net = Conv2D(64, 7, 2, padding='valid', scope='conv_2', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = MaxPooling2D(2, padding='same', scope='pool_3')(net)
+        net = Conv2D(192, 3, scope='conv_4', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = MaxPooling2D(2, padding='same', scope='pool_5')(net)
+        net = Conv2D(128, 1, scope='conv_6', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(256, 3, scope='conv_7', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(256, 1, scope='conv_8', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 3, scope='conv_9', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = MaxPooling2D(2, padding='same', scope='pool_10')(net)
+        net = Conv2D(256, 1, scope='conv_11', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 3, scope='conv_12', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(256, 1, scope='conv_13', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 3, scope='conv_14', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(256, 1, scope='conv_15', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 3, scope='conv_16', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(256, 1, scope='conv_17', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 3, scope='conv_18', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 1, scope='conv_19', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_20', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = MaxPooling2D(2, padding='same', scope='pool_21')(net)
+        net = Conv2D(512, 1, scope='conv_22', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_23', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(512, 1, scope='conv_24', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_25', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_26', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = ZeroPadding2D(padding=np.array([[0, 0], [1, 1], [1, 1], [0, 0]]), name='pad_27')(net)
+        net = Conv2D(1024, 3, 2, padding='valid', scope='conv_28', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_29', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Conv2D(1024, 3, scope='conv_30', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Permute([0, 3, 1, 2], name='trans_31')(transpose(net))
+        net = Flatten(scope='flat_32')(net)
+        net = Dense(512, scope='fc_33', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Dense(4096, scope='fc_34', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+        net = Dropout(keep_prob=keep_prob, is_training=is_training, scope='dropout_35')(net)
+        net = Dense(num_outputs, scope='fc_36', kernel_regularizer=regularizers.l2(0.0005),
+                    kernel_initializer=TruncatedNormal(0.0, 0.01))(net)
+        net = LeakyReLU(alpha=alpha)(net)
+
+        return net
 
     def build_network(self,
                       images,
@@ -49,8 +154,8 @@ class YOLONet(object):
                       keep_prob=0.5,
                       is_training=True,
                       scope='yolo'):
-        with tf.variable_scope(scope) as sc:
-            end_points_collection = sc + '_end_points'
+
+        with tf.variable_scope(scope):
             with slim.arg_scope([slim.conv2d, slim.fully_connected],
                                 activation_fn=leaky_relu(alpha),
                                 weights_initializer=tf.truncated_normal_initializer(0.0, 0.01),
@@ -93,12 +198,7 @@ class YOLONet(object):
                                    is_training=is_training, scope='dropout_35')
                 net = slim.fully_connected(net, num_outputs,
                                            activation_fn=None, scope='fc_36')
-                end_points = slim.utils.convert_collection_to_dict(end_points_collection)
-        return net, end_points
-
-    def transfer_network(self, end_points):
-        fc33_features = end_points['yolo/fc_33']
-        print(fc33_features)
+        return net
 
     def calc_iou(self, boxes1, boxes2, scope='iou'):
         """calculate ious
