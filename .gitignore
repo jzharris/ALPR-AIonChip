@@ -5,5 +5,3 @@ main/dataset/dataset*
 main/dataset/saved datasets/
 
 sandbox/YOLO/*/data
-#sandbox/YOLO/yolo_tensorflow/data
-#sandbox/YOLO/lp_implementation/data
