@@ -10,9 +10,44 @@
     The LP datasets must be extracted into the `dataset` folder in order for `import_data.ipynb` to read the files.
     The script will generate the `saved datasets` directory, containing the imported LP data.
     
+
+### Running the sandbox/YOLOv2 project
+
+* ##### Download the dataset:
+
+    Place the inception pretrained weights in the root folder:
+    https://1drv.ms/f/s!ApLdDEW3ut5fec2OzK4S4RpT-SU
+    
+    
+    
+    
+* #### Running:
+
+    To train:
+    ```
+    pyton train.py -c config.json
+    ```
+
+    To test:
+    ```
+    python predict.py -c config.json -w inception_yolo.h5 -i images\AC_3.jpg
+    python predict.py -c config.json -w inception_yolo.h5 -i images\LE_37.jpg
+    python predict.py -c config.json -w inception_yolo.h5 -i images\RP_32.jpg
+    ```
+    
+* #### Debugging:
+
+    Had to perform the fixes to frontend.py according to [this post](https://github.com/experiencor/keras-yolo2/issues/358).
     
 
-### Running the sandbox/yolo project
+* #### Output:
+
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/AC_3_detected.jpg)
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/LE_37_detected.jpg)
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/RP_32_detected.jpg)
+
+
+### Running the sandbox/YOLO projects
 
 * ##### Download the dataset:
 
