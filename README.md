@@ -21,9 +21,9 @@
     
     Convert the provided dataset by running `convert_dataset.py`. This script will place all LP datasets into one directory, and update their xml `<filname>` references accordingly.
     
-    Generate anchors using the following:
+    Generate anchors using the following. Copy these anchors into the config file:
     ```
-    python gen_anchors.py -c config_lp_bb.json
+    python gen_anchors.py -c config_lp_seg.json
     # should generate: [1.05,0.87, 1.99,1.46, 2.69,2.30, 2.78,1.82, 3.77,2.83]
     ```
     
@@ -33,7 +33,7 @@
     
     Generate anchors using the following. Copy these anchors into the config file:
     ```
-    python gen_anchors.py -c config_num_bb.json
+    python gen_anchors.py -c config_num_seg.json
     # should generate: [0.97,5.09, 1.32,9.37, 1.67,7.18, 2.06,10.08, 2.91,10.94]
     ```
     
