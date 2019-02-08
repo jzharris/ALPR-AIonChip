@@ -55,7 +55,7 @@
 
     To train:
     ```
-    pyton train.py -c config_lp_seg.json
+    python train.py -c config_lp_seg.json
     ```
 
     To test:
@@ -69,7 +69,7 @@
 
     To train:
     ```
-    pyton train.py -c config_num_seg.json
+    python train.py -c config_num_seg.json
     ```
 
     To test:

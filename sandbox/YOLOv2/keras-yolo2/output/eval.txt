@@ -1,0 +1,3 @@
+Epoch 00009: early stopping
+plate 0.9951
+mAP: 0.9951

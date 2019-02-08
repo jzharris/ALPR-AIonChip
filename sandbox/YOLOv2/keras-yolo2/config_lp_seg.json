@@ -28,8 +28,8 @@
     },
 
     "valid": {
-        "valid_image_folder":   "",
-        "valid_annot_folder":   "",
+        "valid_image_folder":   "data/converted_dataset/test/jpeg/",
+        "valid_annot_folder":   "data/converted_dataset/test/xml/",
 
         "valid_times":          1
     }
