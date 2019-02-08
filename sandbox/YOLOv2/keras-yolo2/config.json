@@ -24,7 +24,7 @@
         "class_scale":          1.0,
 
         "saved_weights_name":   "inception_yolo.h5",
-        "debug":                true
+        "debug":                false
     },
 
     "valid": {
