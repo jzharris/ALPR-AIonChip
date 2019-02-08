@@ -15,7 +15,7 @@
 
 * ##### Download the dataset:
 
-    ##### License Plate segmentation:
+    ##### License Plate localization:
     Place the inception pretrained weights in the root folder:
     https://1drv.ms/f/s!ApLdDEW3ut5fec2OzK4S4RpT-SU
     
@@ -36,6 +36,10 @@
     python gen_anchors.py -c config_num_seg.json
     # should generate: [0.97,5.09, 1.32,9.37, 1.67,7.18, 2.06,10.08, 2.91,10.94]
     ```
+    
+    ##### License Plate reading:
+    The bounding boxes are derived from the given dataset by using the process found here:
+    https://gurus.pyimagesearch.com/lesson-sample-segmenting-characters-from-license-plates/?fbclid=IwAR1djTQcAUV8Gyi6Oh-7PI-10bYdcFz0_EMmiE5ORpk6H2NVVXVkZ6RaANY
     
 * ##### Installation:
 
