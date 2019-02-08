@@ -86,9 +86,9 @@
 
 * #### Output:
 
-    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/AC_3_detected.jpg)
-    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/LE_37_detected.jpg)
-    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/RP_32_detected.jpg)
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/lp_seg/AC_3_detected.jpg)
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/lp_seg/LE_37_detected.jpg)
+    ![alt_text](https://github.com/jzharris/AIonChip_HOZ/blob/master/sandbox/YOLOv2/keras-yolo2/images/lp_seg/RP_32_detected.jpg)
 
 
 ### Running the sandbox/YOLO projects
