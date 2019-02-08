@@ -4,4 +4,5 @@
 main/dataset/dataset*
 main/dataset/saved datasets/
 
-sandbox/YOLO/*/data
+sandbox/*/*/data
+! sandbox/YOLOv2/keras-yolo2/data/convert_dataset.py
