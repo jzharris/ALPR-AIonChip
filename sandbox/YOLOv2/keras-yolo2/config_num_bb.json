@@ -2,17 +2,17 @@
     "model" : {
         "backend":              "Inception3",
         "input_size":           448,
-        "anchors":              [1.05,0.87, 1.99,1.46, 2.69,2.30, 2.78,1.82, 3.77,2.83],
-        "max_box_per_image":    1,
-        "labels":               ["plate"]
+        "anchors":              [0.97,5.09, 1.32,9.37, 1.67,7.18, 2.06,10.08, 2.91,10.94],
+        "max_box_per_image":    7,
+        "labels":               ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     },
 
     "train": {
-        "train_image_folder":   "data/converted_dataset/train/jpeg/",
-        "train_annot_folder":   "data/converted_dataset/train/xml/",
+        "train_image_folder":   "data/svhn/train/jpeg/",
+        "train_annot_folder":   "data/svhn/train/xml/",
           
         "train_times":          8,
-        "pretrained_weights":   "inception_yolo.h5",
+        "pretrained_weights":   "num_seg_inception.h5",
         "batch_size":           16,
         "learning_rate":        1e-4,
         "nb_epochs":            50,
@@ -23,7 +23,7 @@
         "coord_scale":          1.0,
         "class_scale":          1.0,
 
-        "saved_weights_name":   "inception_yolo.h5",
+        "saved_weights_name":   "num_seg_inception.h5",
         "debug":                false
     },
 
