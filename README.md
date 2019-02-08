@@ -52,6 +52,15 @@
 * ##### Download the dataset:
 
     Run the `download_data.sh` script in terminal to download the VOC 2007 dataset.
+    Convert the provided dataset by running `convert_dataset.py`. This script will place all LP datasets into one directory, and update their xml `<filname>` references accordingly.
+    
+* ##### Installation:
+
+    Had to install the following:
+    ```
+    pip install -U git+https://github.com/apple/coremltools.git # required for using a newer keras version
+    pip install installation/Shapely-1.6.4.post1-cp35-cp35m-win_amd64.whl # inside project directory
+    ```
     
 * ##### Running:
 
