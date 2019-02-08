@@ -1,8 +1,10 @@
 .idea/
 .ipynb_checkpoints/
+__pycache__/
 
 main/dataset/dataset*
 main/dataset/saved datasets/
 
 sandbox/*/*/data
 ! sandbox/YOLOv2/keras-yolo2/data/convert_dataset.py
+*.h5
