@@ -57,7 +57,8 @@ class YOLO(object):
 
         print(self.feature_extractor.get_output_shape())    
         self.grid_h, self.grid_w = self.feature_extractor.get_output_shape()        
-        features = self.feature_extractor.extract(input_image)            
+        # features = self.feature_extractor.extract(input_image)
+        features = self.feature_extractor.feature_extractor.output
 
         # make the object detection layer
         output = Conv2D(self.nb_box * (4 + 1 + self.nb_class), 
@@ -68,7 +69,8 @@ class YOLO(object):
         output = Reshape((self.grid_h, self.grid_w, self.nb_box, 4 + 1 + self.nb_class))(output)
         output = Lambda(lambda args: args[0])([output, self.true_boxes])
 
-        self.model = Model([input_image, self.true_boxes], output)
+        # self.model = Model([input_image, self.true_boxes], output)
+        self.model = Model([self.feature_extractor.feature_extractor.input, self.true_boxes], output)
 
         
         # initialize the weights of the detection layer
