@@ -53,10 +53,10 @@ def load_data(dataset1_path, dataset2_path):
                  "rp":dataset1_path+"/Subset_RP/RP/" }
     
     dataset1_output = { db_name:
-                           {'Xtrain':load_images(db_path+"train/jpeg"),
-                            'Xtest':load_images(db_path+"test/jpeg"),
-                            'ytrain':load_xmls(db_path+"train/xml"),
-                            'ytest':load_xmls(db_path+"test/xml") }
+                           {'Xtrain':load_images(db_path+"test/jpeg"),
+                            'Xtest':load_images(db_path+"train/jpeg"),
+                            'ytrain':load_xmls(db_path+"test/xml"),
+                            'ytest':load_xmls(db_path+"train/xml") }
                        for db_name, db_path in db_paths.items()}
     
     dataset2_output = {'X':load_images(dataset2_path, key=lambda x:x),
@@ -87,6 +87,15 @@ def convert_data(raw_data, resized_dimensions = (320, 240)):
             ydata[i]['box']['ymin'] *= resize_ratio[1]
             ydata[i]['box']['ymax'] *= resize_ratio[1]
     return np.array(xtrain), np.array(xtest), np.array(ytrain), np.array(ytest)
+
+# Convert dataset 1 into dataset 3 (cropped license plate X, and text y)
+def convert_data2(x, y, resized_dimensions = (320, 240)):
+    def img_to_license(x, y_data):
+        x1, x2, y1, y2 = y_data['xmin'], y_data['xmax'], y_data['ymin'], y_data['ymax']
+        pts1 = np.float32([[x1, y1], [x2, y1], [x1, y2]])
+        pts2 = np.float32([[0,0], [x.shape[1], 0], [0, x.shape[0]]])
+        return cv2.warpAffine(x, cv2.getAffineTransform(pts1,pts2),(x.shape[1], x.shape[0]))
+    return np.array([img_to_license(x[i], y[i]['box']) for i in range(len(y))]), np.array([y[i]['plate'] for i in range(len(y))])
 	
 # --------------- #
 # Visualize Data  #
