@@ -6,6 +6,16 @@ import copy
 from thresholding import threshold_img
 
 
+def get_aspect(cnt):
+    (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+    return boxW / float(boxH)
+
+
+def get_heightr(cnt, image):
+    (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+    return boxH / float(image.shape[0])
+
+
 def bb_img(image, threshold_type='global'):
 
     # apply thresholding
@@ -15,45 +25,65 @@ def bb_img(image, threshold_type='global'):
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     areas = np.zeros(len(contours))
+    aspects = np.zeros(len(contours))
+    heights = np.zeros(len(contours))
     for i, cnt in enumerate(contours):
         areas[i] = cv2.contourArea(cnt)
-    avg_area = np.average(areas)
+        (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+        aspectRatio = boxW / float(boxH)
+        aspects[i] = aspectRatio
+        heights[i] = boxH / float(image.shape[0])
 
-    # remove extremely large contours
-    max_tolerance = 1
-    min_tolerance = 1
-    filtered_contours = []
-    for i, cnt in enumerate(contours):
-        if avg_area - (avg_area - np.min(areas)) * min_tolerance <= areas[i] <= (
-                np.max(areas) - avg_area) * max_tolerance + avg_area:
-            filtered_contours.append(cnt)
+    # remove area outliers
+    mean = np.average(areas)
+    std = np.std(areas)
+    N = 3
+    filtered_contours = [x for x in contours if (mean + N * std > cv2.contourArea(x) > mean - N * std)]
+    # filtered_contours = contours
+
+    # # remove aspect outliers
+    mean = np.average(aspects)
+    std = np.std(aspects)
+    N = 3
+    filtered_contours = [x for x in filtered_contours if (mean + N * std > get_aspect(x) > mean - N * std)]
+
+    # remove height outliers
+    # mean = np.average(heights)
+    # std = np.std(heights)
+    # # if std > 0.3:
+    # N = 1
+    # filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
 
     ##################################################################################
     # Row 4:
     charCandidates = np.zeros(thresh.shape, dtype="uint8")
 
-    c = max(filtered_contours, key=cv2.contourArea)
-    for i, cnt in enumerate(filtered_contours):
-        (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
-        aspectRatio = boxW / float(boxH)
-        solidity = cv2.contourArea(c) / float(boxW * boxH)
-        heightRatio = boxH / float(image.shape[0])
+    if len(filtered_contours) > 0:
+        c = max(filtered_contours, key=cv2.contourArea)
+        for i, cnt in enumerate(filtered_contours):
+            (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+            aspectRatio = boxW / float(boxH)
+            solidity = cv2.contourArea(c) / float(boxW * boxH)
+            heightRatio = boxH / float(image.shape[0])
+            right_bound = boxX + boxW
+            rightRatio = right_bound / float(image.shape[1])
 
-        keepAspectRatio = 0.3 < aspectRatio < 0.8
-        keepSolidity = solidity > 0.15
-        keepHeight = 0.4 < heightRatio < 0.95
+            keepAspectRatio = 0.2 < aspectRatio < 0.8 # might affect some I's
+            keepSolidity = solidity > 0.15
+            keepHeight = 0.4 < heightRatio < 0.9
+            keepRight = rightRatio > 0.2    # try to avoid left-most characters
 
-        if keepAspectRatio and keepSolidity and keepHeight:
-            # hull = cv2.convexHull(cnt)
-            # cv2.drawContours(charCandidates, [hull], -1, 255, -1)
-            x, y, w, h = cv2.boundingRect(cnt)
-            cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
+            if keepAspectRatio and keepSolidity and keepHeight and keepRight:
+                # hull = cv2.convexHull(cnt)
+                # cv2.drawContours(charCandidates, [hull], -1, 255, -1)
+                x, y, w, h = cv2.boundingRect(cnt)
+                cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
 
     return charCandidates
 
 
 def debug_bb(image, threshold_type='global'):
-    fig, axes = plt.subplots(nrows=4, figsize=(7, 8))
+    fig, axes = plt.subplots(nrows=2, figsize=(7, 8))
     ax = axes.ravel()
     plt.gray()
     for a in ax:
@@ -69,58 +99,9 @@ def debug_bb(image, threshold_type='global'):
 
     ##################################################################################
     # Row 2:
-    # apply thresholding
-    thresh = threshold_img(image, threshold_type).astype(np.uint8)
-    ax[1].imshow(thresh)
-    ax[1].set_title('{} thresholding'.format(threshold_type))
-
-    ##################################################################################
-    # Row 3:
-    # apply contouring
-    cont_image = copy.deepcopy(image)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    areas = np.zeros(len(contours))
-    for i, cnt in enumerate(contours):
-        areas[i] = cv2.contourArea(cnt)
-    avg_area = np.average(areas)
-
-    # remove extremely large contours
-    max_tolerance = 1
-    min_tolerance = 1
-    filtered_contours = []
-    for i, cnt in enumerate(contours):
-        if avg_area - (avg_area - np.min(areas)) * min_tolerance <= areas[i] <= (
-                np.max(areas) - avg_area) * max_tolerance + avg_area:
-            cv2.drawContours(cont_image, [cnt], 0, (255, 255, 255), 3)
-            filtered_contours.append(cnt)
-
-    ax[2].imshow(cont_image)
-    ax[2].set_title('Contoured')
-
-    ##################################################################################
-    # Row 4:
-    charCandidates = np.zeros(thresh.shape, dtype="uint8")
-
-    c = max(filtered_contours, key=cv2.contourArea)
-    for i, cnt in enumerate(filtered_contours):
-        (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
-        aspectRatio = boxW / float(boxH)
-        solidity = cv2.contourArea(c) / float(boxW * boxH)
-        heightRatio = boxH / float(image.shape[0])
-
-        keepAspectRatio = 0.3 < aspectRatio < 0.8
-        keepSolidity = solidity > 0.15
-        keepHeight = 0.4 < heightRatio < 0.95
-
-        if keepAspectRatio and keepSolidity and keepHeight:
-            hull = cv2.convexHull(cnt)
-            cv2.drawContours(charCandidates, [hull], -1, 200, -1)
-            x, y, w, h = cv2.boundingRect(cnt)
-            cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
-
-    ax[3].imshow(charCandidates)
-    ax[3].set_title('Candidates')
+    charCandidates = bb_img(image, threshold_type)
+    ax[1].imshow(cv2.bitwise_or(image, charCandidates))
+    ax[1].set_title('Candidates')
 
     plt.show()
 
