@@ -18,34 +18,33 @@ def threshold_img(image, threshold_type='global'):
     return binary
 
 
-# image = imread('just_lps/─■A9H707.jpg', mode='L')
-# image = imread('just_lps/├÷ASF227_27.jpg', mode='L')
-# image = imread('just_lps/├╔HSB333_26.jpg', mode='L')
-image = imread('just_lps/╛⌐LY3127_26.jpg', mode='L')
+def main():
+    # image = imread('just_lps/─■A9H707.jpg', mode='L')
+    # image = imread('just_lps/├÷ASF227_27.jpg', mode='L')
+    # image = imread('just_lps/├╔HSB333_26.jpg', mode='L')
+    image = imread('just_lps/╛⌐LY3127_26.jpg', mode='L')
 
-binary_global = threshold_img(image, 'global')
-# global_thresh = threshold_otsu(image)
-# binary_global = image > global_thresh
+    binary_global = threshold_img(image, 'global')
+    binary_local = threshold_img(image, 'local')
 
-# block_size = 35
-# local_thresh = threshold_local(image, block_size, offset=10)
-# binary_local = image > local_thresh
-binary_local = threshold_img(image, 'local')
+    fig, axes = plt.subplots(nrows=3, figsize=(7, 8))
+    ax = axes.ravel()
+    plt.gray()
 
-fig, axes = plt.subplots(nrows=3, figsize=(7, 8))
-ax = axes.ravel()
-plt.gray()
+    ax[0].imshow(image)
+    ax[0].set_title('Original')
 
-ax[0].imshow(image)
-ax[0].set_title('Original')
+    ax[1].imshow(binary_global)
+    ax[1].set_title('Global thresholding')
 
-ax[1].imshow(binary_global)
-ax[1].set_title('Global thresholding')
+    ax[2].imshow(binary_local)
+    ax[2].set_title('Local thresholding')
 
-ax[2].imshow(binary_local)
-ax[2].set_title('Local thresholding')
+    for a in ax:
+        a.axis('off')
 
-for a in ax:
-    a.axis('off')
+    plt.show()
 
-plt.show()
+
+if __name__ == '__main__':
+    main()
