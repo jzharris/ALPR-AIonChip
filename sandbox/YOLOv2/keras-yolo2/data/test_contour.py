@@ -38,6 +38,7 @@ def correct_letters(image, threshold_type='global'):
 
 
 debug = True
+show_correct = False
 lp_dir = 'just_lps'
 
 for root, dirs, files in os.walk(lp_dir):
@@ -46,30 +47,32 @@ for root, dirs, files in os.walk(lp_dir):
 
         image = imread(file_path, mode='L')
         if correct_letters(image):
-            if debug:
+            if debug and show_correct:
                 debug_bb(image)
             correct += 1
         else:
             # if incorrect, try again but invert the image
             image = cv2.bitwise_not(image)
             if correct_letters(image):
-                if debug:
+                if debug and show_correct:
                     debug_bb(image)
                 correct += 1
             else:
                 # if still incorrect, try adaptive thresholding
                 image = cv2.bitwise_not(image)
                 if correct_letters(image, threshold_type='adaptive'):
-                    if debug:
+                    if debug and show_correct:
                         debug_bb(image, threshold_type='adaptive')
                     correct += 1
                 else:
                     image = cv2.bitwise_not(image)
                     if correct_letters(image, threshold_type='adaptive'):
-                        if debug:
+                        if debug and show_correct:
                             debug_bb(image, threshold_type='adaptive')
                         correct += 1
                     else:
+                        if debug and not show_correct:
+                            debug_bb(image)
                         incorrect += 1
 
 

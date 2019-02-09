@@ -16,6 +16,7 @@ def get_heightr(cnt, image):
     return boxH / float(image.shape[0])
 
 
+#TODO: if all bb's start/end at a specific height (except 1), then crop the outlier to that height - use std dev to tell the difference
 def bb_img(image, threshold_type='global'):
 
     # apply thresholding
