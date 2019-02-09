@@ -95,7 +95,7 @@ def convert_data2(x, y, resized_dimensions = (320, 240)):
         pts1 = np.float32([[x1, y1], [x2, y1], [x1, y2]])
         pts2 = np.float32([[0,0], [x.shape[1], 0], [0, x.shape[0]]])
         return cv2.warpAffine(x, cv2.getAffineTransform(pts1,pts2),(x.shape[1], x.shape[0]))
-    return np.array([img_to_license(x[i], y[i]['box']) for i in range(len(y))]), np.array([y[i]['plate'] for i in range(len(y))])
+    return np.array([img_to_license(x[i], y[i]['box']) for i in range(len(y))]), np.array([y[i]['plate'].replace('\n','').replace(' ','') for i in range(len(y))])
 	
 # --------------- #
 # Visualize Data  #
