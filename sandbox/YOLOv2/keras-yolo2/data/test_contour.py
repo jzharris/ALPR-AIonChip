@@ -9,15 +9,15 @@ import matplotlib.pyplot as plt
 
 from lp_bb import bb_img, debug_bb
 
-# counts = []
 correct = 0
 incorrect = 0
-plate_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 
-def correct_letters(image):
+def correct_letters(image, threshold_type='global'):
+
+    plate_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     # get candidates from license plate
-    candidates = bb_img(image)
+    candidates = bb_img(image, threshold_type)
 
     # count how many unique candidates there are
     contours, hierarchy = cv2.findContours(candidates, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -27,6 +27,8 @@ def correct_letters(image):
     # count how many are correctly contoured
     correct_count = 0
     for char in path.splitext(file)[0]:
+        if char == '_':
+            break
         if char in plate_chars:
             correct_count += 1
 
@@ -43,15 +45,24 @@ for root, dirs, files in os.walk(lp_dir):
             correct += 1
         else:
             # if incorrect, try again but invert the image
-            print(np.min(image), np.max(image))
             image = cv2.bitwise_not(image)
             if correct_letters(image):
                 correct += 1
             else:
-                debug_bb(cv2.bitwise_not(image))
-                debug_bb(image)
-                incorrect += 1
-                exit(0)
+                # if still incorrect, try adaptive thresholding
+                image = cv2.bitwise_not(image)
+                if correct_letters(image, threshold_type='adaptive'):
+                    correct += 1
+                else:
+                    image = cv2.bitwise_not(image)
+                    if correct_letters(image, threshold_type='adaptive'):
+                        correct += 1
+                    else:
+                        # debug_bb(cv2.bitwise_not(image), threshold_type='adaptive')
+                        # debug_bb(image)
+                        print(file_path)
+                        incorrect += 1
+                        # exit(0)
 
 
 # print accuracy

@@ -7,5 +7,4 @@ main/dataset/saved datasets/
 
 sandbox/*/*/data
 sandbox/*/*/logs
-! sandbox/YOLOv2/keras-yolo2/data/*.py
 *.h5

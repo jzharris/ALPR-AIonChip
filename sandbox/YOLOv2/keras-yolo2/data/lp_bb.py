@@ -6,10 +6,10 @@ import copy
 from thresholding import threshold_img
 
 
-def bb_img(image):
+def bb_img(image, threshold_type='global'):
 
     # apply thresholding
-    thresh = threshold_img(image, 'global').astype(np.uint8)
+    thresh = threshold_img(image, threshold_type).astype(np.uint8)
 
     # apply contouring
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -52,7 +52,7 @@ def bb_img(image):
     return charCandidates
 
 
-def debug_bb(image):
+def debug_bb(image, threshold_type='global'):
     fig, axes = plt.subplots(nrows=4, figsize=(7, 8))
     ax = axes.ravel()
     plt.gray()
@@ -70,9 +70,9 @@ def debug_bb(image):
     ##################################################################################
     # Row 2:
     # apply thresholding
-    thresh = threshold_img(image, 'global').astype(np.uint8)
+    thresh = threshold_img(image, threshold_type).astype(np.uint8)
     ax[1].imshow(thresh)
-    ax[1].set_title('Global thresholding')
+    ax[1].set_title('{} thresholding'.format(threshold_type))
 
     ##################################################################################
     # Row 3:
