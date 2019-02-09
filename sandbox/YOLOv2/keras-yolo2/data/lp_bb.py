@@ -52,7 +52,7 @@ def bb_img(image):
     return charCandidates
 
 
-def main():
+def debug_bb(image):
     fig, axes = plt.subplots(nrows=4, figsize=(7, 8))
     ax = axes.ravel()
     plt.gray()
@@ -63,7 +63,7 @@ def main():
     # Row 1:
     # image = imread('just_lps/├╔HSB333_26.jpg', mode='L')
     # image = imread('just_lps/─■A9H707.jpg', mode='L')
-    image = imread('just_lps/├÷D88888_10.jpg', mode='L')
+    # image = imread(filename, mode='L')
     ax[0].imshow(image)
     ax[0].set_title('Original')
 
@@ -123,6 +123,11 @@ def main():
     ax[3].set_title('Candidates')
 
     plt.show()
+
+
+def main():
+    image = imread('just_lps/├÷D88888_10.jpg', mode='L')
+    debug_bb(image)
 
 
 if __name__ == '__main__':
