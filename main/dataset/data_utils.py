@@ -104,7 +104,6 @@ def visualize_dataset(x, y, name="", show_boxes = True, grid_size=2):
         else:
             ax.imshow(x[rand_img],interpolation='nearest')
             ax.set_title(y[rand_img])
-    fig.show()
 
 def draw_result(ax, input_img, boxes, plates, certainties=None):
     # make a copy of the img:
