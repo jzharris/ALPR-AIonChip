@@ -38,19 +38,40 @@ def correct_letters(image, threshold_type='global', debug=False, output_dir=None
         else:
             correct_count += 1
 
-    # check if this file already exists:
-    output_file = path.join(output_dir, '{}.jpg'.format(digits))
-    inc = 0
-    while path.isfile(output_file):
-        # add a new number to the end...for now
-        output_file = path.join(output_dir, '{}_{}.jpg'.format(digits, inc))
-        inc += 1
+    return_val = correct_count <= letter_count <= correct_count
+
+    if return_val:
+        # Now that we have filtered out the outliers, perform pattern detection to
+        # ensure the following pattern exists: X XXXXX
+        percent_tol = 0.1  # X YYYYY - the Y's must have the same spacing
+        centers = np.array([(x + w) / 2 for x, y, w, h in rects])
+        centers[::-1].sort()
+        prev_dist = None
+        for i in range(len(centers)):
+            if i + 2 < len(centers):
+                if prev_dist is None:
+                    prev_dist = centers[i] - centers[i + 1]
+                else:
+                    curr_dist = centers[i] - centers[i + 1]
+                    if np.abs(curr_dist - prev_dist) / prev_dist < percent_tol:
+                        prev_dist = curr_dist
+                    else:
+                        # pattern failed, reject this one:
+                        return_val = False
+                        break
 
     if debug:
         print('{} ?= {}'.format(letter_count, correct_count))
-    return_val = correct_count - 0 <= letter_count <= correct_count + 0
 
     if return_val:
+        # check if this file already exists:
+        output_file = path.join(output_dir, '{}.jpg'.format(digits))
+        inc = 0
+        while path.isfile(output_file):
+            # add a new number to the end...for now
+            output_file = path.join(output_dir, '{}_{}.jpg'.format(digits, inc))
+            inc += 1
+
         if output_dir is not None:
             cv2.imwrite(output_file, cv2.bitwise_or(image, charCandidates))
 

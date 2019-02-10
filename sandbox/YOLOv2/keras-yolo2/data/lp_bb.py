@@ -77,11 +77,11 @@ def bb_img(image, threshold_type='global'):
             keepLocalized = right_bound <= image.shape[1] - 1
 
             if keepAspectRatio and keepSolidity and keepHeight and keepRight and keepLocalized:
-                # hull = cv2.convexHull(cnt)
-                # cv2.drawContours(charCandidates, [hull], -1, 255, -1)
                 x, y, w, h = cv2.boundingRect(cnt)
-                rects.append([x, y, w, h])
-                cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
+                rects.append((x, y, w, h))
+
+    for x, y, w, h in rects:
+        cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
 
     return charCandidates, rects
 
