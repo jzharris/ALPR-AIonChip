@@ -49,16 +49,17 @@ def bb_img(image, threshold_type='global'):
     filtered_contours = [x for x in filtered_contours if (mean + N * std > get_aspect(x) > mean - N * std)]
 
     # remove height outliers
-    # mean = np.average(heights)
-    # std = np.std(heights)
-    # # if std > 0.3:
-    # N = 1
-    # filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
+    mean = np.average(heights)
+    std = np.std(heights)
+    # if std > 0.3:
+    N = 0.7
+    filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
 
     ##################################################################################
     # Row 4:
     charCandidates = np.zeros(thresh.shape, dtype="uint8")
 
+    rects = []
     if len(filtered_contours) > 0:
         c = max(filtered_contours, key=cv2.contourArea)
         for i, cnt in enumerate(filtered_contours):
@@ -73,38 +74,79 @@ def bb_img(image, threshold_type='global'):
             keepSolidity = solidity > 0.15
             keepHeight = 0.4 < heightRatio < 0.9
             keepRight = rightRatio > 0.2    # try to avoid left-most characters
+            keepLocalized = right_bound <= image.shape[1] - 1
 
-            if keepAspectRatio and keepSolidity and keepHeight and keepRight:
+            if keepAspectRatio and keepSolidity and keepHeight and keepRight and keepLocalized:
                 # hull = cv2.convexHull(cnt)
                 # cv2.drawContours(charCandidates, [hull], -1, 255, -1)
                 x, y, w, h = cv2.boundingRect(cnt)
+                rects.append([x, y, w, h])
                 cv2.rectangle(charCandidates, (x, y), (x + w, y + h), 255, 1)
 
-    return charCandidates
+    return charCandidates, rects
 
 
-def debug_bb(image, threshold_type='global'):
-    fig, axes = plt.subplots(nrows=2, figsize=(7, 8))
-    ax = axes.ravel()
-    plt.gray()
-    for a in ax:
-        a.axis('off')
+def debug_bb(image, threshold_type='global', show_steps=False):
+    if show_steps:
+        fig, axes = plt.subplots(nrows=4, figsize=(7, 8))
+        ax = axes.ravel()
+        plt.gray()
+        for a in ax:
+            a.axis('off')
 
-    ##################################################################################
-    # Row 1:
-    # image = imread('just_lps/├╔HSB333_26.jpg', mode='L')
-    # image = imread('just_lps/─■A9H707.jpg', mode='L')
-    # image = imread(filename, mode='L')
-    ax[0].imshow(image)
-    ax[0].set_title('Original')
+        ##################################################################################
+        # Row 1:
+        ax[0].imshow(image)
+        ax[0].set_title('Original')
 
-    ##################################################################################
-    # Row 2:
-    charCandidates = bb_img(image, threshold_type)
-    ax[1].imshow(cv2.bitwise_or(image, charCandidates))
-    ax[1].set_title('Candidates')
+        ##################################################################################
+        # Row 2:
+        # apply thresholding
+        thresh = threshold_img(image, threshold_type).astype(np.uint8)
+        ax[1].imshow(thresh)
+        ax[1].set_title('{} thresholding'.format(threshold_type))
 
-    plt.show()
+        ##################################################################################
+        # Row 3:
+        # apply contouring
+        cont_image = copy.deepcopy(image)
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for i, cnt in enumerate(contours):
+            cv2.drawContours(cont_image, [cnt], 0, (255, 255, 255), 3)
+
+        ax[2].imshow(cont_image)
+        ax[2].set_title('Contoured')
+
+        ##################################################################################
+        # Row 4:
+        charCandidates = bb_img(image, threshold_type)
+        ax[3].imshow(cv2.bitwise_or(image, charCandidates))
+        ax[3].set_title('Candidates')
+
+        plt.show()
+    else:
+        fig, axes = plt.subplots(nrows=2, figsize=(7, 8))
+        ax = axes.ravel()
+        plt.gray()
+        for a in ax:
+            a.axis('off')
+
+        ##################################################################################
+        # Row 1:
+        # image = imread('just_lps/├╔HSB333_26.jpg', mode='L')
+        # image = imread('just_lps/─■A9H707.jpg', mode='L')
+        # image = imread(filename, mode='L')
+        ax[0].imshow(image)
+        ax[0].set_title('Original')
+
+        ##################################################################################
+        # Row 2:
+        charCandidates = bb_img(image, threshold_type)
+        ax[1].imshow(cv2.bitwise_or(image, charCandidates))
+        ax[1].set_title('Candidates')
+
+        plt.show()
 
 
 def main():
