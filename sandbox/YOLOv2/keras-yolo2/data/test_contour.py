@@ -48,7 +48,7 @@ def correct_letters(image, threshold_type='global', debug=False, output_dir=None
 
     if debug:
         print('{} ?= {}'.format(letter_count, correct_count))
-    return_val = correct_count - 1 <= letter_count <= correct_count + 1
+    return_val = correct_count - 0 <= letter_count <= correct_count + 0
 
     if return_val:
         if output_dir is not None:

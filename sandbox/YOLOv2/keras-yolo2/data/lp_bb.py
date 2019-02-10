@@ -51,9 +51,9 @@ def bb_img(image, threshold_type='global'):
     # remove height outliers
     mean = np.average(heights)
     std = np.std(heights)
-    # if std > 0.3:
-    N = 0.7
-    filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
+    if std > 0.2:   # don't remove outliers if the std dev is already very small
+        N = 0.7
+        filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
 
     ##################################################################################
     # Row 4:
