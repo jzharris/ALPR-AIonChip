@@ -1,0 +1,17 @@
+<annotation>
+    <filename>[should match corresponding file number].png</filename>
+    <size>
+        <width>[image width]</width>
+        <height>[image height]</height>
+        <depth>3</depth>
+    </size>
+    <object>
+        <name>[character name]</name>
+        <bndbox>
+            <xmin>[bb xmin]</xmin>
+            <ymin>[bb ymin]</ymin>
+            <xmax>[bb xmax]</xmax>
+            <ymax>[bb ymax]</ymax>
+        </bndbox>
+    </object>
+</annotation>

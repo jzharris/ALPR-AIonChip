@@ -5,11 +5,13 @@ import os.path as path
 from scipy.misc import imread
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
 
-from lp_bb import bb_img, debug_bb
+from lp_bb import bb_img
+
+###############################################################################################################
+# Function for determining whether to accept the plate or not
 
 possible_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'   # NO I's or O's exist in this dataset
 char_counts = np.zeros(len(possible_chars))
@@ -93,67 +95,41 @@ def correct_letters(image, file, threshold_type='global', debug=False, output_di
                         char_counts[found] += 1
 
     return keep_plate, rects
+###############################################################################################################
 
 
-correct = 0
-incorrect = 0
-export = False
-
-debug = False
-show_steps = True
-show_correct = True
-show_incorrect = False
-
-lp_dir = 'just_lps'
+input_dir = 'just_lps'
 out_dir = 'lp_candidates'
 
 if not path.isdir(out_dir):
     os.mkdir(out_dir)
 
-for root, dirs, files in os.walk(lp_dir):
+for root, dirs, files in os.walk(input_dir):
     for file in tqdm(files):
-        file_path = path.join(lp_dir, file)
-        if debug:
-            print(file_path)
-
-        # Proven to be devoid of I's and O's
-        # if "I" in file:
-        #     print("I")
-        #     exit(0)
-        #
-        # if "O" in file:
-        #     print("O")
-        #     exit(0)
+        file_path = path.join(input_dir, file)
 
         image = imread(file_path, mode='L')
-        keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
+        keep_plate, rects = correct_letters(image, file)
         if not keep_plate:
             # if incorrect, try again but invert the image
             image = cv2.bitwise_not(image)
-            keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
+            keep_plate, rects = correct_letters(image, file)
             if not keep_plate:
                 # if still incorrect, try above pattern but with adaptive thresholding
                 image = cv2.bitwise_not(image)
-                keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
-                                                    debug=debug, output_dir=(out_dir if export else None))
+                keep_plate, rects = correct_letters(image, file, threshold_type='adaptive')
                 if not keep_plate:
                     # last try: inverted image with adaptive thresholding
                     image = cv2.bitwise_not(image)
-                    keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
-                                                        debug=debug, output_dir=(out_dir if export else None))
+                    keep_plate, rects = correct_letters(image, file, threshold_type='adaptive')
 
         if keep_plate:
-            correct += 1
-        else:
-            incorrect += 1
+            # TODO: The rects array correspond to the plate characters. Create an xml file
+            # TODO: to store each rect (use example.xml as a template)
 
-# print accuracy
-print("Accuracy: {} ({}/{})".format(correct / (correct + incorrect), correct, correct + incorrect))
+            # TODO: rects will be in the following format:
+            # TODO:     if the plate characters are "A 12345" then the first element in rects will be A and
+            # TODO:     the last will be 5.
 
-# print(char_counts)
-hist_labels = []
-for char in possible_chars:
-    hist_labels.append(char)
-plt.bar(np.arange(len(char_counts)), char_counts, tick_label=hist_labels)
-plt.title('Number of (extracted) character occurences in LP dataset')
-plt.show()
+            # TODO: path.splitext(file)[0] will give the file name
+            pass
