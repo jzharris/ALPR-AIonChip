@@ -152,8 +152,10 @@ for root, dirs, files in os.walk(input_dir):
 
             # open template file and use as base for new file:
             with open('template_xml.txt', 'r') as myfile:
+                ###########################################################################################
+                # Do for original color image:
                 data = myfile.read()
-                formatted = data.format(file_counter, image.shape[1], image.shape[0], bb_set)
+                formatted = data.format('{}.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
 
                 # save formatted to a new xml file
                 with open(path.join(xml_dir, '{}.xml'.format(file_counter)), 'w+') as xml_file:
@@ -161,5 +163,30 @@ for root, dirs, files in os.walk(input_dir):
 
                 # save the (colored) corresponding image as new jpg file
                 cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
+
+                ###########################################################################################
+                # Do for B/W color image:
+                data = myfile.read()
+                formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
+
+                # save formatted to a new xml file
+                with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
+                    xml_file.write(formatted)
+
+                # save the (colored) corresponding image as new jpg file
+                cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
+
+                ###########################################################################################
+                # Do for inverted B/W color image:
+                data = myfile.read()
+                formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
+
+                # save formatted to a new xml file
+                with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
+                    xml_file.write(formatted)
+
+                # save the (colored) corresponding image as new jpg file
+                cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
+                            cv2.invert(imread(file_path, mode='L')))
 
             file_counter += 1

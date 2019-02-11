@@ -1,5 +1,5 @@
 <annotation>
-    <filename>{}.jpg</filename>
+    <filename>{}</filename>
     <size>
         <width>{}</width>
         <height>{}</height>
