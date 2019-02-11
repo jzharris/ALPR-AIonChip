@@ -27,16 +27,6 @@
     # should generate: [1.05,0.87, 1.99,1.46, 2.69,2.30, 2.78,1.82, 3.77,2.83]
     ```
     
-    ##### Number segmentation:
-    The SVHN VOC xml files are used from:
-    https://github.com/penny4860/svhn-voc-annotation-format. Not necessary to run `convert_dataset.py` on these files.
-    
-    Generate anchors using the following. Copy these anchors into the config file:
-    ```
-    python gen_anchors.py -c config_num_seg.json
-    # should generate: [0.97,5.09, 1.32,9.37, 1.67,7.18, 2.06,10.08, 2.91,10.94]
-    ```
-    
     ##### License Plate reading:
     The bounding boxes are derived from the given dataset by using the process found here:
     https://gurus.pyimagesearch.com/lesson-sample-segmenting-characters-from-license-plates/?fbclid=IwAR1djTQcAUV8Gyi6Oh-7PI-10bYdcFz0_EMmiE5ORpk6H2NVVXVkZ6RaANY
@@ -53,7 +43,7 @@
     pip install installation/Shapely-1.6.4.post1-cp35-cp35m-win_amd64.whl # inside project directory
     ```
     
-* #### Running:
+* #### Running the sandbox/YOLOv2 projects
 
     ##### License Plate segmentation:
 
@@ -69,18 +59,16 @@
     python predict.py -c config_lp_seg.json -w lp_seg_inception.h5 -i images\lp_seg\RP_32.jpg
     ```
 
-    ##### Number segmentation:
+    ##### License Plate reading:
 
     To train:
     ```
-    python train.py -c config_num_seg.json
+    python train.py -c config_char_seg.json
     ```
 
     To test:
     ```
-    python predict.py -c config_num_seg.json -w num_seg_inception.h5 -i images\num_seg\AC_3.jpg
-    python predict.py -c config_num_seg.json -w num_seg_inception.h5 -i images\num_seg\LE_37.jpg
-    python predict.py -c config_num_seg.json -w num_seg_inception.h5 -i images\num_seg\RP_32.jpg
+    python predict.py -c config_char_seg.json -w lp_char_inception.h5 -i images\char_seg\3.jpg
     ```
     
 * #### Debugging:
