@@ -100,10 +100,15 @@ def correct_letters(image, file, threshold_type='global', debug=False, output_di
 
 input_dir = 'just_lps'
 out_dir = 'lp_candidates'
+jpg_dir = path.join(out_dir, 'train', 'jpeg')
+xml_dir = path.join(out_dir, 'train', 'xml')
 
-if not path.isdir(out_dir):
-    os.mkdir(out_dir)
+if not path.isdir(jpg_dir):
+    os.makedirs(jpg_dir)
+if not path.isdir(xml_dir):
+    os.makedirs(xml_dir)
 
+file_counter = 0
 for root, dirs, files in os.walk(input_dir):
     for file in tqdm(files):
         file_path = path.join(input_dir, file)
@@ -124,12 +129,37 @@ for root, dirs, files in os.walk(input_dir):
                     keep_plate, rects = correct_letters(image, file, threshold_type='adaptive')
 
         if keep_plate:
-            # TODO: The rects array correspond to the plate characters. Create an xml file
-            # TODO: to store each rect (use example.xml as a template)
+            # filter out chars in filename
+            # count how many are correctly contoured
+            plate_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789_'
+            chars = ''
+            for char in path.splitext(file)[0]:
+                if char in plate_chars:
+                    chars = chars + char
 
-            # TODO: rects will be in the following format:
-            # TODO:     if the plate characters are "A 12345" then the first element in rects will be A and
-            # TODO:     the last will be 5.
+            # create set of bb's for xml file
+            bb_set = ''
+            with open('bb_xml.txt', 'r') as bb_file:
+                bb_xml_template = bb_file.read()
+                for idx, (x, y, w, h) in enumerate(rects):
+                    xmin = x
+                    ymin = y
+                    xmax = x + w
+                    ymax = y + h
 
-            # TODO: path.splitext(file)[0] will give the file name
-            pass
+                    bb_xml_item = bb_xml_template.format(chars[idx], xmin, ymin, xmax, ymax)
+                    bb_set = bb_set + bb_xml_item + '\n'
+
+            # open template file and use as base for new file:
+            with open('template_xml.txt', 'r') as myfile:
+                data = myfile.read()
+                formatted = data.format(file_counter, image.shape[1], image.shape[0], bb_set)
+
+                # save formatted to a new xml file
+                with open(path.join(xml_dir, '{}.xml'.format(file_counter)), 'w+') as xml_file:
+                    xml_file.write(formatted)
+
+                # save the (colored) corresponding image as new jpg file
+                cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
+
+            file_counter += 1

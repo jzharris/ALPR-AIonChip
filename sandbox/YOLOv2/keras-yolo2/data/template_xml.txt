@@ -1,0 +1,11 @@
+<annotation>
+    <filename>{}.jpg</filename>
+    <size>
+        <width>{}</width>
+        <height>{}</height>
+        <depth>3</depth>
+    </size>
+    <object>
+{}
+    </object>
+</annotation>
