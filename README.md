@@ -43,7 +43,7 @@
     pip install installation/Shapely-1.6.4.post1-cp35-cp35m-win_amd64.whl # inside project directory
     ```
     
-* #### Running the sandbox/YOLOv2 projects
+* #### Running:
 
     ##### License Plate segmentation:
 
