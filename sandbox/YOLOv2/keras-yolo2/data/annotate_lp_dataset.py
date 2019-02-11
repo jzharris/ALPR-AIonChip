@@ -166,7 +166,6 @@ for root, dirs, files in os.walk(input_dir):
 
                 ###########################################################################################
                 # Do for B/W color image:
-                data = myfile.read()
                 formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
 
                 # save formatted to a new xml file
@@ -178,7 +177,6 @@ for root, dirs, files in os.walk(input_dir):
 
                 ###########################################################################################
                 # Do for inverted B/W color image:
-                data = myfile.read()
                 formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
 
                 # save formatted to a new xml file
@@ -186,7 +184,6 @@ for root, dirs, files in os.walk(input_dir):
                     xml_file.write(formatted)
 
                 # save the (colored) corresponding image as new jpg file
-                cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
-                            cv2.invert(imread(file_path, mode='L')))
+                cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)), 255 - imread(file_path, mode='L'))
 
             file_counter += 1
