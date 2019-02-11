@@ -12,9 +12,6 @@
 - [ ] Profile the YOLOv2/Inceptionv3 network
     - [ ] Profile training phase
     - [ ] Profile prediction phase
-- [ ] 
-- [ ] 
-- [ ] 
 
 * ##### Pipeline item 2: License Plate reading
 - [ ] Create a VOC-style dataset from original "only lp" dataset using conventional methods**
