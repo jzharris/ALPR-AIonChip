@@ -16,28 +16,88 @@ possible_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'   # NO I's or O's exist in
 char_counts = np.zeros(len(possible_chars))
 
 
-def apply_filter(image):
+def draw_contours(image, contours):
+    if len(contours) > 0:
+        for i, cnt in enumerate(contours):
+            x, y, w, h = cv2.boundingRect(cnt)
+            cv2.rectangle(image, (x, y), (x + w, y + h), 255, 1)
+
+    return image
+
+
+def filter_image(image):
     block_size = 101
     local_thresh = threshold_local(image, block_size, offset=10)
     thresh = (image <= local_thresh).astype(np.uint8)
-    # thresh = debug_bb(image, threshold_type='local', show_steps=show_steps)
-    # thresh = cv2.bitwise_not(binary)
-    # debug_bb(thresh, threshold_type='none', show_steps=show_steps)
-    charCandidates = np.zeros(thresh.shape, dtype="uint8")
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    image = draw_contours(image, contours)
+    return image, contours
+
+
+def filter_contours(image, contours):
+    # def get_aspect(cnt):
+    #     (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+    #     return boxW / float(boxH)
+    #
+    # def get_heightr(cnt, image):
+    #     (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+    #     return boxH / float(image.shape[0])
+    #
+    # areas = np.zeros(len(contours))
+    # aspects = np.zeros(len(contours))
+    # heights = np.zeros(len(contours))
     # for i, cnt in enumerate(contours):
-    #     cv2.drawContours(charCandidates, [cnt], 0, (255, 255, 255), 3)
+    #     areas[i] = cv2.contourArea(cnt)
+    #     (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+    #     aspectRatio = boxW / float(boxH)
+    #     aspects[i] = aspectRatio
+    #     heights[i] = boxH / float(image.shape[0])
+    #
+    # # remove area outliers
+    # mean = np.average(areas)
+    # std = np.std(areas)
+    # N = 3
+    # filtered_contours = [x for x in contours if (mean + N * std > cv2.contourArea(x) > mean - N * std)]
+    # # filtered_contours = contours
+    #
+    # # # remove aspect outliers
+    # mean = np.average(aspects)
+    # std = np.std(aspects)
+    # N = 3
+    # filtered_contours = [x for x in filtered_contours if (mean + N * std > get_aspect(x) > mean - N * std)]
+    #
+    # # remove height outliers
+    # mean = np.average(heights)
+    # std = np.std(heights)
+    # if std > 0.2:  # don't remove outliers if the std dev is already very small
+    #     N = 0.7
+    #     filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
+    #
+    # image = draw_contours(image, filtered_contours)
+    # return image, filtered_contours
 
     rects = []
     if len(contours) > 0:
         c = max(contours, key=cv2.contourArea)
         for i, cnt in enumerate(contours):
-            x, y, w, h = cv2.boundingRect(cnt)
-            rects.append((x, y, w, h))
+            (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+            aspectRatio = boxW / float(boxH)
+            solidity = cv2.contourArea(c) / float(boxW * boxH)
+            heightRatio = boxH / float(image.shape[0])
+
+            keepAspectRatio = 0.1 < aspectRatio < 0.95
+            keepSolidity = solidity > 0.15
+            keepHeight = 0.3 < heightRatio < 0.9
+
+            if keepAspectRatio and keepSolidity and keepHeight:
+                x, y, w, h = cv2.boundingRect(cnt)
+                rects.append((x, y, w, h))
+
     for x, y, w, h in rects:
         cv2.rectangle(image, (x, y), (x + w, y + h), 255, 1)
 
-    return image, rects
+    return image
 
 
 def correct_letters(image, file, threshold_type='global', debug=False, output_dir=None):
@@ -151,12 +211,18 @@ for root, dirs, files in os.walk(lp_dir):
         #     exit(0)
 
         image = imread(file_path, mode='L')
-        output_img, rects = apply_filter(image)
 
+        img = deepcopy(image)
+        output_img, contours = filter_image(img)
         plt.imshow(output_img)
         plt.show()
-        exit(0)
 
+        img = deepcopy(image)
+        filtered_img = filter_contours(img, contours)
+        plt.imshow(filtered_img)
+        plt.show()
+
+        exit(0)
 
 
 

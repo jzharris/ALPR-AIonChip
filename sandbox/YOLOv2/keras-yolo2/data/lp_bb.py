@@ -26,35 +26,35 @@ def bb_img(image, threshold_type='global'):
     filtered_contours = contours
     print(filtered_contours)
 
-    # areas = np.zeros(len(contours))
-    # aspects = np.zeros(len(contours))
-    # heights = np.zeros(len(contours))
-    # for i, cnt in enumerate(contours):
-    #     areas[i] = cv2.contourArea(cnt)
-    #     (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
-    #     aspectRatio = boxW / float(boxH)
-    #     aspects[i] = aspectRatio
-    #     heights[i] = boxH / float(image.shape[0])
-    #
-    # # remove area outliers
-    # mean = np.average(areas)
-    # std = np.std(areas)
-    # N = 3
-    # filtered_contours = [x for x in contours if (mean + N * std > cv2.contourArea(x) > mean - N * std)]
-    # # filtered_contours = contours
-    #
-    # # # remove aspect outliers
-    # mean = np.average(aspects)
-    # std = np.std(aspects)
-    # N = 3
-    # filtered_contours = [x for x in filtered_contours if (mean + N * std > get_aspect(x) > mean - N * std)]
-    #
-    # # remove height outliers
-    # mean = np.average(heights)
-    # std = np.std(heights)
-    # if std > 0.2:   # don't remove outliers if the std dev is already very small
-    #     N = 0.7
-    #     filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
+    areas = np.zeros(len(contours))
+    aspects = np.zeros(len(contours))
+    heights = np.zeros(len(contours))
+    for i, cnt in enumerate(contours):
+        areas[i] = cv2.contourArea(cnt)
+        (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
+        aspectRatio = boxW / float(boxH)
+        aspects[i] = aspectRatio
+        heights[i] = boxH / float(image.shape[0])
+
+    # remove area outliers
+    mean = np.average(areas)
+    std = np.std(areas)
+    N = 3
+    filtered_contours = [x for x in contours if (mean + N * std > cv2.contourArea(x) > mean - N * std)]
+    # filtered_contours = contours
+
+    # # remove aspect outliers
+    mean = np.average(aspects)
+    std = np.std(aspects)
+    N = 3
+    filtered_contours = [x for x in filtered_contours if (mean + N * std > get_aspect(x) > mean - N * std)]
+
+    # remove height outliers
+    mean = np.average(heights)
+    std = np.std(heights)
+    if std > 0.2:   # don't remove outliers if the std dev is already very small
+        N = 0.7
+        filtered_contours = [x for x in filtered_contours if (mean + N * std > get_heightr(x, image) > mean - N * std)]
 
     ##################################################################################
     # Row 4:
