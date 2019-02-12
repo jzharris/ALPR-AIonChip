@@ -8,11 +8,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
+from skimage.filters import threshold_otsu, threshold_local
 
 from lp_bb import bb_img, debug_bb
 
 possible_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'   # NO I's or O's exist in this dataset
 char_counts = np.zeros(len(possible_chars))
+
+
+def apply_filter(image):
+    block_size = 101
+    local_thresh = threshold_local(image, block_size, offset=10)
+    thresh = (image <= local_thresh).astype(np.uint8)
+    # thresh = debug_bb(image, threshold_type='local', show_steps=show_steps)
+    # thresh = cv2.bitwise_not(binary)
+    # debug_bb(thresh, threshold_type='none', show_steps=show_steps)
+    charCandidates = np.zeros(thresh.shape, dtype="uint8")
+    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # for i, cnt in enumerate(contours):
+    #     cv2.drawContours(charCandidates, [cnt], 0, (255, 255, 255), 3)
+
+    rects = []
+    if len(contours) > 0:
+        c = max(contours, key=cv2.contourArea)
+        for i, cnt in enumerate(contours):
+            x, y, w, h = cv2.boundingRect(cnt)
+            rects.append((x, y, w, h))
+    for x, y, w, h in rects:
+        cv2.rectangle(image, (x, y), (x + w, y + h), 255, 1)
+
+    return image, rects
 
 
 def correct_letters(image, file, threshold_type='global', debug=False, output_dir=None):
@@ -126,38 +151,49 @@ for root, dirs, files in os.walk(lp_dir):
         #     exit(0)
 
         image = imread(file_path, mode='L')
-        keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
-        if not keep_plate:
-            # if incorrect, try again but invert the image
-            image = cv2.bitwise_not(image)
-            keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
-            if not keep_plate:
-                # if still incorrect, try above pattern but with adaptive thresholding
-                image = cv2.bitwise_not(image)
-                keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
-                                                    debug=debug, output_dir=(out_dir if export else None))
-                if not keep_plate:
-                    # last try: inverted image with adaptive thresholding
-                    image = cv2.bitwise_not(image)
-                    keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
-                                                        debug=debug, output_dir=(out_dir if export else None))
-                    if not keep_plate:
-                        if show_incorrect:
-                            debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
-                    else:
-                        if show_correct:
-                            debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
-                elif show_correct:
-                    debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
-            elif show_correct:
-                debug_bb(image, show_steps=show_steps)
-        elif show_correct:
-            debug_bb(image, show_steps=show_steps)
+        output_img, rects = apply_filter(image)
 
-        if keep_plate:
-            correct += 1
-        else:
-            incorrect += 1
+        plt.imshow(output_img)
+        plt.show()
+        exit(0)
+
+
+
+
+        # keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
+        # if not keep_plate:
+        #     debug_bb(image, threshold_type='canny', show_steps=show_steps)
+        #     exit(0)
+        #     # if incorrect, try again but invert the image
+        #     image = cv2.bitwise_not(image)
+        #     keep_plate, rects = correct_letters(image, file, debug=debug, output_dir=(out_dir if export else None))
+        #     if not keep_plate:
+        #         # if still incorrect, try above pattern but with adaptive thresholding
+        #         image = cv2.bitwise_not(image)
+        #         keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
+        #                                             debug=debug, output_dir=(out_dir if export else None))
+        #         if not keep_plate:
+        #             # last try: inverted image with adaptive thresholding
+        #             image = cv2.bitwise_not(image)
+        #             keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
+        #                                                 debug=debug, output_dir=(out_dir if export else None))
+        #             if not keep_plate:
+        #                 if show_incorrect:
+        #                     debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+        #             else:
+        #                 if show_correct:
+        #                     debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+        #         elif show_correct:
+        #             debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+        #     elif show_correct:
+        #         debug_bb(image, show_steps=show_steps)
+        # elif show_correct:
+        #     debug_bb(image, show_steps=show_steps)
+        #
+        # if keep_plate:
+        #     correct += 1
+        # else:
+        #     incorrect += 1
 
 # print accuracy
 print("Accuracy: {} ({}/{})".format(correct / (correct + incorrect), correct, correct + incorrect))

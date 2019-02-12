@@ -8,15 +8,27 @@ import cv2
 
 def threshold_img(image, threshold_type='global'):
     if threshold_type is 'global':
-        global_thresh = threshold_otsu(image)
-        binary = image > global_thresh
+        img = cv2.bilateralFilter(image, 9, 75, 100)
+        global_thresh = threshold_otsu(img)
+        binary = img > global_thresh
     elif threshold_type is 'local':
-        block_size = 35
+        block_size = 101
         local_thresh = threshold_local(image, block_size, offset=10)
         binary = image > local_thresh
     elif threshold_type is 'adaptive':
         img = cv2.medianBlur(image, 1)
         binary = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 0)
+    elif threshold_type is 'canny':
+        img = cv2.bilateralFilter(image, 9, 75, 1000)
+        th, bw = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        binary = cv2.Canny(img, th / 2, th)
+    elif threshold_type is 'laplacian':
+        img = cv2.GaussianBlur(image, (3, 3), 0)
+        binary = cv2.Laplacian(img, cv2.CV_64F)
+    elif threshold_type is 'bilateral':
+        binary = cv2.bilateralFilter(image, 9, 75, 1000)
+    elif threshold_type is 'none':
+        binary = image
     else:
         raise Exception('Wrong threshold_type')
     return binary
