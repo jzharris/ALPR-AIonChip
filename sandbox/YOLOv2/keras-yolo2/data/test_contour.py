@@ -57,6 +57,17 @@ def filter_contours(image, contours):
     return image, rects
 
 
+def sort_rects(rects):
+    centers = np.array([(x + w) / 2 for x, y, w, h in rects])
+    arr1inds = centers.argsort()
+
+    sorted_rects = []
+    for idx in arr1inds:
+        sorted_rects.append(rects[idx])
+
+    return sorted_rects
+
+
 def correct_letters(file, rects):
 
     # plates letters to include in file names
@@ -94,18 +105,25 @@ def correct_letters(file, rects):
     return keep_plate
 
 
+export = True
 correct = 0
 incorrect = 0
 
-export = False
-lp_dir = 'converted_dataset2/train/jpeg'
+input_dir = 'converted_dataset2/train/jpeg'
 out_dir = 'lp_candidates_d1'
-if not path.isdir(out_dir):
-    os.mkdir(out_dir)
+jpg_dir = path.join(out_dir, 'train', 'jpeg')
+xml_dir = path.join(out_dir, 'train', 'xml')
 
-for root, dirs, files in os.walk(lp_dir):
+if not path.isdir(jpg_dir):
+    os.makedirs(jpg_dir)
+if not path.isdir(xml_dir):
+    os.makedirs(xml_dir)
+
+file_counter = 0
+
+for root, dirs, files in os.walk(input_dir):
     for file in tqdm(files):
-        file_path = path.join(lp_dir, file)
+        file_path = path.join(input_dir, file)
 
         # Proven to be devoid of I's and O's
         # if "I" in file:
@@ -128,19 +146,86 @@ for root, dirs, files in os.walk(lp_dir):
         # plt.imshow(filtered_img)
         # plt.show()
 
+        rects = sort_rects(rects)
+
         keep_plate = correct_letters(file, rects)
+
         if keep_plate:
             correct += 1
+
+            if export:
+                # get chars from file name
+                plate_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789_'
+                chars = ''
+                for char in path.splitext(file)[0]:
+                    if char in plate_chars:
+                        chars = chars + char
+
+                # create set of bb's for xml file
+                bb_set = ''
+                with open('bb_xml.txt', 'r') as bb_file:
+                    bb_xml_template = bb_file.read()
+                    for idx, (x, y, w, h) in enumerate(rects):
+                        xmin = x
+                        ymin = y
+                        xmax = x + w
+                        ymax = y + h
+
+                        bb_xml_item = bb_xml_template.format(chars[idx], xmin, ymin, xmax, ymax)
+                        bb_set = bb_set + bb_xml_item + '\n'
+
+                # open template file and use as base for new file:
+                with open('template_xml.txt', 'r') as myfile:
+                    ###########################################################################################
+                    # Do for original color image:
+                    data = myfile.read()
+                    formatted = data.format('{}.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
+
+                    # save formatted to a new xml file
+                    with open(path.join(xml_dir, '{}.xml'.format(file_counter)), 'w+') as xml_file:
+                        xml_file.write(formatted)
+
+                    # save the (colored) corresponding image as new jpg file
+                    cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
+
+                    ###########################################################################################
+                    # Do for B/W color image:
+                    formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                                            bb_set)
+
+                    # save formatted to a new xml file
+                    with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
+                        xml_file.write(formatted)
+
+                    # save the (colored) corresponding image as new jpg file
+                    cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
+
+                    ###########################################################################################
+                    # Do for inverted B/W color image:
+                    formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                                            bb_set)
+
+                    # save formatted to a new xml file
+                    with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
+                        xml_file.write(formatted)
+
+                    # save the (colored) corresponding image as new jpg file
+                    cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
+                                255 - imread(file_path, mode='L'))
+
+                file_counter += 1
+
         else:
             incorrect += 1
 
 # print accuracy
 print("Accuracy: {} ({}/{})".format(correct / (correct + incorrect), correct, correct + incorrect))
 
-# print(char_counts)
-hist_labels = []
-for char in possible_chars:
-    hist_labels.append(char)
-plt.bar(np.arange(len(char_counts)), char_counts, tick_label=hist_labels)
-plt.title('Number of (extracted) character occurences in LP dataset')
-plt.show()
+if not export:
+    # print(char_counts)
+    hist_labels = []
+    for char in possible_chars:
+        hist_labels.append(char)
+    plt.bar(np.arange(len(char_counts)), char_counts, tick_label=hist_labels)
+    plt.title('Number of (extracted) character occurences in LP dataset')
+    plt.show()
