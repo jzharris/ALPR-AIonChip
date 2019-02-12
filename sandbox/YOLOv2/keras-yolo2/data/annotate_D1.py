@@ -110,7 +110,7 @@ correct = 0
 incorrect = 0
 
 input_dir = 'converted_dataset2/train/jpeg'
-out_dir = 'lp_candidates_d1'
+out_dir = 'lp_candidates'
 jpg_dir = path.join(out_dir, 'train', 'jpeg')
 xml_dir = path.join(out_dir, 'train', 'xml')
 
