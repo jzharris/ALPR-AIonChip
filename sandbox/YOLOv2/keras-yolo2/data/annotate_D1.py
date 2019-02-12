@@ -105,127 +105,132 @@ def correct_letters(file, rects):
     return keep_plate
 
 
-export = True
-correct = 0
-incorrect = 0
+def annotate(type='train', export=True):
+    correct = 0
+    incorrect = 0
 
-input_dir = 'converted_dataset2/train/jpeg'
-out_dir = 'lp_candidates'
-jpg_dir = path.join(out_dir, 'train', 'jpeg')
-xml_dir = path.join(out_dir, 'train', 'xml')
+    input_dir = 'converted_dataset2/{}/jpeg'.format(type)
+    out_dir = 'lp_candidates'
+    jpg_dir = path.join(out_dir, type, 'jpeg')
+    xml_dir = path.join(out_dir, type, 'xml')
 
-if not path.isdir(jpg_dir):
-    os.makedirs(jpg_dir)
-if not path.isdir(xml_dir):
-    os.makedirs(xml_dir)
+    if not path.isdir(jpg_dir):
+        os.makedirs(jpg_dir)
+    if not path.isdir(xml_dir):
+        os.makedirs(xml_dir)
 
-file_counter = 0
+    file_counter = 0
 
-for root, dirs, files in os.walk(input_dir):
-    for file in tqdm(files):
-        file_path = path.join(input_dir, file)
+    for root, dirs, files in os.walk(input_dir):
+        for file in tqdm(files):
+            file_path = path.join(input_dir, file)
 
-        # Proven to be devoid of I's and O's
-        # if "I" in file:
-        #     print("I")
-        #     exit(0)
-        #
-        # if "O" in file:
-        #     print("O")
-        #     exit(0)
+            # Proven to be devoid of I's and O's
+            # if "I" in file:
+            #     print("I")
+            #     exit(0)
+            #
+            # if "O" in file:
+            #     print("O")
+            #     exit(0)
 
-        image = imread(file_path, mode='L')
+            image = imread(file_path, mode='L')
 
-        img = deepcopy(image)
-        output_img, contours = filter_image(img)
-        # plt.imshow(output_img)
-        # plt.show()
+            img = deepcopy(image)
+            output_img, contours = filter_image(img)
+            # plt.imshow(output_img)
+            # plt.show()
 
-        img = deepcopy(image)
-        filtered_img, rects = filter_contours(img, contours)
-        # plt.imshow(filtered_img)
-        # plt.show()
+            img = deepcopy(image)
+            filtered_img, rects = filter_contours(img, contours)
+            # plt.imshow(filtered_img)
+            # plt.show()
 
-        rects = sort_rects(rects)
+            rects = sort_rects(rects)
 
-        keep_plate = correct_letters(file, rects)
+            keep_plate = correct_letters(file, rects)
 
-        if keep_plate:
-            correct += 1
+            if keep_plate:
+                correct += 1
 
-            if export:
-                # get chars from file name
-                plate_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789_'
-                chars = ''
-                for char in path.splitext(file)[0]:
-                    if char in plate_chars:
-                        chars = chars + char
+                if export:
+                    # get chars from file name
+                    plate_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789_'
+                    chars = ''
+                    for char in path.splitext(file)[0]:
+                        if char in plate_chars:
+                            chars = chars + char
 
-                # create set of bb's for xml file
-                bb_set = ''
-                with open('bb_xml.txt', 'r') as bb_file:
-                    bb_xml_template = bb_file.read()
-                    for idx, (x, y, w, h) in enumerate(rects):
-                        xmin = x
-                        ymin = y
-                        xmax = x + w
-                        ymax = y + h
+                    # create set of bb's for xml file
+                    bb_set = ''
+                    with open('bb_xml.txt', 'r') as bb_file:
+                        bb_xml_template = bb_file.read()
+                        for idx, (x, y, w, h) in enumerate(rects):
+                            xmin = x
+                            ymin = y
+                            xmax = x + w
+                            ymax = y + h
 
-                        bb_xml_item = bb_xml_template.format(chars[idx], xmin, ymin, xmax, ymax)
-                        bb_set = bb_set + bb_xml_item + '\n'
+                            bb_xml_item = bb_xml_template.format(chars[idx], xmin, ymin, xmax, ymax)
+                            bb_set = bb_set + bb_xml_item + '\n'
 
-                # open template file and use as base for new file:
-                with open('template_xml.txt', 'r') as myfile:
-                    ###########################################################################################
-                    # Do for original color image:
-                    data = myfile.read()
-                    formatted = data.format('{}.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
+                    # open template file and use as base for new file:
+                    with open('template_xml.txt', 'r') as myfile:
+                        ###########################################################################################
+                        # Do for original color image:
+                        data = myfile.read()
+                        formatted = data.format('{}.jpg'.format(file_counter), image.shape[1], image.shape[0], bb_set)
 
-                    # save formatted to a new xml file
-                    with open(path.join(xml_dir, '{}.xml'.format(file_counter)), 'w+') as xml_file:
-                        xml_file.write(formatted)
+                        # save formatted to a new xml file
+                        with open(path.join(xml_dir, '{}.xml'.format(file_counter)), 'w+') as xml_file:
+                            xml_file.write(formatted)
 
-                    # save the (colored) corresponding image as new jpg file
-                    cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
+                        # save the (colored) corresponding image as new jpg file
+                        cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
 
-                    ###########################################################################################
-                    # Do for B/W color image:
-                    formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0],
-                                            bb_set)
+                        ###########################################################################################
+                        # Do for B/W color image:
+                        formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                                                bb_set)
 
-                    # save formatted to a new xml file
-                    with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
-                        xml_file.write(formatted)
+                        # save formatted to a new xml file
+                        with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
+                            xml_file.write(formatted)
 
-                    # save the (colored) corresponding image as new jpg file
-                    cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
+                        # save the (colored) corresponding image as new jpg file
+                        cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
 
-                    ###########################################################################################
-                    # Do for inverted B/W color image:
-                    formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0],
-                                            bb_set)
+                        ###########################################################################################
+                        # Do for inverted B/W color image:
+                        formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                                                bb_set)
 
-                    # save formatted to a new xml file
-                    with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
-                        xml_file.write(formatted)
+                        # save formatted to a new xml file
+                        with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
+                            xml_file.write(formatted)
 
-                    # save the (colored) corresponding image as new jpg file
-                    cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
-                                255 - imread(file_path, mode='L'))
+                        # save the (colored) corresponding image as new jpg file
+                        cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
+                                    255 - imread(file_path, mode='L'))
 
-                file_counter += 1
+                    file_counter += 1
 
-        else:
-            incorrect += 1
+            else:
+                incorrect += 1
 
-# print accuracy
-print("Accuracy: {} ({}/{})".format(correct / (correct + incorrect), correct, correct + incorrect))
+    # print accuracy
+    print("Accuracy: {} ({}/{})".format(correct / (correct + incorrect), correct, correct + incorrect))
 
-if not export:
-    # print(char_counts)
-    hist_labels = []
-    for char in possible_chars:
-        hist_labels.append(char)
-    plt.bar(np.arange(len(char_counts)), char_counts, tick_label=hist_labels)
-    plt.title('Number of (extracted) character occurences in LP dataset')
-    plt.show()
+    if not export:
+        # print(char_counts)
+        hist_labels = []
+        for char in possible_chars:
+            hist_labels.append(char)
+        plt.bar(np.arange(len(char_counts)), char_counts, tick_label=hist_labels)
+        plt.title('Number of (extracted) character occurences in LP dataset')
+        plt.show()
+
+
+if __name__ == '__main__':
+    annotate('train', True)
+    annotate('test', True)
