@@ -119,7 +119,7 @@ def debug_bb(image, threshold_type='global', show_steps=False):
 
         ##################################################################################
         # Row 4:
-        charCandidates = bb_img(image, threshold_type)
+        charCandidates, _ = bb_img(image, threshold_type)
         ax[3].imshow(cv2.bitwise_or(image, charCandidates))
         ax[3].set_title('Candidates')
 

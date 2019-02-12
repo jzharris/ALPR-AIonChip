@@ -98,8 +98,8 @@ def correct_letters(image, file, threshold_type='global', debug=False, output_di
 ###############################################################################################################
 
 
-input_dir = 'just_lps'
-out_dir = 'lp_candidates'
+input_dir = 'converted_dataset2/train/jpeg'
+out_dir = 'lp_candidates_d1'
 jpg_dir = path.join(out_dir, 'train', 'jpeg')
 xml_dir = path.join(out_dir, 'train', 'xml')
 

@@ -99,13 +99,13 @@ correct = 0
 incorrect = 0
 export = False
 
-debug = False
+debug = True
 show_steps = True
-show_correct = True
-show_incorrect = False
+show_correct = False
+show_incorrect = True
 
-lp_dir = 'just_lps'
-out_dir = 'lp_candidates'
+lp_dir = 'converted_dataset2/train/jpeg'
+out_dir = 'lp_candidates_d1'
 
 if not path.isdir(out_dir):
     os.mkdir(out_dir)
@@ -141,6 +141,18 @@ for root, dirs, files in os.walk(lp_dir):
                     image = cv2.bitwise_not(image)
                     keep_plate, rects = correct_letters(image, file, threshold_type='adaptive',
                                                         debug=debug, output_dir=(out_dir if export else None))
+                    if not keep_plate:
+                        if show_incorrect:
+                            debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+                    else:
+                        if show_correct:
+                            debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+                elif show_correct:
+                    debug_bb(image, threshold_type='adaptive', show_steps=show_steps)
+            elif show_correct:
+                debug_bb(image, show_steps=show_steps)
+        elif show_correct:
+            debug_bb(image, show_steps=show_steps)
 
         if keep_plate:
             correct += 1

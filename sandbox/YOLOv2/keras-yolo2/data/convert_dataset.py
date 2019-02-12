@@ -110,39 +110,27 @@ def convert_files2(subset, is_training=True):
         os.mkdir(jpeg_path)
 
     # get array of bbs corresponding to each jpeg
-    bbs = {}
+    xmls = {}
     search_path = path.join(parent_path, 'Subset_{}'.format(subset), subset, input_set, 'xml')
     for root, dirs, files in os.walk(search_path):
         for file in files:
             name = path.splitext(file)
             xml_dict = xml_to_dict(path.join(search_path, file))
-            bb = convert_xml([xml_dict])[0]['box']
-            bbs['{}_{}'.format(subset, name[0])] = bb
-            # name = path.splitext(file)
-            # new_path = '{}_{}{}'.format(subset, name[0], name[1])
-            #
-            # # save new file to shared folder:
-            # new_file = path.join(xml_path, new_path)
-            # shutil.copy(path.join(search_path, file), new_file)
-            #
-            # # overwrite new name into xml file...
-            # with fileinput.FileInput(new_file, inplace=True) as xml:
-            #     for line in xml:
-            #         print(line.replace('<filename>{}.jpg</filename>'.format(name[0]),
-            #                            '<filename>{}_{}.jpg</filename>'.format(subset, name[0])), end='')
+            xml = convert_xml([xml_dict])[0]
+            xmls['{}_{}'.format(subset, name[0])] = xml
 
     search_path = path.join(parent_path, 'Subset_{}'.format(subset), subset, input_set, 'jpeg')
     for root, dirs, files in os.walk(search_path):
         for file in files:
             name = path.splitext(file)
-            new_path = '{}_{}{}'.format(subset, name[0], name[1])
+            xml = xmls['{}_{}'.format(subset, name[0])]
+            new_path = '{}{}'.format(xml['plate'], name[1])
 
             # convert image to cropped box using xml path
-            bb = bbs['{}_{}'.format(subset, name[0])]
-            if bb is None:
+            if xml is None:
                 raise Exception('Should not be None')
             image = cv2.imread(path.join(search_path, file))
-            just_lp = img_to_license(image, bb)
+            just_lp = img_to_license(image, xml['box'])
 
             # save new file to shared folder:
             cv2.imwrite(path.join(jpeg_path, new_path), just_lp)
