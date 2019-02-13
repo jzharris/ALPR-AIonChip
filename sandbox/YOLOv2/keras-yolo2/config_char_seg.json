@@ -2,7 +2,7 @@
     "model" : {
         "backend":              "Inception3",
         "input_size":           200,
-        "anchors":              [0.40,3.13, 0.81,3.34, 0.82,2.85, 0.93,3.12, 2.08,3.65],
+        "anchors":              [0.41,3.14, 0.80,2.93, 0.83,3.44, 0.91,3.01, 1.22,3.53],
         "max_box_per_image":    1,
         "labels":               ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     },
@@ -28,8 +28,8 @@
     },
 
     "valid": {
-        "valid_image_folder":   "",
-        "valid_annot_folder":   "",
+        "valid_image_folder":   "data/lp_candidates/test/jpeg/",
+        "valid_annot_folder":   "data/lp_candidates/test/xml/",
 
         "valid_times":          1
     }

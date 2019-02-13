@@ -110,7 +110,7 @@
 
     To test:
     ```
-    python predict.py -c config_char_seg.json -w lp_char_inception.h5 -i images\char_seg\3.jpg
+    python predict.py -c config_char_seg.json -w lp_char_inception.h5 -i images\char_seg\0.jpg
     ```
     
 * #### Debugging:

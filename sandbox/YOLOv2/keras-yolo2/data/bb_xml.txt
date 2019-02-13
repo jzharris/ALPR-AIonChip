@@ -1,7 +1,12 @@
+    <object>
         <name>{}</name>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
         <bndbox>
             <xmin>{}</xmin>
             <ymin>{}</ymin>
             <xmax>{}</xmax>
             <ymax>{}</ymax>
         </bndbox>
+    </object>
