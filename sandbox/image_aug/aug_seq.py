@@ -9,13 +9,6 @@ import PIL.ImageOps
 
 ia.seed(1)
 
-# Example batch of images.
-# The array has shape (32, 64, 64, 3) and dtype uint8.
-images = np.array(
-    [ia.quokka(size=(64, 64)) for _ in range(32)],
-    dtype=np.uint8
-)
-
 seq = iaa.Sequential([
     # iaa.Fliplr(0.5), # horizontal flips
 
@@ -55,8 +48,8 @@ seq = iaa.Sequential([
     # Make some images brighter and some darker.
     # In 20% of all cases, we sample the multiplier once per channel,
     # which can end up changing the color of the images.
-    # iaa.Multiply((0.8, 1.2), per_channel=0.2),
-], random_order=True) # apply augmenters in random order
+    iaa.Multiply((0.8, 1.2), per_channel=0.2),
+], random_order=False) # apply augmenters in random order
 
 img = cv2.imread('res_inv.png')
 images = []
@@ -67,6 +60,6 @@ images_aug = seq.augment_images(images)
 for i in range(32):
     im = Image.fromarray(np.uint8(images_aug[i]))
     inverted_image = PIL.ImageOps.invert(im)
-    plt.subplot(8, 4, i+1), plt.imshow(inverted_image)
-plt.axis('off')
+    fig, ax = plt.subplot(8, 4, i+1), plt.imshow(inverted_image)
+    # ax.set_axis_off()
 plt.show()
