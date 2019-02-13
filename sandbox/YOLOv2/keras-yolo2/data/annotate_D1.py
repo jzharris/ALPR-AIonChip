@@ -232,5 +232,5 @@ def annotate(type='train', export=True):
 
 
 if __name__ == '__main__':
-    annotate('train', True)
-    annotate('test', True)
+    annotate('train', export=True)
+    annotate('test', export=True)
