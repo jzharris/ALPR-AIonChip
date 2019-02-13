@@ -4,14 +4,14 @@ import cv2
 import time
 
 ## Make canvas and set the color
-img_width = 475
-img_height = 207
-img = np.zeros((img_height, img_width, 3), np.uint8)
+cols = 475
+rows = 207
+img = np.zeros((rows, cols, 3), np.uint8)
 b, g, r, a = 0, 0, 0, 1
 
 # set the rectangle background to white
 rectangle_bgr = (255, 255, 255)
-cv2.rectangle(img, (0, 0), (img_width, img_height), rectangle_bgr, cv2.FILLED)
+cv2.rectangle(img, (0, 0), (cols, rows), rectangle_bgr, cv2.FILLED)
 
 ## Use simsum.ttc to write Chinese.
 fontpath = "./LICENSE_PLATE_USA.ttf"
