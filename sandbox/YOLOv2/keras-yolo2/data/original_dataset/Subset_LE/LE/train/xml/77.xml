@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_LE_train</folder>
+    <filename>77.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>LE_train</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>320</width>
+        <height>240</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>N36190</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>167</xmin>
+            <ymin>133</ymin>
+            <xmax>237</xmax>
+            <ymax>171</ymax>
+        </bndbox>
+    </object>
+</annotation>

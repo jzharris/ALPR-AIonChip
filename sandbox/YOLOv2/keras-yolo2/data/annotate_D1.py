@@ -188,30 +188,30 @@ def annotate(type='train', export=True):
                         # save the (colored) corresponding image as new jpg file
                         cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
 
-                        ###########################################################################################
-                        # Do for B/W color image:
-                        formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0],
-                                                bb_set)
-
-                        # save formatted to a new xml file
-                        with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
-                            xml_file.write(formatted)
-
-                        # save the (colored) corresponding image as new jpg file
-                        cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
-
-                        ###########################################################################################
-                        # Do for inverted B/W color image:
-                        formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0],
-                                                bb_set)
-
-                        # save formatted to a new xml file
-                        with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
-                            xml_file.write(formatted)
-
-                        # save the (colored) corresponding image as new jpg file
-                        cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
-                                    255 - imread(file_path, mode='L'))
+                        # ###########################################################################################
+                        # # Do for B/W color image:
+                        # formatted = data.format('{}_bw.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                        #                         bb_set)
+                        #
+                        # # save formatted to a new xml file
+                        # with open(path.join(xml_dir, '{}_bw.xml'.format(file_counter)), 'w+') as xml_file:
+                        #     xml_file.write(formatted)
+                        #
+                        # # save the (colored) corresponding image as new jpg file
+                        # cv2.imwrite(path.join(jpg_dir, '{}_bw.jpg'.format(file_counter)), imread(file_path, mode='L'))
+                        #
+                        # ###########################################################################################
+                        # # Do for inverted B/W color image:
+                        # formatted = data.format('{}_inv.jpg'.format(file_counter), image.shape[1], image.shape[0],
+                        #                         bb_set)
+                        #
+                        # # save formatted to a new xml file
+                        # with open(path.join(xml_dir, '{}_inv.xml'.format(file_counter)), 'w+') as xml_file:
+                        #     xml_file.write(formatted)
+                        #
+                        # # save the (colored) corresponding image as new jpg file
+                        # cv2.imwrite(path.join(jpg_dir, '{}_inv.jpg'.format(file_counter)),
+                        #             255 - imread(file_path, mode='L'))
 
                     file_counter += 1
 

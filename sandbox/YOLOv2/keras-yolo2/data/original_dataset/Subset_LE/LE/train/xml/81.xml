@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_LE_train</folder>
+    <filename>81.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>LE_train</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>320</width>
+        <height>240</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>QR8001</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>181</xmin>
+            <ymin>127</ymin>
+            <xmax>249</xmax>
+            <ymax>162</ymax>
+        </bndbox>
+    </object>
+</annotation>
