@@ -38,25 +38,17 @@ def filter_image(image):
 
 
 def filter_contours(image, contours):
-    image_w = image.shape[1]
-    image_h = image.shape[0]
-
     rects = []
-    cnt_areas = [cv2.contourArea(cnt) for cnt in contours]
-    cnt_areas = sorted(cnt_areas, reverse=True)
-    keep_n_areas = 6
     if len(contours) > 0:
-        # c = max(contours, key=cv2.contourArea)
         for i, cnt in enumerate(contours):
 
             (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
             aspectRatio = boxW / float(boxH)
-            # solidity = cv2.contourArea(cnt) / float(boxW * boxH)
+            solidity = cv2.contourArea(cnt) / float(boxW * boxH)
             heightRatio = boxH / float(image.shape[0])
 
             keepAspectRatio = 0.1 < aspectRatio < 0.95
-            # keepSolidity = cnt_areas.index(cv2.contourArea(cnt)) < keep_n_areas # > 0.15
-            keepSolidity = cv2.contourArea(cnt) / (image_w * image_h) < 0.9
+            keepSolidity = solidity > 0.15
             keepHeight = 0.3 < heightRatio < 0.9
 
             # if keepSolidity:
