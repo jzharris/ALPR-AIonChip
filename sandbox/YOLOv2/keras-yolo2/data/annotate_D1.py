@@ -28,12 +28,12 @@ def draw_contours(image, contours):
 
 def filter_image(image):
     # Median Filer to remove possible noise
-    median = cv2.medianBlur(image, 5)
+    kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
+    blur = cv2.filter2D(image, -1, kernel)
+    median = cv2.medianBlur(blur, 5)
     # Bilateral Filter to remove texture
-    blur = cv2.bilateralFilter(median, 9, 25, 25)
+    blur = cv2.bilateralFilter(median, 13, 115, 115)
     # Adaptive Threshold
-    # kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
-    #image = cv2.filter2D(median, -1, kernel)
     block_size = 101
     local_thresh = threshold_local(blur, block_size, mode='constant', offset=16)
     #t_sauvola = threshold_sauvola(blur, window_size=block_size, k=0.7)
@@ -153,8 +153,8 @@ def annotate(type='train', export=True):
 
             img = deepcopy(image)
             filtered_img, rects = filter_contours(img, contours)
-            #plt.imshow(filtered_img)
-            #plt.show()
+            # plt.imshow(filtered_img)
+            # plt.show()
 
             rects = sort_rects(rects)
 
