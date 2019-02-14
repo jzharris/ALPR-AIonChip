@@ -37,7 +37,7 @@ def filter_image(image):
     block_size = 103
     local_thresh = threshold_local(blur, block_size, mode='nearest', offset=16)
     #t_sauvola = threshold_sauvola(blur, window_size=block_size, k=0.7)
-    thresh = (image < local_thresh).astype(np.uint8)
+    thresh = (image <= local_thresh).astype(np.uint8)
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
     image = draw_contours(image, contours)
     return image, contours
