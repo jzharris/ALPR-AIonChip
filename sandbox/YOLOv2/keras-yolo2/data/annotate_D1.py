@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
 from skimage.filters import threshold_local
+import xml.etree.ElementTree as ET
 
 possible_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'   # NO I's or O's exist in this dataset
 char_counts = np.zeros(len(possible_chars))
@@ -24,8 +25,11 @@ def draw_contours(image, contours):
 
 
 def filter_image(image):
+    median = cv2.medianBlur(image, 5)
+    blur = cv2.bilateralFilter(median, 9, 100, 100)
+
     block_size = 101
-    local_thresh = threshold_local(image, block_size, offset=10)
+    local_thresh = threshold_local(blur, block_size, offset=16)
     thresh = (image <= local_thresh).astype(np.uint8)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -34,19 +38,28 @@ def filter_image(image):
 
 
 def filter_contours(image, contours):
+    image_w = image.shape[1]
+    image_h = image.shape[0]
+
     rects = []
+    cnt_areas = [cv2.contourArea(cnt) for cnt in contours]
+    cnt_areas = sorted(cnt_areas, reverse=True)
+    keep_n_areas = 6
     if len(contours) > 0:
-        c = max(contours, key=cv2.contourArea)
+        # c = max(contours, key=cv2.contourArea)
         for i, cnt in enumerate(contours):
+
             (boxX, boxY, boxW, boxH) = cv2.boundingRect(cnt)
             aspectRatio = boxW / float(boxH)
-            solidity = cv2.contourArea(c) / float(boxW * boxH)
+            # solidity = cv2.contourArea(cnt) / float(boxW * boxH)
             heightRatio = boxH / float(image.shape[0])
 
             keepAspectRatio = 0.1 < aspectRatio < 0.95
-            keepSolidity = solidity > 0.15
+            # keepSolidity = cnt_areas.index(cv2.contourArea(cnt)) < keep_n_areas # > 0.15
+            keepSolidity = cv2.contourArea(cnt) / (image_w * image_h) < 0.9
             keepHeight = 0.3 < heightRatio < 0.9
 
+            # if keepSolidity:
             if keepAspectRatio and keepSolidity and keepHeight:
                 x, y, w, h = cv2.boundingRect(cnt)
                 rects.append((x, y, w, h))
@@ -105,7 +118,7 @@ def correct_letters(file, rects):
     return keep_plate
 
 
-def annotate(type='train', export=True):
+def annotate(type='train', export=True, export_bbs=False):
     correct = 0
     incorrect = 0
 
@@ -186,7 +199,12 @@ def annotate(type='train', export=True):
                             xml_file.write(formatted)
 
                         # save the (colored) corresponding image as new jpg file
-                        cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), imread(file_path))
+                        img = imread(file_path)
+                        if export_bbs:
+                            boxes = load_lp_annotation(path.join(xml_dir, '{}.xml'.format(file_counter)))
+                            for box in boxes:
+                                cv2.rectangle(img, box[0], box[1], (0, 255, 0), 2)
+                        cv2.imwrite(path.join(jpg_dir, '{}.jpg'.format(file_counter)), img)
 
                         # ###########################################################################################
                         # # Do for B/W color image:
@@ -231,6 +249,29 @@ def annotate(type='train', export=True):
         plt.show()
 
 
+def load_lp_annotation(xmlname):
+    """
+    Load image and bounding boxes info from XML file in the PASCAL VOC
+    format.
+    """
+
+    filename = xmlname
+    tree = ET.parse(filename)
+    objs = tree.findall('object')
+
+    boxes = []
+    for obj in objs:
+        bbox = obj.find('bndbox')
+        x1 = int(float(bbox.find('xmin').text) - 1)
+        y1 = int(float(bbox.find('ymin').text) - 1)
+        x2 = int(float(bbox.find('xmax').text) - 1)
+        y2 = int(float(bbox.find('ymax').text) - 1)
+
+        boxes.append([(x1, y1), (x2, y2)])
+
+    return boxes
+
+
 if __name__ == '__main__':
-    annotate('train', export=True)
-    annotate('test', export=True)
+    annotate('train', export=True, export_bbs=True)
+    annotate('test', export=True, export_bbs=True)
