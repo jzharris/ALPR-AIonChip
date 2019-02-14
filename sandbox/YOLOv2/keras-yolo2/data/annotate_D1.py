@@ -36,7 +36,7 @@ def filter_image(image):
     # Adaptive Threshold
     # kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
     #image = cv2.filter2D(median, -1, kernel)
-    block_size = 103
+    block_size = 101
     local_thresh = threshold_local(blur, block_size, mode='nearest', offset=16)
     #t_sauvola = threshold_sauvola(blur, window_size=block_size, k=0.7)
     thresh = (image <= local_thresh).astype(np.uint8)
