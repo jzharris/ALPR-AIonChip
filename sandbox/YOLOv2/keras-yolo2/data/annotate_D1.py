@@ -8,7 +8,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
-from skimage.filters import threshold_local
+from skimage.filters import threshold_local,threshold_sauvola
+from scipy.signal import convolve2d
+from skimage import color, data, restoration
+import imutils
 
 possible_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'   # NO I's or O's exist in this dataset
 char_counts = np.zeros(len(possible_chars))
@@ -24,11 +27,18 @@ def draw_contours(image, contours):
 
 
 def filter_image(image):
-    block_size = 101
-    local_thresh = threshold_local(image, block_size, offset=10)
-    thresh = (image <= local_thresh).astype(np.uint8)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+    # Median Filer to remove possible noise
+    median = cv2.medianBlur(image, 5)
+    # Bilateral Filter to remove texture
+    blur = cv2.bilateralFilter(median, 9, 25, 25)
+    # Adaptive Threshold
+    # kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
+    #image = cv2.filter2D(median, -1, kernel)
+    block_size = 103
+    local_thresh = threshold_local(blur, block_size, mode='nearest', offset=16)
+    #t_sauvola = threshold_sauvola(blur, window_size=block_size, k=0.7)
+    thresh = (image < local_thresh).astype(np.uint8)
+    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
     image = draw_contours(image, contours)
     return image, contours
 
@@ -138,13 +148,13 @@ def annotate(type='train', export=True):
 
             img = deepcopy(image)
             output_img, contours = filter_image(img)
-            # plt.imshow(output_img)
-            # plt.show()
+            #plt.imshow(output_img)
+            #plt.show()
 
             img = deepcopy(image)
             filtered_img, rects = filter_contours(img, contours)
-            # plt.imshow(filtered_img)
-            # plt.show()
+            #plt.imshow(filtered_img)
+            #plt.show()
 
             rects = sort_rects(rects)
 
