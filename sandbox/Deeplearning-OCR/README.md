@@ -11,7 +11,7 @@ To add your own images, just place them in Train and Test. In each directory, pu
 
 Once the data has been placed in the Train/Test directories, you need to convert the data into tfrecords using the following command:
 ```
-python tools/write_text_features --dataset_dir path/to/your/dataset --save_dir path/to/tfrecords_dir --charset_dir path/to/charset_dir
+python tools/write_text_features.py --dataset_dir dataset --save_dir dataset
 ```
 
 ## Training the dataset
