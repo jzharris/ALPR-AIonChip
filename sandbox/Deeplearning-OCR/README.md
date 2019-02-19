@@ -9,6 +9,11 @@ The dataset must be placed in ./dataset under the Train and Test directories. Th
 
 To add your own images, just place them in Train and Test. In each directory, put a file called "sample.txt". In each row, put it in the format of "(Image Name) (Image Label)".
 
+Once the data has been placed in the Train/Test directories, you need to convert the data into tfrecords using the following command:
+```
+python tools/write_text_features --dataset_dir path/to/your/dataset --save_dir path/to/tfrecords_dir --charset_dir path/to/charset_dir
+```
+
 ## Training the dataset
 After placing the data in its respective directories, you can begin training from scratch, or continuing off an existing trained model.
 
