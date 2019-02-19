@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import xml.etree.ElementTree as ElementTree
 from tqdm import tqdm
+from scipy.misc import imread
 
 
 def convert_files(subset, is_training=True):
@@ -159,7 +160,13 @@ def convert_files3(is_training=True):
     if not path.isdir(jpeg_path):
         os.mkdir(jpeg_path)
 
+    xml_path = path.join(target_path, 'xml')
+    if not path.isdir(xml_path):
+        os.mkdir(xml_path)
+
     for input_set in input_sets:
+
+        print('Processing {}:'.format(input_set))
 
         # copy jpeg file:
         search_path1 = path.join(parent_path, input_set)
@@ -173,9 +180,88 @@ def convert_files3(is_training=True):
                             # print(path.join(root2, file))
                             if not os.path.isfile(path.join(jpeg_path, file)):
                                 shutil.copy(path.join(root2, file), path.join(jpeg_path, file))
-                        else:
+                        elif name[1] == '.txt':
                             # convert txt file to xml:
-                            pass
+                            target_file = path.join(xml_path, '{}.xml'.format(name[0]))
+                            if not os.path.isfile(target_file):
+                                ######################################################################
+                                # variables we need:
+                                plate = ''
+                                position_plate = ''
+                                char_positions = ['', '', '', '', '', '', '']
+
+                                with open(path.join(root2, file)) as txt:
+                                    for i, line in enumerate(txt.readlines()):
+                                        line = line.replace('\n', '')
+                                        if i == 6:
+                                            plate = line[6:]
+                                        elif i == 7:
+                                            position_plate = line[16:]
+                                        elif i >= 8:
+                                            char_positions[i-8] = line[9:]
+
+                                ######################################################################
+                                # preprocess xml objects:
+                                boxes = []
+                                chars = []
+                                for char in plate:
+                                    if char != '-' and char != ' ' and type(char) is str:
+                                        chars.append(char)
+
+                                with open('bb_xml_ufpr.txt', 'r') as myfile:
+                                    bb_template = myfile.read()
+
+                                    # plate position:
+                                    position_plate = position_plate.split(' ')
+                                    box_left = int(position_plate[0])
+                                    box_top = int(position_plate[1])
+                                    box_width = int(position_plate[2])
+                                    box_height = int(position_plate[3])
+
+                                    x_min = box_left
+                                    y_min = box_top
+                                    x_max = box_left + box_width
+                                    y_max = box_top + box_height
+
+                                    plate_template = bb_template.format(
+                                        'plate', x_min, y_min, x_max, y_max
+                                    )
+                                    boxes.append(plate_template)
+
+                                    # character positions:
+                                    for idx, char in enumerate(chars):
+                                        position_char = char_positions[idx].split(' ')
+                                        box_left = int(position_char[0])
+                                        box_top = int(position_char[1])
+                                        box_width = int(position_char[2])
+                                        box_height = int(position_char[3])
+
+                                        x_min = box_left
+                                        y_min = box_top
+                                        x_max = box_left + box_width
+                                        y_max = box_top + box_height
+
+                                        char_template = bb_template.format(
+                                            char, x_min, y_min, x_max, y_max
+                                        )
+                                        boxes.append(char_template)
+
+                                parsed = ''
+                                for box in boxes:
+                                    parsed = parsed + box + '\n'
+
+                                ######################################################################
+                                # add to main template
+                                with open('template_xml_ufpr.txt', 'r') as myfile:
+                                    data = myfile.read()
+                                    image = imread(path.join(root2, '{}.png'.format(name[0])), mode='L')
+                                    formatted = data.format('{}.png'.format(name[0]), image.shape[1], image.shape[0],
+                                                            parsed)
+
+                                if not os.path.isfile(target_file):
+                                    with open(target_file, 'w+') as xml_file:
+                                        xml_file.write(formatted)
+
             break
 
 
@@ -183,6 +269,7 @@ subsets = [
     'AC', 'LE', 'RP'
 ]
 
+convert_files3(is_training=True)
 convert_files3(is_training=False)
 
 # for subset in tqdm(subsets):
