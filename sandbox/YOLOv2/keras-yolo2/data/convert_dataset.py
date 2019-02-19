@@ -137,14 +137,58 @@ def convert_files2(subset, is_training=True):
             # shutil.copy(path.join(search_path, file), path.join(jpeg_path, new_path))
 
 
+def convert_files3(is_training=True):
+    if is_training:
+        input_sets = ['training']
+        output_set = 'train'
+    else:
+        input_sets = ['testing', 'validation']
+        output_set = 'test'
+
+    parent_path = 'ufpr_dataset'
+
+    converted_path = 'converted_ufpr'
+    if not path.isdir(path.join(converted_path)):
+        os.mkdir(path.join(converted_path))
+
+    target_path = path.join(converted_path, output_set)
+    if not path.isdir(target_path):
+        os.mkdir(target_path)
+
+    jpeg_path = path.join(target_path, 'jpeg')
+    if not path.isdir(jpeg_path):
+        os.mkdir(jpeg_path)
+
+    for input_set in input_sets:
+
+        # copy jpeg file:
+        search_path1 = path.join(parent_path, input_set)
+        for root1, tracks, _ in os.walk(search_path1):
+            for track in tqdm(tracks):
+                for root2, _, files in os.walk(path.join(root1, track)):
+                    for file in files:
+                        name = path.splitext(file)
+                        if name[1] == '.png':
+                            # copy jpeg file:
+                            # print(path.join(root2, file))
+                            if not os.path.isfile(path.join(jpeg_path, file)):
+                                shutil.copy(path.join(root2, file), path.join(jpeg_path, file))
+                        else:
+                            # convert txt file to xml:
+                            pass
+            break
+
+
 subsets = [
     'AC', 'LE', 'RP'
 ]
 
-for subset in tqdm(subsets):
-    convert_files2(subset, is_training=True)
-    convert_files2(subset, is_training=False)
+convert_files3(is_training=False)
 
-for subset in tqdm(subsets):
-    convert_files(subset, is_training=True)
-    convert_files(subset, is_training=False)
+# for subset in tqdm(subsets):
+#     convert_files2(subset, is_training=True)
+#     convert_files2(subset, is_training=False)
+#
+# for subset in tqdm(subsets):
+#     convert_files(subset, is_training=True)
+#     convert_files(subset, is_training=False)
