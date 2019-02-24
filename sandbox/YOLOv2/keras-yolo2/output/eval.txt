@@ -1,7 +1,14 @@
 #### LP seg
+
+##### Inceptionv3
 Epoch 00009: early stopping
 plate 0.9951
 mAP: 0.9951
+
+##### SqueezeNet
+Epoch 00017: early stopping
+plate 0.9366
+mAP: 0.9366
 
 #### Char seg
 Epoch 00045: val_loss did not improve from 1.22595
