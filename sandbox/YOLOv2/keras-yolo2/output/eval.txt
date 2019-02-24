@@ -5,10 +5,25 @@ Epoch 00009: early stopping
 plate 0.9951
 mAP: 0.9951
 
+##### MobileNet
+Epoch 00010: early stopping
+plate 0.9926
+mAP: 0.9926
+
+##### Tiny_yolo
+Epoch 00011: early stopping
+plate 0.9800
+mAP: 0.9800
+
 ##### SqueezeNet
 Epoch 00017: early stopping
 plate 0.9366
 mAP: 0.9366
+
+##### VGG16
+Epoch 00015: early stopping
+plate 0.0000
+mAP: 0.0000
 
 #### Char seg
 Epoch 00045: val_loss did not improve from 1.22595
