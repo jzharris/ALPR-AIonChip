@@ -7,6 +7,17 @@ from preprocessing import parse_annotation
 from frontend import YOLO
 import json
 
+from pruning.debug_functions import plot_weight_dist, print_inference
+from pruning.prune_network import prune_layers, check_pruned_weights, print_pruned_weights
+import keras.backend as K
+
+iterations = 2
+skip_first_train = True
+
+prune_threshold = 0.2
+white_list = [] #['DetectionLayer/kernel:0']
+white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss'] # TODO: add white_regex and white_list to print weight statements, and from weight count
+
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -58,43 +69,62 @@ def _main_(args):
     else:
         print('No labels are provided. Train on all seen labels.')
         config['model']['labels'] = train_labels.keys()
-        
-    ###############################
-    #   Construct the model 
-    ###############################
 
-    yolo = YOLO(backend             = config['model']['backend'],
-                input_size          = config['model']['input_size'], 
-                labels              = config['model']['labels'], 
-                max_box_per_image   = config['model']['max_box_per_image'],
-                anchors             = config['model']['anchors'])
+    grad_mask_consts = None
 
     ###############################
-    #   Load the pretrained weights (if any) 
-    ###############################    
-
-    if os.path.exists(config['train']['pretrained_weights']):
-        print("Loading pre-trained weights in", config['train']['pretrained_weights'])
-        yolo.load_weights(config['train']['pretrained_weights'])
-
-    ###############################
-    #   Start the training process 
+    #   Construct the model
     ###############################
 
-    yolo.train(train_imgs         = train_imgs,
-               valid_imgs         = valid_imgs,
-               train_times        = config['train']['train_times'],
-               valid_times        = config['valid']['valid_times'],
-               nb_epochs          = config['train']['nb_epochs'], 
-               learning_rate      = config['train']['learning_rate'], 
-               batch_size         = config['train']['batch_size'],
-               warmup_epochs      = config['train']['warmup_epochs'],
-               object_scale       = config['train']['object_scale'],
-               no_object_scale    = config['train']['no_object_scale'],
-               coord_scale        = config['train']['coord_scale'],
-               class_scale        = config['train']['class_scale'],
-               saved_weights_name = config['train']['saved_weights_name'],
-               debug              = config['train']['debug'])
+    yolo = YOLO(backend=config['model']['backend'],
+                input_size=config['model']['input_size'],
+                labels=config['model']['labels'],
+                max_box_per_image=config['model']['max_box_per_image'],
+                anchors=config['model']['anchors'],
+                grad_mask_consts=grad_mask_consts)
+
+    for it in range(iterations):
+        print("it {}".format(it))
+
+        ###############################
+        #   Load the pretrained weights (if any)
+        ###############################
+
+        if os.path.exists(config['train']['pretrained_weights']):
+            print("Loading pre-trained weights in", config['train']['pretrained_weights'])
+            yolo.load_weights(config['train']['pretrained_weights'])
+
+        ###############################
+        #   Start the training process
+        ###############################
+
+        if it != 0 or not skip_first_train:
+
+            yolo.train(train_imgs         = train_imgs,
+                       valid_imgs         = valid_imgs,
+                       train_times        = config['train']['train_times'],
+                       valid_times        = config['valid']['valid_times'],
+                       nb_epochs          = config['train']['nb_epochs'],
+                       learning_rate      = config['train']['learning_rate'],
+                       batch_size         = config['train']['batch_size'],
+                       warmup_epochs      = config['train']['warmup_epochs'],
+                       object_scale       = config['train']['object_scale'],
+                       no_object_scale    = config['train']['no_object_scale'],
+                       coord_scale        = config['train']['coord_scale'],
+                       class_scale        = config['train']['class_scale'],
+                       saved_weights_name = config['train']['saved_weights_name'],
+                       debug              = config['train']['debug'])
+
+        ################################################################################################################
+        # Calculate grad_mask_consts
+
+        sess = K.get_session()
+        grad_mask_consts = prune_layers(sess, prune_threshold, grad_mask_consts, white_list, white_regex)
+        print_pruned_weights(sess, grad_mask_consts)
+        check_pruned_weights(sess, grad_mask_consts, prune_threshold, it)
+        print('='*20)
+
+        # K.clear_session()
 
 if __name__ == '__main__':
     args = argparser.parse_args()

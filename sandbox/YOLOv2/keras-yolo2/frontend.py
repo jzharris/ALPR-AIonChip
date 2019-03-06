@@ -2,6 +2,7 @@ from keras.models import Model
 from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
 from keras.layers.advanced_activations import LeakyReLU
 import tensorflow as tf
+import keras
 import numpy as np
 import os
 import cv2
@@ -9,6 +10,7 @@ from utils import decode_netout, compute_overlap, compute_ap
 from keras.applications.mobilenet import MobileNet
 from keras.layers.merge import concatenate
 from keras.optimizers import SGD, Adam, RMSprop
+from pruning.prune_network import CustomAdam
 from preprocessing import BatchGenerator
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from backend import TinyYoloFeature, FullYoloFeature, MobileNetFeature, SqueezeNetFeature, Inception3Feature, \
@@ -20,7 +22,8 @@ class YOLO(object):
                  input_size,
                  labels,
                  max_box_per_image,
-                 anchors):
+                 anchors,
+                 grad_mask_consts=None):
 
         self.input_size = input_size
 
@@ -31,6 +34,8 @@ class YOLO(object):
         self.anchors = anchors
 
         self.max_box_per_image = max_box_per_image
+
+        self.grad_mask_consts = grad_mask_consts
 
         ##########################
         # Make the model
@@ -302,7 +307,11 @@ class YOLO(object):
         # Compile the model
         ############################################
 
-        optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+        # optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=0.9, beta2=0.999, epsilon=1e-08)
+        optimizer = CustomAdam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08,
+                               grad_mask_consts=self.grad_mask_consts)
+        # optimizer = CustomAdamOptimizer(learning_rate=learning_rate, beta1=0.9, beta2=0.999, epsilon=1e-08,
+        #                                 grad_mask_consts=self.grad_mask_consts)
         self.model.compile(loss=self.custom_loss, optimizer=optimizer)
 
         ############################################
