@@ -16,7 +16,7 @@ import keras.backend as K
 ##########################################################################################################
 
 iterations = 8
-epochs = [None, 1, 4, 4, 4, 4, 4, 4, 4]
+epochs = [None, 1, 1, 2, 2, 2, 3, 10, 10]
 skip_first_train = True
 
 prune_threshold = 0.20
@@ -27,7 +27,7 @@ white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'r
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
