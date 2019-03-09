@@ -12,7 +12,7 @@ from prune_network import prune_layers, check_pruned_weights, print_pruned_weigh
 import keras.backend as K
 
 ##########################################################################################################
-# run: python train.py -c config_lp_seg_mobilenet.json 2>&1 | tee pruned_models\logs.txt
+# run: python train.py -c config_lp_seg_mobilenet.json 2>&1 | tee pruned_models/logs.txt
 ##########################################################################################################
 
 iterations = 8

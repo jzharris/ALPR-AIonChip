@@ -241,58 +241,87 @@ class CustomAdam(Optimizer):
 
     @interfaces.legacy_get_updates_support
     def get_updates(self, loss, params):
-        grads = self.get_gradients(loss, params)
-        # # needed here? No...?
-        # if self.grad_mask_consts is not None:
-        #     # Apply mask. orig_grads_and_vars is a list of tuples (gradient, variable).
-        #     pruned_train_gradient = [
-        #         (tf.multiply(tf.cast(self.grad_mask_consts[gv[1].name], tf.float32), gv[0]), gv[1]) for gv in grads]
-        #
-        #     opt_update = self.apply_gradients(
-        #         grads, global_step=self.iterations)
-        #     self.updates.append(opt_update)
+        if sys.version_info[1] == 5:
+            grads = self.get_gradients(loss, params)
+            self.updates = [K.update_add(self.iterations, 1)]
 
-        self.updates = [K.update_add(self.iterations, 1)]
-
-        lr = self.lr
-        if self.initial_decay > 0:
-            lr = lr * (1. / (1. + self.decay * K.cast(self.iterations,
+            lr = self.lr
+            if self.initial_decay > 0:
+                lr *= (1. / (1. + self.decay * K.cast(self.iterations,
                                                       K.dtype(self.decay))))
 
-        t = K.cast(self.iterations, K.floatx()) + 1
-        lr_t = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
-                     (1. - K.pow(self.beta_1, t)))
+            t = K.cast(self.iterations, K.floatx()) + 1
+            lr_t = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
+                         (1. - K.pow(self.beta_1, t)))
 
-        ms = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
-        vs = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
-        if self.amsgrad:
-            vhats = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
-        else:
-            vhats = [K.zeros(1) for _ in params]
-        self.weights = [self.iterations] + ms + vs + vhats
+            ms = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
+            vs = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
+            self.weights = [self.iterations] + ms + vs
 
-        for p, g, m, v, vhat in zip(params, grads, ms, vs, vhats):
-            if self.grad_mask_consts is not None and p.name in self.grad_mask_consts:
-                g = tf.cast(self.grad_mask_consts[p.name], tf.float32) * g
+            for p, g, m, v in zip(params, grads, ms, vs):
+                if self.grad_mask_consts is not None and p.name in self.grad_mask_consts:
+                    g = tf.cast(self.grad_mask_consts[p.name], tf.float32) * g
 
-            m_t = (self.beta_1 * m) + (1. - self.beta_1) * g
-            v_t = (self.beta_2 * v) + (1. - self.beta_2) * K.square(g)
-            if self.amsgrad:
-                vhat_t = K.maximum(vhat, v_t)
-                p_t = p - lr_t * m_t / (K.sqrt(vhat_t) + self.epsilon)
-                self.updates.append(K.update(vhat, vhat_t))
-            else:
+                m_t = (self.beta_1 * m) + (1. - self.beta_1) * g
+                v_t = (self.beta_2 * v) + (1. - self.beta_2) * K.square(g)
                 p_t = p - lr_t * m_t / (K.sqrt(v_t) + self.epsilon)
 
-            self.updates.append(K.update(m, m_t))
-            self.updates.append(K.update(v, v_t))
-            new_p = p_t
+                self.updates.append(K.update(m, m_t))
+                self.updates.append(K.update(v, v_t))
+                new_p = p_t
 
-            # Apply constraints.
-            if getattr(p, 'constraint', None) is not None:
-                new_p = p.constraint(new_p)
+                # Apply constraints.
+                if getattr(p, 'constraint', None) is not None:
+                    new_p = p.constraint(new_p)
 
-            self.updates.append(K.update(p, new_p))
+                self.updates.append(K.update(p, new_p))
+            return self.updates
+        elif sys.version_info[1] == 6:
+            grads = self.get_gradients(loss, params)
+
+            self.updates = [K.update_add(self.iterations, 1)]
+
+            lr = self.lr
+            if self.initial_decay > 0:
+                lr = lr * (1. / (1. + self.decay * K.cast(self.iterations,
+                                                          K.dtype(self.decay))))
+
+            t = K.cast(self.iterations, K.floatx()) + 1
+            lr_t = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
+                         (1. - K.pow(self.beta_1, t)))
+
+            ms = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
+            vs = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
+            if self.amsgrad:
+                vhats = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
+            else:
+                vhats = [K.zeros(1) for _ in params]
+            self.weights = [self.iterations] + ms + vs + vhats
+
+            for p, g, m, v, vhat in zip(params, grads, ms, vs, vhats):
+                if self.grad_mask_consts is not None and p.name in self.grad_mask_consts:
+                    g = tf.cast(self.grad_mask_consts[p.name], tf.float32) * g
+
+                m_t = (self.beta_1 * m) + (1. - self.beta_1) * g
+                v_t = (self.beta_2 * v) + (1. - self.beta_2) * K.square(g)
+                if self.amsgrad:
+                    vhat_t = K.maximum(vhat, v_t)
+                    p_t = p - lr_t * m_t / (K.sqrt(vhat_t) + self.epsilon)
+                    self.updates.append(K.update(vhat, vhat_t))
+                else:
+                    p_t = p - lr_t * m_t / (K.sqrt(v_t) + self.epsilon)
+
+                self.updates.append(K.update(m, m_t))
+                self.updates.append(K.update(v, v_t))
+                new_p = p_t
+
+                # Apply constraints.
+                if getattr(p, 'constraint', None) is not None:
+                    new_p = p.constraint(new_p)
+
+                self.updates.append(K.update(p, new_p))
+        else:
+            raise Exception("CustomAdam does not currently suppor this version of python")
         return self.updates
 
     def get_config(self):
