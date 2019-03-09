@@ -16,7 +16,9 @@ skip_first_train = True
 
 prune_threshold = 0.2
 white_list = [] #['DetectionLayer/kernel:0']
-white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss'] # TODO: add white_regex and white_list to print weight statements, and from weight count
+white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'running_variance',
+               'moving_mean', 'moving_variance', 'DetectionLayer']
+# TODO: add white_regex and white_list to print weight statements, and from weight count
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -86,13 +88,38 @@ def _main_(args):
     for it in range(iterations):
         print("it {}".format(it))
 
+        # update grad_mask_consts if it > 0
+        if it > 0 and grad_mask_consts is not None:
+            yolo.grad_mask_consts = grad_mask_consts
+            yolo.recompile(train_imgs         = train_imgs,
+                           valid_imgs         = valid_imgs,
+                           train_times        = config['train']['train_times'],
+                           valid_times        = config['valid']['valid_times'],
+                           learning_rate      = config['train']['learning_rate'],
+                           batch_size         = config['train']['batch_size'],
+                           warmup_epochs      = config['train']['warmup_epochs'],
+                           object_scale       = config['train']['object_scale'],
+                           no_object_scale    = config['train']['no_object_scale'],
+                           coord_scale        = config['train']['coord_scale'],
+                           class_scale        = config['train']['class_scale'],
+                           debug              = config['train']['debug'])
+
         ###############################
         #   Load the pretrained weights (if any)
         ###############################
 
-        if os.path.exists(config['train']['pretrained_weights']):
+        if it > 0 and os.path.exists(config['train']['pruned_weights_name']):
+            print("Loading pruned weights in", config['train']['pruned_weights_name'])
+            yolo.load_weights(config['train']['pruned_weights_name'])
+
+            # check to make sure the weights are pruned
+            sess = K.get_session()
+            check_pruned_weights(sess, grad_mask_consts, prune_threshold, it-1)
+        elif os.path.exists(config['train']['pretrained_weights']):
             print("Loading pre-trained weights in", config['train']['pretrained_weights'])
             yolo.load_weights(config['train']['pretrained_weights'])
+        else:
+            print("No pre-trained weights were loaded")
 
         ###############################
         #   Start the training process
@@ -119,11 +146,24 @@ def _main_(args):
         # Calculate grad_mask_consts
 
         sess = K.get_session()
-        grad_mask_consts = prune_layers(sess, prune_threshold, grad_mask_consts, white_list, white_regex)
-        print_pruned_weights(sess, grad_mask_consts)
+        if it > 0:
+            # show the weights just after training
+            check_pruned_weights(sess, grad_mask_consts, prune_threshold, it-1)
+        grad_mask_consts = prune_layers(sess, prune_threshold, grad_mask_consts, white_list, white_regex,
+                                        verbose=config['train']['verbose'])
+        if config['train']['verbose']:
+            print_pruned_weights(sess, grad_mask_consts)
         check_pruned_weights(sess, grad_mask_consts, prune_threshold, it)
         print('='*20)
 
+        # save weights to h5:
+        if config['train']['saved_weights_name']:
+            print("Saving pruned weights for next iteration...")
+            yolo.save_weights(config['train']['saved_weights_name'])
+
+        # get this error if enabled:
+        #   Cannot interpret feed_dict key as Tensor: Tensor Tensor("Placeholder_17:0", shape=(64,), dtype=float32)
+        #   is not an element of this graph.
         # K.clear_session()
 
 if __name__ == '__main__':

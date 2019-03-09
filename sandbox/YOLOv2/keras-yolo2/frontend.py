@@ -249,8 +249,67 @@ class YOLO(object):
 
         return loss
 
+    def recompile(self, train_imgs,  # the list of images to train the model
+                  valid_imgs,  # the list of images used to validate the model
+                  train_times,  # the number of time to repeat the training set, often used for small datasets
+                  valid_times,  # the number of times to repeat the validation set, often used for small datasets
+                  learning_rate,  # the learning rate
+                  batch_size,  # the size of the batch
+                  warmup_epochs,  # number of initial batches to let the model familiarize with the new dataset
+                  object_scale,
+                  no_object_scale,
+                  coord_scale,
+                  class_scale,
+                  debug=False):
+
+        self.batch_size = batch_size
+
+        self.object_scale = object_scale
+        self.no_object_scale = no_object_scale
+        self.coord_scale = coord_scale
+        self.class_scale = class_scale
+
+        self.debug = debug
+
+        ############################################
+        # Make train and validation generators
+        ############################################
+
+        generator_config = {
+            'IMAGE_H': self.input_size,
+            'IMAGE_W': self.input_size,
+            'GRID_H': self.grid_h,
+            'GRID_W': self.grid_w,
+            'BOX': self.nb_box,
+            'LABELS': self.labels,
+            'CLASS': len(self.labels),
+            'ANCHORS': self.anchors,
+            'BATCH_SIZE': self.batch_size,
+            'TRUE_BOX_BUFFER': self.max_box_per_image,
+        }
+
+        train_generator = BatchGenerator(train_imgs,
+                                         generator_config,
+                                         norm=self.feature_extractor.normalize)
+        valid_generator = BatchGenerator(valid_imgs,
+                                         generator_config,
+                                         norm=self.feature_extractor.normalize,
+                                         jitter=False)
+
+        self.warmup_batches = warmup_epochs * (train_times * len(train_generator) + valid_times * len(valid_generator))
+
+        # optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=0.9, beta2=0.999, epsilon=1e-08)
+        optimizer = CustomAdam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08,
+                               grad_mask_consts=self.grad_mask_consts)
+        # optimizer = CustomAdamOptimizer(learning_rate=learning_rate, beta1=0.9, beta2=0.999, epsilon=1e-08,
+        #                                 grad_mask_consts=self.grad_mask_consts)
+        self.model.compile(loss=self.custom_loss, optimizer=optimizer)
+
     def load_weights(self, weight_path):
         self.model.load_weights(weight_path)
+
+    def save_weights(self, weight_path):
+        self.model.save_weights(weight_path)
 
     def train(self, train_imgs,  # the list of images to train the model
               valid_imgs,  # the list of images used to validate the model

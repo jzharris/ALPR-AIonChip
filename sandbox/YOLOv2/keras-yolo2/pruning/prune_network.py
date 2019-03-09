@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
+import keras
 
 import numpy as np
 
@@ -11,7 +12,7 @@ DATA_DIR = './dataset/cifar/'
 FIGS_DIR = 'figs'
 
 
-def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=None, white_regex=None):
+def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=None, white_regex=None, verbose=True):
     print('Pruning parameters one layer at a time...')
 
     if prune_threshold > 1 or prune_threshold < 0:
@@ -26,7 +27,11 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
 
     # set everything under threshold to zero
     for idx, (var, val) in enumerate(zip(vars, vars_vals)):
-        print('>>> {}'.format(var.name))
+        if grad_mask_consts_old is not None:
+            if not var.name in grad_mask_consts_old.keys():
+                continue # skip if there is a new variable that wasn't known of previously
+
+        # print('>>> {}'.format(var.name))
 
         # create np array of weights
         val_np = np.array(val)
@@ -46,7 +51,8 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
         # create the mask
         layer_weights = np.ones(val_np.shape)
         if (white_list is not None and var.name in white_list):
-            print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
+            if verbose:
+                print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
         else:
             skip = False
             if white_regex is not None:
@@ -56,8 +62,11 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
                         break
 
             if skip:
-                print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
+                if verbose:
+                    print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
             else:
+                if verbose:
+                    print(">>>\t pruning {}".format(var.name))
                 sorted_full = np.dstack(np.unravel_index(np.argsort(flattened), val_np.shape))[0]
                 sorted_full_prune = sorted_full[outliers : n - outliers]
                 for prune in sorted_full_prune:
@@ -94,21 +103,22 @@ def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
 
     # set everything under threshold to zero
     for idx, (var, val) in enumerate(zip(vars, vals)):
-        # create np array of weights
-        val_np = np.array(val)
+        if var.name in grad_mask_consts.keys():
+            # create np array of weights
+            val_np = np.array(val)
 
-        # mask out the un-pruned weights
-        mask = np.array(sess.run(grad_mask_consts[var.name]))
-        val_masked = val_np[mask == 0]
+            # mask out the un-pruned weights
+            mask = np.array(sess.run(grad_mask_consts[var.name]))
+            val_masked = val_np[mask == 0]
 
-        # count how many of these are != 0
-        leaked_pruned_weights += np.count_nonzero(val_masked)
+            # count how many of these are != 0
+            leaked_pruned_weights += np.count_nonzero(val_masked)
 
-        # count total number of pruned weights
-        total += len(val_masked.flatten())
+            # count total number of pruned weights
+            total += len(val_masked.flatten())
 
-        # count total number of weights in this layer
-        original += len(val_np.flatten())
+            # count total number of weights in this layer
+            original += len(val_np.flatten())
 
     total_pruned = total
     count = leaked_pruned_weights
@@ -116,7 +126,7 @@ def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
     percentage = total_pruned / original * 100
     true_percentage = (1 - (1-prune_threshold)**(it+1)) * 100
 
-    print('>>>\t{} of the {} weights that should have been pruned are NONzero (should be 0)'.
+    print('>>>\t{} of the {} weights that have been pruned are NONzero (should be 0)'.
           format(count, total_pruned, percentage))
     print('>>>\t{} of the {} total weights have been pruned ({:.6f}% of original, should be {:.6f}%)'.
           format(total_pruned, original, percentage, true_percentage))
@@ -176,6 +186,7 @@ def print_pruned_weights(sess, grad_mask_consts=None):
         pass
 
 ########################################################################################################################
+# Pruning a Keras model using a customized Optimizer
 from keras.optimizers import Optimizer
 import keras.backend as K
 from keras.legacy import interfaces
@@ -222,6 +233,7 @@ class CustomAdam(Optimizer):
     @interfaces.legacy_get_updates_support
     def get_updates(self, loss, params):
         grads = self.get_gradients(loss, params)
+        # # needed here? No...?
         # if self.grad_mask_consts is not None:
         #     # Apply mask. orig_grads_and_vars is a list of tuples (gradient, variable).
         #     pruned_train_gradient = [
@@ -251,13 +263,8 @@ class CustomAdam(Optimizer):
         self.weights = [self.iterations] + ms + vs + vhats
 
         for p, g, m, v, vhat in zip(params, grads, ms, vs, vhats):
-            if self.grad_mask_consts is not None:
-                print(p.name)
-                print(self.grad_mask_consts[p.name])
-                g = self.grad_mask_consts[p.name] * g
-            # else:
-            #     print('ok')
-            #     exit(0)
+            if self.grad_mask_consts is not None and p.name in self.grad_mask_consts:
+                g = tf.cast(self.grad_mask_consts[p.name], tf.float32) * g
 
             m_t = (self.beta_1 * m) + (1. - self.beta_1) * g
             v_t = (self.beta_2 * v) + (1. - self.beta_2) * K.square(g)
@@ -288,6 +295,21 @@ class CustomAdam(Optimizer):
                   'amsgrad': self.amsgrad}
         base_config = super(CustomAdam, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
+
+    def get_gradients(self, loss, params):
+        grads = K.gradients(loss, params)
+        if None in grads:
+            raise ValueError('An operation has `None` for gradient. '
+                             'Please make sure that all of your ops have a '
+                             'gradient defined (i.e. are differentiable). '
+                             'Common ops without gradient: '
+                             'K.argmax, K.round, K.eval.')
+        if hasattr(self, 'clipnorm') and self.clipnorm > 0:
+            norm = K.sqrt(sum([K.sum(K.square(g)) for g in grads]))
+            grads = [keras.optimizers.clip_norm(g, self.clipnorm, norm) for g in grads]
+        if hasattr(self, 'clipvalue') and self.clipvalue > 0:
+            grads = [K.clip(g, -self.clipvalue, self.clipvalue) for g in grads]
+        return grads
 
 
 # from tensorflow.python.eager import context
