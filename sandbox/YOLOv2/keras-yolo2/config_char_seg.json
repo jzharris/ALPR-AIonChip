@@ -1,15 +1,15 @@
 {
     "model" : {
         "backend":              "Inception3",
-        "input_size":           200,
-        "anchors":              [0.41,3.14, 0.80,2.93, 0.83,3.44, 0.91,3.01, 1.22,3.53],
-        "max_box_per_image":    1,
-        "labels":               ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        "input_size":           448,
+        "anchors":              [0.03,0.19, 0.06,0.16, 0.09,0.24, 0.15,0.34, 0.71,0.49],
+        "max_box_per_image":    8,
+        "labels":               ["plate", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     },
 
     "train": {
-        "train_image_folder":   "data/lp_candidates/train/jpeg/",
-        "train_annot_folder":   "data/lp_candidates/train/xml/",
+        "train_image_folder":   "data/converted_ufpr/test/jpeg/",
+        "train_annot_folder":   "data/converted_ufpr/test/xml/",
 
         "train_times":          8,
         "pretrained_weights":   "",
@@ -28,8 +28,8 @@
     },
 
     "valid": {
-        "valid_image_folder":   "data/lp_candidates/test/jpeg/",
-        "valid_annot_folder":   "data/lp_candidates/test/xml/",
+        "valid_image_folder":   "data/converted_ufpr/train/jpeg/",
+        "valid_annot_folder":   "data/converted_ufpr/train/xml/",
 
         "valid_times":          1
     }

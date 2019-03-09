@@ -1,0 +1,38 @@
+{
+    "model" : {
+        "backend":              "MobileNet",
+        "input_size":           448,
+        "anchors":              [1.05,0.87, 1.99,1.46, 2.69,2.30, 2.78,1.82, 3.77,2.83],
+        "max_box_per_image":    1,
+        "labels":               ["plate"]
+    },
+
+    "train": {
+        "train_image_folder":   "data/converted_dataset/train/jpeg/",
+        "train_annot_folder":   "data/converted_dataset/train/xml/",
+          
+        "train_times":          8,
+        "pretrained_weights":   "lp_seg_mobilenet.h5",
+        "batch_size":           20,
+        "learning_rate":        1e-4,
+        "nb_epochs":            1,
+        "warmup_epochs":        0,
+
+        "object_scale":         5.0,
+        "no_object_scale":      1.0,
+        "coord_scale":          1.0,
+        "class_scale":          1.0,
+
+        "saved_weights_name":   "pruned_models/mobilenet_8it_20p/lp_seg_mobilenet_last_unpruned",
+        "pruned_weights_name":  "pruned_models/mobilenet_8it_20p/lp_seg_mobilenet_pruned",
+        "debug":                false,
+        "verbose":              false
+    },
+
+    "valid": {
+        "valid_image_folder":   "data/converted_dataset/test/jpeg/",
+        "valid_annot_folder":   "data/converted_dataset/test/xml/",
+
+        "valid_times":          1
+    }
+}

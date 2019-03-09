@@ -1,0 +1,3 @@
+model_checkpoint_path: "shadownet_2019-02-14-11-11-22.ckpt-1"
+all_model_checkpoint_paths: "shadownet_2019-02-14-11-11-22.ckpt-0"
+all_model_checkpoint_paths: "shadownet_2019-02-14-11-11-22.ckpt-1"

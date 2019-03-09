@@ -1,0 +1,9 @@
+<annotation>
+    <filename>{}</filename>
+    <size>
+        <width>{}</width>
+        <height>{}</height>
+        <depth>3</depth>
+    </size>
+{}
+</annotation>

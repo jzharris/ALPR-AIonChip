@@ -1,0 +1,36 @@
+{
+    "model" : {
+        "backend":              "VGG16",
+        "input_size":           448,
+        "anchors":              [1.05,0.87, 1.99,1.46, 2.69,2.30, 2.78,1.82, 3.77,2.83],
+        "max_box_per_image":    1,
+        "labels":               ["plate"]
+    },
+
+    "train": {
+        "train_image_folder":   "data/converted_dataset/train/jpeg/",
+        "train_annot_folder":   "data/converted_dataset/train/xml/",
+          
+        "train_times":          8,
+        "pretrained_weights":   "",
+        "batch_size":           16,
+        "learning_rate":        1e-4,
+        "nb_epochs":            50,
+        "warmup_epochs":        3,
+
+        "object_scale":         5.0,
+        "no_object_scale":      1.0,
+        "coord_scale":          1.0,
+        "class_scale":          1.0,
+
+        "saved_weights_name":   "lp_seg_vgg16.h5",
+        "debug":                false
+    },
+
+    "valid": {
+        "valid_image_folder":   "data/converted_dataset/test/jpeg/",
+        "valid_annot_folder":   "data/converted_dataset/test/xml/",
+
+        "valid_times":          1
+    }
+}

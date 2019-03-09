@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_RP_train</folder>
+    <filename>22.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>RP_train</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>320</width>
+        <height>240</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>DM1551</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>71</xmin>
+            <ymin>154</ymin>
+            <xmax>139</xmax>
+            <ymax>197</ymax>
+        </bndbox>
+    </object>
+</annotation>

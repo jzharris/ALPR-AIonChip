@@ -1,0 +1,9 @@
+    <object>
+        <name>{}</name>
+        <bndbox>
+            <xmin>{}</xmin>
+            <ymin>{}</ymin>
+            <xmax>{}</xmax>
+            <ymax>{}</ymax>
+        </bndbox>
+    </object>
