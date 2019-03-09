@@ -8,7 +8,6 @@ from preprocessing import parse_annotation
 from frontend import YOLO
 import json
 
-from pruning.debug_functions import plot_weight_dist, print_inference
 from pruning.prune_network import prune_layers, check_pruned_weights, print_pruned_weights
 import keras.backend as K
 
