@@ -1,11 +1,11 @@
 import os
 
+# disable GPU - not needed
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import tensorflow as tf
 import keras
-import os
 import json
 import argparse
 from preprocessing import parse_annotation
@@ -13,6 +13,11 @@ import numpy as np
 import shutil
 
 from frontend import YOLO
+from pruning.prune_network import CustomAdam
+
+######################################################################
+# To run: python convert_checkpoint.py -c config_lp_seg_mobilenet.json
+######################################################################
 
 parent_folder = "./"
 filename = "lp_seg_mobilenet_last_unpruned"
@@ -104,7 +109,9 @@ def _main_(args):
                     debug=config['train']['debug'])
 
     # Load model, print endpoints
-    model = keras.models.load_model("{}.h5".format(full_path), custom_objects={'custom_loss': yolo.custom_loss})
+    # optimizer = CustomAdam(lr=config['train']['learning_rate'], beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+    model = keras.models.load_model("{}.h5".format(full_path), custom_objects={'custom_loss': yolo.custom_loss,
+                                                                               'CustomAdam': CustomAdam})
     print('inputs')
     print(model.inputs)
     print('outputs:')
