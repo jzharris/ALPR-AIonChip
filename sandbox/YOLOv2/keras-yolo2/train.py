@@ -11,14 +11,14 @@ from pruning.debug_functions import plot_weight_dist, print_inference
 from pruning.prune_network import prune_layers, check_pruned_weights, print_pruned_weights
 import keras.backend as K
 
-iterations = 2
+iterations = 9
 skip_first_train = True
 
 prune_threshold = 0.2
 white_list = [] #['DetectionLayer/kernel:0']
 white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'running_variance',
                'moving_mean', 'moving_variance', 'DetectionLayer']
-# TODO: add white_regex and white_list to print weight statements, and from weight count
+epochs = [1, 1, 5, 5, 5]
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -141,6 +141,20 @@ def _main_(args):
                        class_scale        = config['train']['class_scale'],
                        saved_weights_name = config['train']['saved_weights_name'],
                        debug              = config['train']['debug'])
+        else:
+            # perform evaluation in either case (usually performed at end of training setp)
+            print('Evaluating pre-trained network')
+            yolo.validate(train_imgs=train_imgs,
+                          valid_imgs=valid_imgs,
+                          train_times=config['train']['train_times'],
+                          valid_times=config['valid']['valid_times'],
+                          batch_size=config['train']['batch_size'],
+                          warmup_epochs=config['train']['warmup_epochs'],
+                          object_scale=config['train']['object_scale'],
+                          no_object_scale=config['train']['no_object_scale'],
+                          coord_scale=config['train']['coord_scale'],
+                          class_scale=config['train']['class_scale'],
+                          debug=config['train']['debug'])
 
         ################################################################################################################
         # Calculate grad_mask_consts
@@ -157,14 +171,23 @@ def _main_(args):
         print('='*20)
 
         # save weights to h5:
-        if config['train']['saved_weights_name']:
+        if config['train']['pruned_weights_name']:
             print("Saving pruned weights for next iteration...")
-            yolo.save_weights(config['train']['saved_weights_name'])
+            yolo.save_weights(config['train']['pruned_weights_name'])
 
-        # get this error if enabled:
-        #   Cannot interpret feed_dict key as Tensor: Tensor Tensor("Placeholder_17:0", shape=(64,), dtype=float32)
-        #   is not an element of this graph.
-        # K.clear_session()
+        # perform evaluation to see how badly pruning affected the accuracy
+        print('Evaluating pruned network, before train step:')
+        yolo.validate(train_imgs=train_imgs,
+                      valid_imgs=valid_imgs,
+                      train_times=config['train']['train_times'],
+                      valid_times=config['valid']['valid_times'],
+                      batch_size=config['train']['batch_size'],
+                      warmup_epochs=config['train']['warmup_epochs'],
+                      object_scale=config['train']['object_scale'],
+                      no_object_scale=config['train']['no_object_scale'],
+                      coord_scale=config['train']['coord_scale'],
+                      class_scale=config['train']['class_scale'],
+                      debug=config['train']['debug'])
 
 if __name__ == '__main__':
     args = argparser.parse_args()
