@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
-from skimage.filters import threshold_local,threshold_sauvola
+from skimage.filters import threshold_local
 from scipy.signal import convolve2d
 from skimage import color, data, restoration
 import imutils
@@ -32,11 +32,10 @@ def filter_image(image):
     blur = cv2.filter2D(image, -1, kernel)
     median = cv2.medianBlur(blur, 5)
     # Bilateral Filter to remove texture
-    blur = cv2.bilateralFilter(median, 13, 115, 115)
+    blur = cv2.bilateralFilter(median, 13, 75, 75)
     # Adaptive Threshold
     block_size = 101
     local_thresh = threshold_local(blur, block_size, mode='constant', offset=16)
-    #t_sauvola = threshold_sauvola(blur, window_size=block_size, k=0.7)
     thresh = (image <= local_thresh).astype(np.uint8)
     im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
     image = draw_contours(image, contours)

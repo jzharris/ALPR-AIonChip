@@ -7,6 +7,7 @@ import tensorflow as tf
 import keras
 
 import numpy as np
+import sys
 
 DATA_DIR = './dataset/cifar/'
 FIGS_DIR = 'figs'
@@ -14,6 +15,7 @@ FIGS_DIR = 'figs'
 
 def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=None, white_regex=None, verbose=True):
     print('Pruning parameters one layer at a time...')
+    sys.stdout.flush()
 
     if prune_threshold > 1 or prune_threshold < 0:
         raise Exception("Invalid prune threshold. Must be between 0 and 1")
@@ -53,6 +55,7 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
         if (white_list is not None and var.name in white_list):
             if verbose:
                 print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
+                sys.stdout.flush()
         else:
             skip = False
             if white_regex is not None:
@@ -64,9 +67,11 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
             if skip:
                 if verbose:
                     print(">>>\t not pruning '{}', it is part of the whitelist".format(var.name))
+                    sys.stdout.flush()
             else:
                 if verbose:
                     print(">>>\t pruning {}".format(var.name))
+                    sys.stdout.flush()
                 sorted_full = np.dstack(np.unravel_index(np.argsort(flattened), val_np.shape))[0]
                 sorted_full_prune = sorted_full[outliers : n - outliers]
                 for prune in sorted_full_prune:
@@ -90,6 +95,7 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
 
 def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
     print('Checking that the pruned weights were not modified...')
+    sys.stdout.flush()
 
     leaked_pruned_weights = 0
     total = 0
@@ -130,6 +136,7 @@ def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
           format(count, total_pruned, percentage))
     print('>>>\t{} of the {} total weights have been pruned ({:.6f}% of original, should be {:.6f}%)'.
           format(total_pruned, original, percentage, true_percentage))
+    sys.stdout.flush()
     return count == 0
 
 
@@ -163,6 +170,7 @@ def print_pruned_weights(sess, grad_mask_consts=None):
 
             print('>>>\t{}: {} of the {} total weights have been pruned ({:.2f}% of original)'.
                   format(var.name, total_pruned, original, total_pruned / original * 100))
+            sys.stdout.flush()
     else:
         # count total number of weights that are zero
         total_weights = 0
@@ -183,6 +191,7 @@ def print_pruned_weights(sess, grad_mask_consts=None):
 
         print('>>>\t{} of the {} total weights have been pruned ({:.6f}% of original)'.
               format(total_zero, total_weights, total_zero / total_weights * 100))
+        sys.stdout.flush()
         pass
 
 ########################################################################################################################

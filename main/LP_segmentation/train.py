@@ -12,15 +12,17 @@ from prune_network import prune_layers, check_pruned_weights, print_pruned_weigh
 import keras.backend as K
 
 ##########################################################################################################
-# run: python train.py -c config_lp_seg_mobilenet.json 2>&1 | tee pruned_models\mobilenet_8it_20p\logs.txt
+# run: python train.py -c config_lp_seg_mobilenet.json 2>&1 | tee pruned_models\logs.txt
 ##########################################################################################################
 
 iterations = 8
-epochs = [None, 1, 1, 2, 2, 2, 3, 4, 5]
+epochs = [None, 1, 4, 4, 4, 4, 4, 4, 4]
 skip_first_train = True
 
-prune_threshold = 0.2
-white_list = [] #['DetectionLayer/kernel:0']
+prune_threshold = 0.20
+# for specific variable names
+white_list = []
+# for specific types of variables/layers
 white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'running_variance',
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
@@ -40,6 +42,21 @@ def _main_(args):
 
     with open(config_path) as config_buffer:    
         config = json.loads(config_buffer.read())
+
+    # parent save directory:
+    pruned_dir = "pruned_models"
+    if not os.path.isdir(pruned_dir):
+        os.mkdir(pruned_dir)
+    # find a unique folder to save to
+    i = 1
+    save_dir = "mobilenet_{}it_{}p_{}/".format(iterations, int(prune_threshold * 100), i)
+    while os.path.isdir(os.path.join(pruned_dir, save_dir)):
+        i += 1
+        save_dir = "mobilenet_{}it_{}p_{}/".format(iterations, int(prune_threshold * 100), i)
+    # folder to save things in this time:
+    save_path = os.path.join(pruned_dir, save_dir)
+    if not os.path.isdir(save_path): # dummy check
+        os.mkdir(save_path)
 
     ###############################
     #   Parse the annotations 
@@ -89,8 +106,12 @@ def _main_(args):
                 anchors=config['model']['anchors'],
                 grad_mask_consts=grad_mask_consts)
 
+    ####################################################################################################################
     for it in range(iterations):
         print("it {}".format(it))
+
+        prune_weights_path_prev = os.path.join(save_path, config['train']['pruned_weights_name']+"_it{}.h5".format(it-1))
+        prune_weights_path_curr = os.path.join(save_path, config['train']['pruned_weights_name']+"_it{}.h5".format(it))
 
         # update grad_mask_consts if it > 0
         if it > 0 and grad_mask_consts is not None:
@@ -112,9 +133,9 @@ def _main_(args):
         #   Load the pretrained weights (if any)
         ###############################
 
-        if it > 0 and os.path.exists(config['train']['pruned_weights_name']+"_it{}.h5".format(it-1)):
-            print("Loading pruned weights in", config['train']['pruned_weights_name']+"_it{}.h5".format(it-1))
-            yolo.load_weights(config['train']['pruned_weights_name']+"_it{}.h5".format(it-1))
+        if it > 0 and os.path.exists(prune_weights_path_prev):
+            print("Loading pruned weights in", prune_weights_path_prev)
+            yolo.load_weights(prune_weights_path_prev)
 
             # check to make sure the weights are pruned
             sess = K.get_session()
@@ -143,8 +164,9 @@ def _main_(args):
                        no_object_scale    = config['train']['no_object_scale'],
                        coord_scale        = config['train']['coord_scale'],
                        class_scale        = config['train']['class_scale'],
-                       saved_weights_name = config['train']['saved_weights_name']+"_it{}.h5".format(it),
-                       debug              = config['train']['debug'])
+                       saved_weights_name = os.path.join(save_path, config['train']['saved_weights_name']+"_it{}.h5".format(it)),
+                       debug              = config['train']['debug'],
+                       verbose            = True)
         else:
             # perform evaluation in either case (usually performed at end of training setp)
             print('Evaluating pre-trained network')
@@ -167,21 +189,16 @@ def _main_(args):
         if it > 0:
             # show the weights just after training
             check_pruned_weights(sess, grad_mask_consts, prune_threshold, it-1)
-            sys.stdout.flush()
         grad_mask_consts = prune_layers(sess, prune_threshold, grad_mask_consts, white_list, white_regex,
                                         verbose=config['train']['verbose'])
-        sys.stdout.flush()
         if config['train']['verbose']:
             print_pruned_weights(sess, grad_mask_consts)
-            sys.stdout.flush()
         check_pruned_weights(sess, grad_mask_consts, prune_threshold, it)
-        sys.stdout.flush()
         print('='*20)
 
         # save weights to h5:
-        if config['train']['pruned_weights_name']:
-            print("Saving pruned weights for next iteration...")
-            yolo.save_weights(config['train']['pruned_weights_name']+"_it{}.h5".format(it))
+        print("Saving pruned weights for next iteration...")
+        yolo.save_weights(prune_weights_path_curr)
 
         # perform evaluation to see how badly pruning affected the accuracy
         print('Evaluating pruned network, before train step:')
@@ -196,7 +213,6 @@ def _main_(args):
                       coord_scale=config['train']['coord_scale'],
                       class_scale=config['train']['class_scale'],
                       debug=config['train']['debug'])
-        sys.stdout.flush()
 
 if __name__ == '__main__':
     args = argparser.parse_args()

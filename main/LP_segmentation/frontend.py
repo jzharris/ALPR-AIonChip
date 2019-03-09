@@ -5,6 +5,7 @@ import tensorflow as tf
 import keras
 import numpy as np
 import os
+import sys
 import cv2
 from utils import decode_netout, compute_overlap, compute_ap
 from keras.applications.mobilenet import MobileNet
@@ -324,7 +325,8 @@ class YOLO(object):
               coord_scale,
               class_scale,
               saved_weights_name='best_weights.h5',
-              debug=False):
+              debug=False,
+              verbose=True):
 
         self.batch_size = batch_size
 
@@ -401,7 +403,7 @@ class YOLO(object):
         self.model.fit_generator(generator=train_generator,
                                  steps_per_epoch=len(train_generator) * train_times,
                                  epochs=warmup_epochs + nb_epochs,
-                                 verbose=2 if debug else 1,
+                                 verbose=2 if debug else 1 if verbose else 0,
                                  validation_data=valid_generator,
                                  validation_steps=len(valid_generator) * valid_times,
                                  callbacks=[early_stop, checkpoint, tensorboard],
@@ -523,6 +525,7 @@ class YOLO(object):
         for label, average_precision in average_precisions.items():
             print(self.labels[label], '{:.4f}'.format(average_precision))
         print('mAP: {:.4f}'.format(sum(average_precisions.values()) / len(average_precisions)))
+        sys.stdout.flush()
 
     def evaluate(self,
                  generator,
