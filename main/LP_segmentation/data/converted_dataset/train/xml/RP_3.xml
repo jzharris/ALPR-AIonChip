@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_RP_test</folder>
+    <filename>RP_3.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>RP_test</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>320</width>
+        <height>240</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>3B1158</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>41</xmin>
+            <ymin>168</ymin>
+            <xmax>143</xmax>
+            <ymax>216</ymax>
+        </bndbox>
+    </object>
+</annotation>

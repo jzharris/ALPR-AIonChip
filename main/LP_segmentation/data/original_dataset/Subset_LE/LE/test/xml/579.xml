@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_LE_test</folder>
+    <filename>579.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>LE_test</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>320</width>
+        <height>240</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>C38166</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>66</xmin>
+            <ymin>78</ymin>
+            <xmax>124</xmax>
+            <ymax>109</ymax>
+        </bndbox>
+    </object>
+</annotation>

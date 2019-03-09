@@ -1,0 +1,28 @@
+<annotation>
+    <folder>AOLP_LE_test</folder>
+    <filename>303.jpg</filename>
+    <source>
+        <database>AOLP</database>
+        <annotation>LE_test</annotation>
+        <image>AOLP</image>
+    </source>
+    <size>
+        <width>640</width>
+        <height>480</height>
+        <depth>3</depth>
+    </size>
+    <segmented>1</segmented>
+    <object>
+        <name>plate</name>
+        <platetext>4635VG</platetext>
+        <pose>Frontal</pose>
+        <truncated>1</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>230</xmin>
+            <ymin>117</ymin>
+            <xmax>404</xmax>
+            <ymax>214</ymax>
+        </bndbox>
+    </object>
+</annotation>

@@ -1,0 +1,1 @@
+Phase 1: Detect license plates from cars in a variety of scenes. Send the cropped sections to the Character Segmentation phase to read the plate chars.
