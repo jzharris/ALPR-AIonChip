@@ -79,7 +79,23 @@ def draw_boxes(image, boxes, labels):
                     1e-3 * image_h, 
                     (0,255,0), 2)
         
-    return image          
+    return image
+
+def crop_image(image, box):
+    image_h, image_w, _ = image.shape
+
+    xmin = int(box.xmin * image_w)
+    ymin = int(box.ymin * image_h)
+    xmax = int(box.xmax * image_w)
+    ymax = int(box.ymax * image_h)
+
+    if xmin < 0:
+        xmin = 0
+    if ymin < 0:
+        ymin = 0
+
+    cropped_image = image[ymin:ymax, xmin:xmax]
+    return cropped_image
         
 def decode_netout(netout, anchors, nb_class, obj_threshold=0.3, nms_threshold=0.3):
     grid_h, grid_w, nb_box = netout.shape[:3]
