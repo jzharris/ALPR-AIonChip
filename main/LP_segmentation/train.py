@@ -15,8 +15,6 @@ import keras.backend as K
 # run: python train.py -c config_lp_seg_mobilenet.json 2>&1 | tee pruned_models/logs.txt
 ##########################################################################################################
 
-iterations = 8
-epochs = [None, 1, 1, 2, 2, 2, 3, 10, 10]
 skip_first_train = True
 
 prune_threshold = 0.20
@@ -42,6 +40,9 @@ def _main_(args):
 
     with open(config_path) as config_buffer:    
         config = json.loads(config_buffer.read())
+
+    # get iterations from train_times:
+    iterations = config['train']['train_times']
 
     # parent save directory:
     pruned_dir = "pruned_models"
@@ -156,7 +157,8 @@ def _main_(args):
                        valid_imgs         = valid_imgs,
                        train_times        = config['train']['train_times'],
                        valid_times        = config['valid']['valid_times'],
-                       nb_epochs          = epochs[it],
+                       nb_epochs          = config['train']['nb_epochs'],
+                       # nb_epochs          = epochs[it],
                        learning_rate      = config['train']['learning_rate'],
                        batch_size         = config['train']['batch_size'],
                        warmup_epochs      = config['train']['warmup_epochs'],
