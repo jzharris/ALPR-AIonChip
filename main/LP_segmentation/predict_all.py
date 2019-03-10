@@ -10,6 +10,7 @@ from preprocessing import parse_annotation
 from utils import draw_boxes, crop_image
 from frontend import YOLO
 import json
+import xml.etree.ElementTree
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -41,6 +42,16 @@ argparser.add_argument(
     action='store_true',
     default=False,
     help='crop the bounding box of each output')
+
+
+# Convert XML to nested dictionary
+def xml_to_dict(path):
+    def xml_to_dict_recursive(node):
+        if len(node)==0:
+            return node.text
+        return {child.tag:xml_to_dict_recursive(child) for child in node}
+    return xml_to_dict_recursive(xml.etree.ElementTree.parse(path).getroot())
+
 
 def _main_(args):
     config_path  = args.conf
@@ -80,6 +91,9 @@ def _main_(args):
     ###############################
     #   Predict bounding boxes 
     ###############################
+
+    # dictionary of exported images used to generate samples.txt file:
+    samples_dict = {}
 
     for root, dirs, files in os.walk(os.path.join(image_folder, "jpeg")):
         for file in tqdm(files):
@@ -127,13 +141,21 @@ def _main_(args):
                 elif crop:
                     cropped_image = crop_image(image, best_box[0])
 
-                    # find LP chars to name the file by
-
-
                     cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
+
+                    # find LP chars to add to samples.txt file
+                    xml = xml_to_dict(os.path.join(image_folder, "xml", "{}.xml".format(file[:-4])))
+                    samples_dict[file] = xml['object']['platetext']
 
                 if not crop:
                     cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], image)
+
+    if crop:
+        # write samples.txt file:
+        print('writing samples.txt file to {}'.format(os.path.join(detected_folder, 'samples.txt')))
+        with open(os.path.join(detected_folder, 'samples.txt'), 'w+') as samples_txt:
+            for key in samples_dict.keys():
+                samples_txt.write("{} {}\n".format(key, samples_dict[key]))
 
 if __name__ == '__main__':
     args = argparser.parse_args()
