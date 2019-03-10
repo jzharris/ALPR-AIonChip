@@ -126,6 +126,10 @@ def _main_(args):
                     print(len(best_box), 'no boxes are chosen')
                 elif crop:
                     cropped_image = crop_image(image, best_box[0])
+
+                    # find LP chars to name the file by
+
+
                     cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
 
                 if not crop:
