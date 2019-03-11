@@ -8,6 +8,7 @@
     },
 
     "train": {
+        "prune_threshold":      0.20,
         "prune_network":        false,
         "train_image_folder":   "data/converted_dataset/train/jpeg/",
         "train_annot_folder":   "data/converted_dataset/train/xml/",

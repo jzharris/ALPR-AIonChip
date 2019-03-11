@@ -17,7 +17,6 @@ import keras.backend as K
 
 skip_first_train = True
 
-prune_threshold = 0.20
 # for specific variable names
 white_list = []
 # for specific types of variables/layers
@@ -41,6 +40,8 @@ def _main_(args):
 
     with open(config_path) as config_buffer:
         config = json.loads(config_buffer.read())
+
+    prune_threshold = config['train']['prune_threshold']
 
     if config['train']['prune_network']:
 
