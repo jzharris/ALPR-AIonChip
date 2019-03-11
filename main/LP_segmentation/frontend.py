@@ -421,16 +421,16 @@ class YOLO(object):
         print('mAP: {:.4f}'.format(sum(average_precisions.values()) / len(average_precisions)))
 
     def set_params(self, train_imgs,  # the list of images to train the model
-                 valid_imgs,  # the list of images used to validate the model
-                 train_times,  # the number of time to repeat the training set, often used for small datasets
-                 valid_times,  # the number of times to repeat the validation set, often used for small datasets
-                 batch_size,  # the size of the batch
-                 warmup_epochs,  # number of initial batches to let the model familiarize with the new dataset
-                 object_scale,
-                 no_object_scale,
-                 coord_scale,
-                 class_scale,
-                 debug=False):
+                   valid_imgs,  # the list of images used to validate the model
+                   train_times,  # the number of time to repeat the training set, often used for small datasets
+                   valid_times,  # the number of times to repeat the validation set, often used for small datasets
+                   batch_size,  # the size of the batch
+                   warmup_epochs,  # number of initial batches to let the model familiarize with the new dataset
+                   object_scale,
+                   no_object_scale,
+                   coord_scale,
+                   class_scale,
+                   debug=False):
 
         self.batch_size = batch_size
 
