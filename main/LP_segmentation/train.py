@@ -298,18 +298,54 @@ def _main_(args):
             print("Loading pre-trained weights from", config['train']['pretrained_weights'])
             yolo.load_weights(config['train']['pretrained_weights'])
 
-            print('Evaluating imported network, before train step:')
-            yolo.validate(train_imgs=train_imgs,
-                          valid_imgs=valid_imgs,
-                          train_times=config['train']['train_times'],
-                          valid_times=config['valid']['valid_times'],
-                          batch_size=config['train']['batch_size'],
-                          warmup_epochs=config['train']['warmup_epochs'],
-                          object_scale=config['train']['object_scale'],
-                          no_object_scale=config['train']['no_object_scale'],
-                          coord_scale=config['train']['coord_scale'],
-                          class_scale=config['train']['class_scale'],
-                          debug=config['train']['debug'])
+            # get mask, if one exists
+            # NOTE: expects a pruned checkpoint, not pruned_post-train
+            sess = K.get_session()
+            grad_mask_consts = get_mask_consts(sess, white_list, white_regex, verbose=False)
+            if grad_mask_consts != {}:
+
+                check_pruned_weights(sess, grad_mask_consts, prune_threshold, config['train']['previous_iterations'] - 1)
+
+                print('Evaluating masked network, before train step:')
+                yolo.validate(train_imgs=train_imgs,
+                              valid_imgs=valid_imgs,
+                              train_times=config['train']['train_times'],
+                              valid_times=config['valid']['valid_times'],
+                              batch_size=config['train']['batch_size'],
+                              warmup_epochs=config['train']['warmup_epochs'],
+                              object_scale=config['train']['object_scale'],
+                              no_object_scale=config['train']['no_object_scale'],
+                              coord_scale=config['train']['coord_scale'],
+                              class_scale=config['train']['class_scale'],
+                              debug=config['train']['debug'])
+
+                # update grad_mask_consts in yolo network, and recompile network
+                yolo.grad_mask_consts = grad_mask_consts
+                yolo.recompile(train_imgs=train_imgs,
+                               valid_imgs=valid_imgs,
+                               train_times=config['train']['train_times'],
+                               valid_times=config['valid']['valid_times'],
+                               learning_rate=config['train']['learning_rate'],
+                               batch_size=config['train']['batch_size'],
+                               warmup_epochs=config['train']['warmup_epochs'],
+                               object_scale=config['train']['object_scale'],
+                               no_object_scale=config['train']['no_object_scale'],
+                               coord_scale=config['train']['coord_scale'],
+                               class_scale=config['train']['class_scale'],
+                               debug=config['train']['debug'])
+            else:
+                print('Evaluating imported network (NO MASK GENERATED), before train step:')
+                yolo.validate(train_imgs=train_imgs,
+                              valid_imgs=valid_imgs,
+                              train_times=config['train']['train_times'],
+                              valid_times=config['valid']['valid_times'],
+                              batch_size=config['train']['batch_size'],
+                              warmup_epochs=config['train']['warmup_epochs'],
+                              object_scale=config['train']['object_scale'],
+                              no_object_scale=config['train']['no_object_scale'],
+                              coord_scale=config['train']['coord_scale'],
+                              class_scale=config['train']['class_scale'],
+                              debug=config['train']['debug'])
 
         yolo.train(train_imgs=train_imgs,
                    valid_imgs=valid_imgs,
