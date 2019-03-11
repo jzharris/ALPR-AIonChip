@@ -89,9 +89,16 @@ def _main_(args):
     else:
         image = cv2.imread(image_path)
         boxes = yolo.predict(image)
-        image = draw_boxes(image, boxes, config['model']['labels'])
 
-        print(len(boxes), 'boxes are found')
+        best_box = []
+        for box in boxes:
+            if len(best_box) == 0:
+                best_box.append(box)
+            elif box.get_score() > best_box[0].get_score():
+                best_box[0] = box
+        image = draw_boxes(image, best_box, config['model']['labels'])
+
+        print(len(best_box), 'boxes are chosen')
 
         cv2.imwrite(image_path[:-4] + '_detected' + image_path[-4:], image)
 
