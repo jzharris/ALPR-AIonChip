@@ -25,8 +25,7 @@ white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'r
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
-
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
 
