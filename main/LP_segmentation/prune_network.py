@@ -13,6 +13,47 @@ DATA_DIR = './dataset/cifar/'
 FIGS_DIR = 'figs'
 
 
+def get_mask_consts(sess, white_list=None, white_regex=None, verbose=False):
+    print('Generating mask from pre-trained weights...')
+    grad_mask_consts_new = {}
+
+    vars = tf.trainable_variables()
+    vars_vals = sess.run(vars)
+
+    for var, val in zip(vars, vars_vals):
+        # create np array of weights
+        val_np = np.array(val)
+
+        if not np.all(np.nonzero(val_np)):
+            # create the mask
+            layer_weights = np.ones(val_np.shape)
+            if (white_list is not None and var.name in white_list):
+                if verbose:
+                    print(">>>\t not masking '{}', it is part of the whitelist".format(var.name))
+                    sys.stdout.flush()
+            else:
+                skip = False
+                if white_regex is not None:
+                    for white in white_regex:
+                        if white in var.name:
+                            skip = True
+                            break
+
+                if skip:
+                    if verbose:
+                        print(">>>\t not masking '{}', it is part of the whitelist".format(var.name))
+                        sys.stdout.flush()
+                else:
+                    if verbose:
+                        print(">>>\t masking {}".format(var.name))
+                        sys.stdout.flush()
+                    layer_weights[val_np == 0] = 0
+                    grad_mask_consts_new[var.name] = tf.constant(layer_weights)
+
+    return grad_mask_consts_new
+
+
+
 def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=None, white_regex=None, verbose=True):
     print('Pruning parameters one layer at a time...')
     sys.stdout.flush()
