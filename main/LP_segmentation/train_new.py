@@ -24,14 +24,9 @@ white_list = []
 white_regex = ['bias', 'gamma', 'beta', 'CustomAdam', 'loss', 'running_mean', 'running_variance',
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
-<<<<<<< HEAD:main/LP_segmentation/train_new.py
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-=======
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"  # <-- change to 1 for server
 
->>>>>>> 389d986bc61f77e2f1f8074274040173f1af786f:main/LP_segmentation/train.py
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
 
