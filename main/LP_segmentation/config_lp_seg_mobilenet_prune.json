@@ -13,8 +13,8 @@
         "train_annot_folder":   "data/converted_dataset/train/xml/",
           
         "train_times":          5,
-        "previous_iterations":  10,
-        "pretrained_weights":   "pruned_models/mobilenet_10it_20p_1/lp_seg_mobilenet_pruned_it9.h5",
+        "previous_iterations":  12,
+        "pretrained_weights":   "lp_seg_mobilenet_trained.h5",
         "batch_size":           24,
         "learning_rate":        1e-4,
         "nb_epochs":            1,
