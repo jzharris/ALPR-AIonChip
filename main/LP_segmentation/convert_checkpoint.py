@@ -19,8 +19,8 @@ from prune_network import CustomAdam
 # To run: python convert_checkpoint.py -c config_lp_seg_mobilenet.json
 ######################################################################
 
-parent_folder = "./"
-filename = "lp_seg_mobilenet_last_unpruned"
+parent_folder = "./pruned_models/mobilenet_10it_20p_1/"
+filename = "lp_seg_mobilenet_pruned_post-train_it8"
 checkpoint_name = "pruned_post-train"
 
 argparser = argparse.ArgumentParser(

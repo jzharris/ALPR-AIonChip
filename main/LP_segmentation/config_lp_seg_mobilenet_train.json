@@ -12,6 +12,7 @@
         "prune_network":        false,
         "train_image_folder":   "data/converted_dataset/train/jpeg/",
         "train_annot_folder":   "data/converted_dataset/train/xml/",
+        "skip_first_train":     true,
           
         "train_times":          5,
         "previous_iterations":  10,

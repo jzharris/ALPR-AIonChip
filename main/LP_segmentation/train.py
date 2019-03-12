@@ -15,8 +15,6 @@ import keras.backend as K
 # run: python train.py -c config_lp_seg_mobilenet_prune.json 2>&1 | tee pruned_models/logs.txt
 ##########################################################################################################
 
-skip_first_train = True
-
 # for specific variable names
 white_list = []
 # for specific types of variables/layers
@@ -42,13 +40,39 @@ def _main_(args):
         config = json.loads(config_buffer.read())
 
     prune_threshold = config['train']['prune_threshold']
+    skip_first_train = config['train']['skip_first_train']
+
+    ###############################
+    #   Parse the annotations
+    ###############################
+
+    # parse annotations of the training set
+    train_imgs, train_labels = parse_annotation(config['train']['train_annot_folder'],
+                                                config['train']['train_image_folder'],
+                                                config['model']['labels'])
+
+    # parse annotations of the validation set, if any, otherwise split the training set
+    if os.path.exists(config['valid']['valid_annot_folder']):
+        print('Using validation set found in {}'.format(config['valid']['valid_annot_folder']))
+        valid_imgs, valid_labels = parse_annotation(config['valid']['valid_annot_folder'],
+                                                    config['valid']['valid_image_folder'],
+                                                    config['model']['labels'])
+    else:
+        print('No validation set found, splitting 20% of train set to use as validation instead')
+        train_valid_split = int(0.8 * len(train_imgs))
+        np.random.shuffle(train_imgs)
+
+        valid_imgs = train_imgs[train_valid_split:]
+        train_imgs = train_imgs[:train_valid_split]
+
+    print('Training shape:   {}'.format(len(train_imgs)))
+    print('Validation shape: {}'.format(len(valid_imgs)))
 
     if config['train']['prune_network']:
 
         # get iterations from train_times:
         iterations = config['train']['train_times']
         prev_its = config['train']['previous_iterations']
-        iterations += prev_its
 
         # parent save directory:
         pruned_dir = "pruned_models"
@@ -56,35 +80,14 @@ def _main_(args):
             os.mkdir(pruned_dir)
         # find a unique folder to save to
         i = 1
-        save_dir = "mobilenet_{}it_{}p_{}/".format(iterations, int(prune_threshold * 100), i)
+        save_dir = "mobilenet_{}it_{}p_{}/".format(iterations + prev_its, int(prune_threshold * 100), i)
         while os.path.isdir(os.path.join(pruned_dir, save_dir)):
             i += 1
-            save_dir = "mobilenet_{}it_{}p_{}/".format(iterations, int(prune_threshold * 100), i)
+            save_dir = "mobilenet_{}it_{}p_{}/".format(iterations + prev_its, int(prune_threshold * 100), i)
         # folder to save things in this time:
         save_path = os.path.join(pruned_dir, save_dir)
         if not os.path.isdir(save_path):  # dummy check
             os.mkdir(save_path)
-
-        ###############################
-        #   Parse the annotations
-        ###############################
-
-        # parse annotations of the training set
-        train_imgs, train_labels = parse_annotation(config['train']['train_annot_folder'],
-                                                    config['train']['train_image_folder'],
-                                                    config['model']['labels'])
-
-        # parse annotations of the validation set, if any, otherwise split the training set
-        if os.path.exists(config['valid']['valid_annot_folder']):
-            valid_imgs, valid_labels = parse_annotation(config['valid']['valid_annot_folder'],
-                                                        config['valid']['valid_image_folder'],
-                                                        config['model']['labels'])
-        else:
-            train_valid_split = int(0.8 * len(train_imgs))
-            np.random.shuffle(train_imgs)
-
-            valid_imgs = train_imgs[train_valid_split:]
-            train_imgs = train_imgs[:train_valid_split]
 
         if len(config['model']['labels']) > 0:
             overlap_labels = set(config['model']['labels']).intersection(set(train_labels.keys()))
@@ -114,8 +117,7 @@ def _main_(args):
                     grad_mask_consts=grad_mask_consts)
 
         ####################################################################################################################
-        for it in range(iterations):
-            it = it + prev_its
+        for it in range(prev_its, iterations + prev_its):
             print("it {}".format(it))
 
             prune_weights_path_prev = os.path.join(save_path,
@@ -181,7 +183,7 @@ def _main_(args):
             #   Start the training process
             ###############################
 
-            if it != 0 or not skip_first_train:
+            if it - prev_its > 0 or not skip_first_train:
 
                 yolo.train(train_imgs=train_imgs,
                            valid_imgs=valid_imgs,
@@ -248,27 +250,6 @@ def _main_(args):
                           debug=config['train']['debug'])
 
     else:
-
-        ###############################
-        #   Parse the annotations
-        ###############################
-
-        # parse annotations of the training set
-        train_imgs, train_labels = parse_annotation(config['train']['train_annot_folder'],
-                                                    config['train']['train_image_folder'],
-                                                    config['model']['labels'])
-
-        # parse annotations of the validation set, if any, otherwise split the training set
-        if os.path.exists(config['valid']['valid_annot_folder']):
-            valid_imgs, valid_labels = parse_annotation(config['valid']['valid_annot_folder'],
-                                                        config['valid']['valid_image_folder'],
-                                                        config['model']['labels'])
-        else:
-            train_valid_split = int(0.8 * len(train_imgs))
-            np.random.shuffle(train_imgs)
-
-            valid_imgs = train_imgs[train_valid_split:]
-            train_imgs = train_imgs[:train_valid_split]
 
         if len(config['model']['labels']) > 0:
             overlap_labels = set(config['model']['labels']).intersection(set(train_labels.keys()))

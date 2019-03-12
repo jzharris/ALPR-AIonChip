@@ -16,7 +16,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ########################################################################################################################
-# run: python predict_all.py -c config_lp_seg_mobilenet.json -w pruned_models\mobilenet_10it_20p_1\lp_seg_mobilenet_pruned_post-train_it9.h5 -i data\converted_dataset\test --crop
+# run: python predict_all.py -c config_lp_seg_mobilenet_prune.json -w pruned_models\mobilenet_10it_20p_1\lp_seg_mobilenet_pruned_post-train_it9.h5 -i data\converted_dataset\test --crop
 ########################################################################################################################
 
 argparser = argparse.ArgumentParser(

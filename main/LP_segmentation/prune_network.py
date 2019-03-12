@@ -362,7 +362,7 @@ class CustomAdam(Optimizer):
 
                 self.updates.append(K.update(p, new_p))
         else:
-            raise Exception("CustomAdam does not currently suppor this version of python")
+            raise Exception("CustomAdam does not currently support this version of python")
         return self.updates
 
     def get_config(self):
