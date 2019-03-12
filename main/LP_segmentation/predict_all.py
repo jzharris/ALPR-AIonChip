@@ -16,7 +16,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ########################################################################################################################
-# run: python predict_all.py -c config_lp_seg_mobilenet_prune.json -w pruned_models\mobilenet_10it_20p_1\lp_seg_mobilenet_pruned_post-train_it9.h5 -i data\converted_dataset\test --crop
+# run: python predict_all.py -c config_lp_seg_mobilenet_prune.json -i data\converted_dataset\test --crop
 ########################################################################################################################
 
 argparser = argparse.ArgumentParser(
@@ -26,11 +26,6 @@ argparser.add_argument(
     '-c',
     '--conf',
     help='path to configuration file')
-
-argparser.add_argument(
-    '-w',
-    '--weights',
-    help='path to pretrained weights')
 
 argparser.add_argument(
     '-i',
@@ -55,7 +50,6 @@ def xml_to_dict(path):
 
 def _main_(args):
     config_path  = args.conf
-    weights_path = args.weights
     image_folder = args.input
     crop         = args.crop
 
@@ -71,6 +65,8 @@ def _main_(args):
 
     with open(config_path) as config_buffer:    
         config = json.load(config_buffer)
+
+    weights_path = config['train']['pretrained_weights']
 
     ###############################
     #   Make the model 

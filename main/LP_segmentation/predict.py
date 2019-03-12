@@ -14,7 +14,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ########################################################################################################################
-# run: python predict.py -c config_lp_seg_mobilenet.json -w pruned_models\mobilenet_8it_20p\lp_seg_mobilenet_last_unpruned_it6.h5 -i predictions\AC_3.jpg
+# run: python predict.py -c config_lp_seg_mobilenet.json -i predictions\AC_3.jpg
 ########################################################################################################################
 
 argparser = argparse.ArgumentParser(
@@ -26,22 +26,18 @@ argparser.add_argument(
     help='path to configuration file')
 
 argparser.add_argument(
-    '-w',
-    '--weights',
-    help='path to pretrained weights')
-
-argparser.add_argument(
     '-i',
     '--input',
     help='path to an image or an video (mp4 format)')
 
 def _main_(args):
     config_path  = args.conf
-    weights_path = args.weights
     image_path   = args.input
 
     with open(config_path) as config_buffer:    
         config = json.load(config_buffer)
+
+    weights_path = config['train']['pretrained_weights']
 
     ###############################
     #   Make the model 
