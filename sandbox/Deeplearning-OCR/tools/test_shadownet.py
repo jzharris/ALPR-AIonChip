@@ -211,7 +211,7 @@ def test_shadownet(dataset_dir, weights_path, is_vis=False, is_recursive=True):
             one_acc = np.mean(np.array(one_acc).astype(np.float32), axis=0)
             two_acc = np.mean(np.array(two_acc).astype(np.float32), axis=0)
             more_acc = np.mean(np.array(three_acc).astype(np.float32), axis=0)
-            print('Original acc:              {:5f}%'.format(accuracy*100))
+            # print('Original acc:              {:5f}%'.format(accuracy*100))
             print('Acc (3 or fewer mistakes): {:5f}%'.format(more_acc*100))
             print('Acc (2 or fewer mistakes): {:5f}%'.format(two_acc*100))
             print('Acc (1 or fewer mistakes): {:5f}%'.format(one_acc*100))
