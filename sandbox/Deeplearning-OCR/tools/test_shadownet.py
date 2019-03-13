@@ -134,7 +134,7 @@ def test_shadownet(dataset_dir, weights_path, is_vis=False, is_recursive=True):
             zero_acc = []
             one_acc = []
             two_acc = []
-            more_acc = []
+            three_acc = []
             for epoch in range(loops_nums):
                 predictions, images, labels, imagenames = sess.run([decoded, images_sh, labels_sh, imagenames_sh])
                 imagenames = np.reshape(imagenames, newshape=imagenames.shape[0])
@@ -183,10 +183,10 @@ def test_shadownet(dataset_dir, weights_path, is_vis=False, is_recursive=True):
                         # z_count counts how many characters are correct, taking shifts into account
                         off_count = len(pred) - z_count # get how many chars the prediction is off by
                         print("{} vs {} = {} off".format(gt_label, pred, off_count))
-                        zero_acc.append(0 if off_count == 0 else 1)
-                        one_acc.append(0 if off_count == 1 else 1)
-                        two_acc.append(0 if off_count == 2 else 1)
-                        more_acc.append(0 if off_count >= 3 else 1)
+                        zero_acc.append(1 if off_count == 0 else 0)
+                        one_acc.append(1 if off_count <= 1 else 0)
+                        two_acc.append(1 if off_count <= 2 else 0)
+                        three_acc.append(1 if off_count <= 3 else 0)
 
                     except IndexError:
                         continue
@@ -210,12 +210,12 @@ def test_shadownet(dataset_dir, weights_path, is_vis=False, is_recursive=True):
             zero_acc = np.mean(np.array(zero_acc).astype(np.float32), axis=0)
             one_acc = np.mean(np.array(one_acc).astype(np.float32), axis=0)
             two_acc = np.mean(np.array(two_acc).astype(np.float32), axis=0)
-            more_acc = np.mean(np.array(more_acc).astype(np.float32), axis=0)
-            print('Overall acc:     {:5f}%'.format(accuracy*100))
-            print('>=3 wrong acc:   {:5f}%'.format(more_acc*100))
-            print('Two wrong acc:   {:5f}%'.format(two_acc*100))
-            print('One wrong acc:   {:5f}%'.format(one_acc*100))
-            print('Zero wrong acc:  {:5f}%'.format(zero_acc*100))
+            more_acc = np.mean(np.array(three_acc).astype(np.float32), axis=0)
+            print('Original acc:              {:5f}%'.format(accuracy*100))
+            print('Acc (3 or fewer mistakes): {:5f}%'.format(more_acc*100))
+            print('Acc (2 or fewer mistakes): {:5f}%'.format(two_acc*100))
+            print('Acc (1 or fewer mistakes): {:5f}%'.format(one_acc*100))
+            print('Acc (No mistakes):         {:5f}%'.format(zero_acc*100))
 
         coord.request_stop()
         coord.join(threads=threads)
