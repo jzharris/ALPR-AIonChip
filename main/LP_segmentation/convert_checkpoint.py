@@ -11,17 +11,19 @@ import argparse
 from preprocessing import parse_annotation
 import numpy as np
 import shutil
+import ntpath
 
 from frontend import YOLO
 from prune_network import CustomAdam
 
+# fixing the "Unknown activation function:relu6" bug by adding custom object scope
+from keras.utils.generic_utils import CustomObjectScope
+
 ######################################################################
-# To run: python convert_checkpoint.py -c config_lp_seg_mobilenet.json
+# To run: python convert_checkpoint.py -c config_lp_seg_mobilenet_prune.json
 ######################################################################
 
-parent_folder = "./pruned_models/mobilenet_10it_20p_1/"
-filename = "lp_seg_mobilenet_pruned_post-train_it8"
-checkpoint_name = "pruned_post-train"
+parent_folder = "./pruned_models"
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
@@ -30,6 +32,11 @@ argparser.add_argument(
     '-c',
     '--conf',
     help='path to configuration file')
+
+
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
 
 
 def _main_(args):
@@ -42,10 +49,11 @@ def _main_(args):
         shutil.rmtree(output_path)
     os.makedirs(output_path)
 
-    full_path = os.path.join(parent_folder, filename)
-
     with open(config_path) as config_buffer:
         config = json.loads(config_buffer.read())
+
+    full_path = config['train']['pretrained_weights']
+    checkpoint_name = os.path.splitext(path_leaf(full_path))[0]
 
     ###############################
     #   Parse the annotations
@@ -109,9 +117,13 @@ def _main_(args):
                     debug=config['train']['debug'])
 
     # Load model, print endpoints
-    # optimizer = CustomAdam(lr=config['train']['learning_rate'], beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-    model = keras.models.load_model("{}.h5".format(full_path), custom_objects={'custom_loss': yolo.custom_loss,
-                                                                               'CustomAdam': CustomAdam})
+    # potentially need to update the following: pip install -U git+https://github.com/Microsoft/MMdnn.git@master
+    with CustomObjectScope({# mobilenet custom activations
+                            'relu6': keras.activations.relu,
+                            # custom loss and optimizers
+                            'custom_loss': yolo.custom_loss,
+                            'CustomAdam': CustomAdam}):
+        model = keras.models.load_model(full_path)
     print('inputs')
     print(model.inputs)
     print('outputs:')
