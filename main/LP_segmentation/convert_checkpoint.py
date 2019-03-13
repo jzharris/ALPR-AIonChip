@@ -129,10 +129,39 @@ def _main_(args):
     print('outputs:')
     print(model.outputs)
 
+    with open(os.path.join(output_path, "endpoints.txt"), 'w+') as file:
+        file.writelines(['inputs: ', str([node.op.name for node in model.inputs]),
+                         '\noutputs: ', str([node.op.name for node in model.outputs])])
+
     # Add ops to save and restore all the variables.
     saver = tf.train.Saver()
     sess = keras.backend.get_session()
-    save_path = saver.save(sess, os.path.join(output_path, "{}.ckpt".format(checkpoint_name)))
+    saver.save(sess, os.path.join(output_path, "{}.ckpt".format(checkpoint_name)))
+
+
+    ####################################################################################################################
+    # load the checkpoint file into tensorflow and save it as a pb file
+
+    # meta_path = os.path.join(output_path, "{}.ckpt.meta".format(checkpoint_name))  # Your .meta file
+    output_node_names = [node.op.name for node in model.outputs]  # Output nodes
+
+    # with tf.Session() as sess:
+
+    # Restore the graph
+    # saver = tf.train.import_meta_graph(meta_path)
+
+    # Load weights
+    # saver.restore(sess, tf.train.latest_checkpoint(output_path))
+
+    # Freeze the graph
+    frozen_graph_def = tf.graph_util.convert_variables_to_constants(
+        sess,
+        sess.graph_def,
+        output_node_names)
+
+    # Save the frozen graph
+    with open(os.path.join(output_path, "{}.pb".format(checkpoint_name)), 'wb') as f:
+        f.write(frozen_graph_def.SerializeToString())
 
 
 if __name__ == '__main__':

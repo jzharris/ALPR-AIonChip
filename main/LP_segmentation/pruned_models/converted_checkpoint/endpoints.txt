@@ -1,0 +1,2 @@
+inputs: ['input_3_1', 'input_2_1']
+outputs: ['lambda_1_1/Identity']
