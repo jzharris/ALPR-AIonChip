@@ -130,8 +130,8 @@ def _main_(args):
     print(model.outputs)
 
     with open(os.path.join(output_path, "endpoints.txt"), 'w+') as file:
-        file.writelines(['inputs: ', str([node.op.name for node in model.inputs]),
-                         '\noutputs: ', str([node.op.name for node in model.outputs])])
+        file.writelines(['inputs: ', str(model.inputs),
+                         '\noutputs: ', str(model.outputs)])
 
     # Add ops to save and restore all the variables.
     saver = tf.train.Saver()
