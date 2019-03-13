@@ -1,2 +1,2 @@
-inputs: ['input_3_1', 'input_2_1']
-outputs: ['lambda_1_1/Identity']
+inputs: [<tf.Tensor 'input_3_1:0' shape=(?, 448, 448, 3) dtype=float32>, <tf.Tensor 'input_2_1:0' shape=(?, 1, 1, 1, 1, 4) dtype=float32>]
+outputs: [<tf.Tensor 'lambda_1_1/Identity:0' shape=(?, 14, 14, 5, 6) dtype=float32>]
