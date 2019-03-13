@@ -88,7 +88,7 @@ def _main_(args):
     #   Predict bounding boxes 
     ###############################
 
-    # dictionary of exported images used to generate samples.txt file:
+    # dictionary of exported images used to generate sample.txt file:
     samples_dict = {}
 
     for root, dirs, files in os.walk(os.path.join(image_folder, "jpeg")):
@@ -139,7 +139,7 @@ def _main_(args):
 
                     cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
 
-                    # find LP chars to add to samples.txt file
+                    # find LP chars to add to sample.txt file
                     xml = xml_to_dict(os.path.join(image_folder, "xml", "{}.xml".format(file[:-4])))
                     samples_dict[file] = xml['object']['platetext']
 
@@ -147,9 +147,9 @@ def _main_(args):
                     cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], image)
 
     if crop:
-        # write samples.txt file:
-        print('writing samples.txt file to {}'.format(os.path.join(detected_folder, 'samples.txt')))
-        with open(os.path.join(detected_folder, 'samples.txt'), 'w+') as samples_txt:
+        # write sample.txt file:
+        print('writing sample.txt file to {}'.format(os.path.join(detected_folder, 'sample.txt')))
+        with open(os.path.join(detected_folder, 'sample.txt'), 'w+') as samples_txt:
             for key in samples_dict.keys():
                 samples_txt.write("{} {}\n".format(key, samples_dict[key]))
 

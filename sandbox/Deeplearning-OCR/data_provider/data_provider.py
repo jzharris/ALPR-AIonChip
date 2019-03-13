@@ -186,7 +186,10 @@ class TextDataProvider(object):
         assert ops.exists(train_anno_path)
 
         with open(train_anno_path, 'r') as anno_file:
-            info = np.array([tmp.strip().split() for tmp in anno_file.readlines()])
+            # filtering out lines which do not have the correct format (usually found at the end of sample.txt)
+            lines = anno_file.readlines()
+            filtered_lines = [x for x in lines if len(x.strip().split()) == 2]
+            info = np.array([tmp.strip().split() for tmp in filtered_lines])
 
             train_images_org = [cv2.imread(ops.join(self.__train_dataset_dir, tmp), cv2.IMREAD_COLOR)
                                      for tmp in info[:, 0]]

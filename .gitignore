@@ -5,7 +5,10 @@ __pycache__/
 main/dataset/dataset*
 main/dataset/saved datasets/
 main/LP_segmentation/logs/
+main/LP_segmentation/data/converted_dataset/*/cropped
+main/LP_segmentation/data/converted_dataset/*/detected
 
 sandbox/*/*/data
 sandbox/*/*/logs
+sandbox/DeepLearning-OCR/dataset*
 *.h5
