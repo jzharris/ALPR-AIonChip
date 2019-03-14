@@ -1,0 +1,13 @@
+#!/bin/bash
+tflite_convert \
+  --output_file=/media/qiujing/e5439522-63c4-4b7c-a968-fefee6a3d960/omead/aiOnChip/AIonChip_HOZ/main/LP_segmentation/pruned_models/converted_checkpoint/foo.tflite \
+  --graph_def_file=/media/qiujing/e5439522-63c4-4b7c-a968-fefee6a3d960/omead/aiOnChip/AIonChip_HOZ/main/LP_segmentation/pruned_models/converted_checkpoint/lp_seg_mobilenet_pruned_post-train_it25.pb \
+  --inference_type=QUANTIZED_UINT8 \
+  --input_arrays=input_3_1 \
+  --input_shapes=1,448,448,3 \
+  --default_ranges_min=0 \
+  --default_ranges_max=6 \
+  --output_arrays=lambda_1_1/Identity \
+  --mean_values=128 \
+  --std_dev_values=127
+

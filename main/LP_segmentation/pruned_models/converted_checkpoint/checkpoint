@@ -1,2 +1,2 @@
-model_checkpoint_path: "lp_seg_mobilenet_pruned_post-train_it25.ckpt"
-all_model_checkpoint_paths: "lp_seg_mobilenet_pruned_post-train_it25.ckpt"
+model_checkpoint_path: "/media/qiujing/e5439522-63c4-4b7c-a968-fefee6a3d960/omead/aiOnChip/AIonChip_HOZ/main/LP_segmentation/pruned_models/converted_checkpoint/model_2_pruned_trained_quant.ckpt"
+all_model_checkpoint_paths: "/media/qiujing/e5439522-63c4-4b7c-a968-fefee6a3d960/omead/aiOnChip/AIonChip_HOZ/main/LP_segmentation/pruned_models/converted_checkpoint/model_2_pruned_trained_quant.ckpt"

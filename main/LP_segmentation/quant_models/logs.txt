@@ -1,0 +1,16 @@
+2019-03-13 19:12:38.025908: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2019-03-13 19:12:38.145117: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: TITAN Xp major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:17:00.0
+totalMemory: 11.91GiB freeMemory: 3.13GiB
+2019-03-13 19:12:38.224315: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 1 with properties: 
+name: TITAN Xp major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:65:00.0
+totalMemory: 11.91GiB freeMemory: 2.29GiB
+2019-03-13 19:12:38.224427: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0, 1
+2019-03-13 19:12:39.667125: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-03-13 19:12:39.667158: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 1 
+2019-03-13 19:12:39.667164: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N Y 
+2019-03-13 19:12:39.667167: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 1:   Y N 
+2019-03-13 19:12:39.667513: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 2838 MB memory) -> physical GPU (device: 0, name: TITAN Xp, pci bus id: 0000:17:00.0, compute capability: 6.1)
+2019-03-13 19:12:39.667702: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 1977 MB memory) -> physical GPU (device: 1, name: TITAN Xp, pci bus id: 0000:65:00.0, compute capability: 6.1)
