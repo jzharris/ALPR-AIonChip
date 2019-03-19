@@ -37,5 +37,12 @@
         "valid_annot_folder":   "data/converted_dataset/test/xml/",
 
         "valid_times":          1
+    },
+
+    "predict": {
+        "input":                "data/converted_dataset/test",
+        "output_folder":        "vanilla",
+        "crop":                 false,
+        "pretrained_weights":   "quant_models/mobilenet_5it_q_2/lp_seg_mobilenet_quant_it1.h5"
     }
 }

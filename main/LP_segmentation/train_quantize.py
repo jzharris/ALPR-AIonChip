@@ -21,7 +21,7 @@ white_regex = ['CustomAdam', 'loss', 'training',
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
