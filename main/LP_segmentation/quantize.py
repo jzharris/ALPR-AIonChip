@@ -10,9 +10,15 @@ import json
 import tensorflow as tf
 import numpy as np
 import os
+import sys
+
+from tqdm import tqdm
 
 # 8 bit int can represent for 256 levels
 NUM_OF_LEVEL = 256
+# skip specific types of variables/layers
+white_regex = ['CustomAdam', 'loss', 'training',
+               'moving_mean', 'moving_variance', 'DetectionLayer']
 # TRAIN_DIR = '/media/qiujing/e5439522-63c4-4b7c-a968-fefee6a3d960/omead/aiOnChip/AIonChip_HOZ/main/LP_segmentation/pruned_models/converted_checkpoint'
 # META = 'lp_seg_mobilenet_pruned_post-train_it25.ckpt.meta'
 # CKPT = 'lp_seg_mobilenet_pruned_post-train_it25.ckpt'
@@ -61,6 +67,7 @@ def _main_(args):
     ckpt = config['quant']['ckpt']
     out = config['quant']['quantized_model']
     out_dir = config['quant']['quant_dir']
+    verbose = config['quant']['verbose']
 
     # pretrained_weights = config['quant']['pretrained_weights']
     # skip_first_train = config['train']['skip_first_train']
@@ -73,13 +80,23 @@ def _main_(args):
         graph = tf.get_default_graph()
         all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
         update_operation = []
-        for v in all_vars:
-            # quantize only network variables
-            if ('fcn' in v.name) and ('Adam' not in v.name):
+        for v in tqdm(all_vars):
+            skip = False
+            for regex in white_regex:
+                if regex in v.name:
+                    skip = True
+            if skip:
+                if verbose:
+                    print('>>> Skipping {}, part of whitelist'.format(v.name))
+                    sys.stdout.flush()
+            else:
+                if verbose:
+                    print('>>> Quantizing {}'.format(v.name))
+                    sys.stdout.flush()
                 update_operation.append(quantize_one_variable(sess, v))
         _ = sess.run(update_operation)
         # save the qunatized checkpoint
-        checkpoint_path = os.path.join(out_dir,out )
+        checkpoint_path = os.path.join(out_dir,out)
         saver.save(sess, checkpoint_path)
 
 

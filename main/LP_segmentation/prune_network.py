@@ -134,7 +134,7 @@ def prune_layers(sess, prune_threshold, grad_mask_consts_old=None, white_list=No
     return grad_mask_consts_new# , global_step_value
 
 
-def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
+def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it, show_expected=False):
     print('Checking that the pruned weights were not modified...')
     sys.stdout.flush()
 
@@ -175,8 +175,8 @@ def check_pruned_weights(sess, grad_mask_consts, prune_threshold, it):
 
     print('>>>\t{} of the {} weights that have been pruned are NONzero (should be 0)'.
           format(count, total_pruned, percentage))
-    print('>>>\t{} of the {} total weights have been pruned ({:.6f}% of original, should be {:.6f}%)'.
-          format(total_pruned, original, percentage, true_percentage))
+    print('>>>\t{} of the {} total weights have been pruned ({:.6f}% of original{})'.
+          format(total_pruned, original, percentage, ', should be {:.6f}%'.format(true_percentage) if show_expected else ''))
     sys.stdout.flush()
     return count == 0
 
