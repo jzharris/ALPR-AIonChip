@@ -14,9 +14,9 @@
           
         "train_times":          5,
         "pretrained_weights":   "pruned_models/mobilenet_25it_1p_1/lp_seg_mobilenet_pruned_post-train_it25.h5",
-        "batch_size":           16,
+        "batch_size":           24,
         "learning_rate":        1e-4,
-        "nb_epochs":            10,
+        "nb_epochs":            5,
         "warmup_epochs":        0,
 
         "object_scale":         5.0,
