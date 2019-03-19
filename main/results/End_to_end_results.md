@@ -22,8 +22,7 @@
 
 ### YOLOv2 accuracies:
 * mAP: 0.9897
-* Test set boxed: 1 missed LPs (99.7%)
-* Train set boxed: - missed LPs (%)
+* Test set boxed: 1/300 missed LPs (99.7%)
 
 ### CRNN accuracies:
 * Acc (3 or fewer mistakes): 
