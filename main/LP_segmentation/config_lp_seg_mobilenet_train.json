@@ -8,16 +8,16 @@
     },
 
     "train": {
-        "prune_threshold":      0.20,
+        "prune_threshold":      0,
         "prune_network":        false,
         "train_image_folder":   "data/converted_dataset/train/jpeg/",
         "train_annot_folder":   "data/converted_dataset/train/xml/",
         "skip_first_train":     true,
           
-        "train_times":          5,
-        "previous_iterations":  10,
-        "pretrained_weights":   "pruned_models/mobilenet_10it_20p_1/lp_seg_mobilenet_pruned_it9.h5",
-        "batch_size":           24,
+        "train_times":          10,
+        "previous_iterations":  0,
+        "pretrained_weights":   "lp_seg_mobilenet.h5",
+        "batch_size":           16,
         "learning_rate":        1e-4,
         "nb_epochs":            10,
         "warmup_epochs":        0,
@@ -27,7 +27,7 @@
         "coord_scale":          1.0,
         "class_scale":          1.0,
 
-        "saved_weights_name":   "lp_seg_mobilenet_trained_test.h5",
+        "saved_weights_name":   "lp_seg_mobilenet",
         "debug":                false,
         "verbose":              false
     },
@@ -40,9 +40,9 @@
     },
 
     "predict": {
-        "input":                "data/converted_dataset/test",
-        "output_folder":        "vanilla",
-        "crop":                 false,
-        "pretrained_weights":   "quant_models/mobilenet_5it_q_2/lp_seg_mobilenet_quant_it1.h5"
+        "input":                "data/converted_dataset/train",
+        "output_folder":        "trained",
+        "crop":                 true,
+        "pretrained_weights":   "trained_models/mobilenet_1/lp_seg_mobilenet.h5"
     }
 }

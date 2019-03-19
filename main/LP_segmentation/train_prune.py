@@ -251,6 +251,21 @@ def _main_(args):
                           debug=config['train']['debug'])
 
     else:
+        # parent save directory:
+        train_dir = "trained_models"
+        if not os.path.isdir(train_dir):
+            os.mkdir(train_dir)
+        # find a unique folder to save to
+        i = 1
+        save_dir = "mobilenet_{}/".format(i)
+        while os.path.isdir(os.path.join(train_dir, save_dir)) and \
+                (len(os.listdir(os.path.join(train_dir, save_dir))) > 0):
+            i += 1
+            save_dir = "mobilenet_{}/".format(i)
+        # folder to save things in this time:
+        save_path = os.path.join(train_dir, save_dir)
+        if not os.path.isdir(save_path):  # dummy check
+            os.mkdir(save_path)
 
         if len(config['model']['labels']) > 0:
             overlap_labels = set(config['model']['labels']).intersection(set(train_labels.keys()))
@@ -342,7 +357,7 @@ def _main_(args):
                    no_object_scale=config['train']['no_object_scale'],
                    coord_scale=config['train']['coord_scale'],
                    class_scale=config['train']['class_scale'],
-                   saved_weights_name=config['train']['saved_weights_name'],
+                   saved_weights_name=os.path.join(save_path, "{}.h5".format(config['train']['saved_weights_name'])),
                    debug=config['train']['debug'],
                    verbose=True)
 
