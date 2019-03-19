@@ -16,7 +16,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 ########################################################################################################################
-# run: python predict_all.py -c config_lp_seg_mobilenet_prune.json -i data\converted_dataset\test --crop
+# run: python predict_all.py -c config_lp_seg_mobilenet_quant.json
 ########################################################################################################################
 
 argparser = argparse.ArgumentParser(
@@ -26,17 +26,6 @@ argparser.add_argument(
     '-c',
     '--conf',
     help='path to configuration file')
-
-argparser.add_argument(
-    '-i',
-    '--input',
-    help='folder of images or mp4 files')
-
-argparser.add_argument(
-    '--crop',
-    action='store_true',
-    default=False,
-    help='crop the bounding box of each output')
 
 
 # Convert XML to nested dictionary
@@ -50,23 +39,24 @@ def xml_to_dict(path):
 
 def _main_(args):
     config_path  = args.conf
-    image_folder = args.input
-    crop         = args.crop
+    with open(config_path) as config_buffer:
+        config = json.load(config_buffer)
+
+    image_folder = config['predict']['input']
+    output_folder = config['predict']['output_folder']
+    crop = config['predict']['crop']
 
     if crop:
-        target_folder = "cropped"
+        target_folder = "{}_cropped".format(output_folder)
     else:
-        target_folder = "detected"
+        target_folder = "{}_detected".format(output_folder)
 
     detected_folder = os.path.join(image_folder, target_folder)
     if os.path.exists(detected_folder):
         shutil.rmtree(detected_folder)
     os.mkdir(detected_folder)
 
-    with open(config_path) as config_buffer:    
-        config = json.load(config_buffer)
-
-    weights_path = config['train']['pretrained_weights']
+    weights_path = config['predict']['pretrained_weights']
 
     ###############################
     #   Make the model 

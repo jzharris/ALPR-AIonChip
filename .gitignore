@@ -7,6 +7,8 @@ main/dataset/saved datasets/
 main/LP_segmentation/logs/
 main/LP_segmentation/data/converted_dataset/*/cropped
 main/LP_segmentation/data/converted_dataset/*/detected
+main/LP_segmentation/data/converted_dataset/*/*_cropped
+main/LP_segmentation/data/converted_dataset/*/*_detected
 
 sandbox/*/*/data
 sandbox/*/*/logs
