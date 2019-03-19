@@ -9,15 +9,13 @@ from frontend import YOLO
 import json
 
 from quantize_network import quantize_layers
-from prune_network import check_pruned_weights, print_pruned_weights, get_mask_consts
+from prune_network import check_pruned_weights, get_mask_consts
 import keras.backend as K
 
 ##########################################################################################################
-# run: python train_quantize.py -c config_lp_seg_mobilenet_prune.json 2>&1 | tee pruned_models/logs.txt
+# run: python train_quantize.py -c config_lp_seg_mobilenet_quant.json 2>&1 | tee quant_models/logs.txt
 ##########################################################################################################
 
-# 8 bit int can represent for 256 levels
-NUM_OF_LEVEL = 256
 # skip specific types of variables/layers
 white_regex = ['CustomAdam', 'loss', 'training',
                'moving_mean', 'moving_variance', 'DetectionLayer']
@@ -92,17 +90,18 @@ def _main_(args):
     iterations = config['train']['train_times']
 
     # parent save directory:
-    pruned_dir = config['quant']['quant_dir']
-    if not os.path.isdir(pruned_dir):
-        os.mkdir(pruned_dir)
+    quant_dir = config['quant']['quant_dir']
+    if not os.path.isdir(quant_dir):
+        os.mkdir(quant_dir)
     # find a unique folder to save to
     i = 1
     save_dir = "mobilenet_{}it_q_{}/".format(iterations, i)
-    while os.path.isdir(os.path.join(pruned_dir, save_dir)):
+    while os.path.isdir(os.path.join(quant_dir, save_dir)) and \
+            (len(os.listdir(os.path.join(quant_dir, save_dir))) > 0):
         i += 1
         save_dir = "mobilenet_{}it_q_{}/".format(iterations, i)
     # folder to save things in this time:
-    save_path = os.path.join(pruned_dir, save_dir)
+    save_path = os.path.join(quant_dir, save_dir)
     if not os.path.isdir(save_path):  # dummy check
         os.mkdir(save_path)
 
@@ -178,7 +177,7 @@ def _main_(args):
                               class_scale=config['train']['class_scale'],
                               debug=config['train']['debug'])
         else:
-            print("No pre-trained weights were loaded")
+            print("No pre-trained weights were loaded from {}".format(config['train']['pretrained_weights']))
 
         ###############################
         #   Start the training process
@@ -234,7 +233,7 @@ def _main_(args):
         # TODO: check to make sure the weights were properly quantized
 
         # save weights to h5:
-        print("Saving pruned weights for next iteration...")
+        print("Saving quantized weights for next iteration...")
         yolo.save_weights(quant_weights_path_curr)
 
         # perform evaluation to see how badly pruning affected the accuracy

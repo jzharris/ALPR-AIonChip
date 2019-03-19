@@ -16,7 +16,9 @@ from tqdm import tqdm
 
 # one method to do quantization
 def strategy_1(v_numpy):
-    global NUM_OF_LEVEL
+    # 8 bit int can represent for 256 levels
+    NUM_OF_LEVEL = 256
+
     v_numpy_shape = v_numpy.shape
     v_numpy_flatten = v_numpy.flatten()
     min_np = v_numpy.min()
@@ -37,8 +39,10 @@ def quantize_one_variable(sess, v):
 
 
 def quantize_layers(sess, white_regex=None, verbose=True):
+    print('Quantizing network...')
     all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
     update_operation = []
+    quantized_count = 0
     for v in tqdm(all_vars):
         skip = False
         for regex in white_regex:
@@ -46,15 +50,17 @@ def quantize_layers(sess, white_regex=None, verbose=True):
                 skip = True
         if skip:
             if verbose:
-                print('>>> Skipping {}, part of whitelist'.format(v.name))
+                print('>>> skipping {}, part of whitelist'.format(v.name))
                 sys.stdout.flush()
         else:
             if verbose:
-                print('>>> Quantizing {}'.format(v.name))
+                print('>>> quantizing {}'.format(v.name))
                 sys.stdout.flush()
             update_operation.append(quantize_one_variable(sess, v))
+
+            # increment weight count by number of weights in layer
+            val_np = sess.run(v)
+            quantized_count += len(val_np.flatten())
     _ = sess.run(update_operation)
 
-    # save the qunatized checkpoint
-    # checkpoint_path = os.path.join(out_dir, out)
-    # saver.save(sess, checkpoint_path)
+    print(">>>\t quantizing a total of {} weights".format(quantized_count))

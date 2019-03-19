@@ -81,7 +81,8 @@ def _main_(args):
         # find a unique folder to save to
         i = 1
         save_dir = "mobilenet_{}it_{}p_{}/".format(iterations + prev_its, int(prune_threshold * 100), i)
-        while os.path.isdir(os.path.join(pruned_dir, save_dir)):
+        while os.path.isdir(os.path.join(pruned_dir, save_dir)) and \
+                (len(os.listdir(os.path.join(pruned_dir, save_dir))) > 0):
             i += 1
             save_dir = "mobilenet_{}it_{}p_{}/".format(iterations + prev_its, int(prune_threshold * 100), i)
         # folder to save things in this time:
