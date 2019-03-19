@@ -64,7 +64,7 @@ class ShadowNet(cnn_basenet.CNNBaseModel):
         :return:
         """
         conv = self.conv2d(inputdata=inputdata, out_channel=out_dims, kernel_size=3, stride=1, use_bias=False, name=name)
-        drop_activation = self.drop_activation(inputdata=conv)
+        drop_activation = self.my_drop_activation(inputdata=conv)
         max_pool = self.maxpooling(inputdata=drop_activation, kernel_size=2, stride=2)
         return max_pool
 
@@ -77,25 +77,25 @@ class ShadowNet(cnn_basenet.CNNBaseModel):
         conv1 = self.__conv_stage(inputdata=inputdata, out_dims=64, name='conv1')  # batch*16*50*64
         conv2 = self.__conv_stage(inputdata=conv1, out_dims=128, name='conv2')  # batch*8*25*128
         conv3 = self.conv2d(inputdata=conv2, out_channel=256, kernel_size=3, stride=1, use_bias=False, name='conv3')  # batch*8*25*256
-        drop_activation3 = self.drop_activation(conv3) # batch*8*25*256
+        drop_activation3 = self.my_drop_activation(conv3) # batch*8*25*256
         conv4 = self.conv2d(inputdata=drop_activation3, out_channel=256, kernel_size=3, stride=1, use_bias=False, name='conv4')  # batch*8*25*256
-        drop_activation4 = self.drop_activation(conv4)  # batch*8*25*256
+        drop_activation4 = self.my_drop_activation(conv4)  # batch*8*25*256
         max_pool4 = self.maxpooling(inputdata=drop_activation4, kernel_size=[2, 1], stride=[2, 1], padding='VALID')  # batch*4*25*256
         conv5 = self.conv2d(inputdata=max_pool4, out_channel=512, kernel_size=3, stride=1, use_bias=False, name='conv5')  # batch*4*25*512
-        drop_activation5 = self.drop_activation(conv5)  # batch*4*25*512
+        drop_activation5 = self.my_drop_activation(conv5)  # batch*4*25*512
         if self.phase.lower() == 'train':
             bn5 = self.layerbn(inputdata=drop_activation5, is_training=True)
         else:
             bn5 = self.layerbn(inputdata=drop_activation5, is_training=False)  # batch*4*25*512
         conv6 = self.conv2d(inputdata=bn5, out_channel=512, kernel_size=3, stride=1, use_bias=False, name='conv6')  # batch*4*25*512
-        drop_activation6 = self.drop_activation(conv6)  # batch*4*25*512
+        drop_activation6 = self.my_drop_activation(conv6)  # batch*4*25*512
         if self.phase.lower() == 'train':
             bn6 = self.layerbn(inputdata=drop_activation6, is_training=True)
         else:
             bn6 = self.layerbn(inputdata=drop_activation6, is_training=False)  # batch*4*25*512
         max_pool6 = self.maxpooling(inputdata=bn6, kernel_size=[2, 1], stride=[2, 1])  # batch*2*25*512
         conv7 = self.conv2d(inputdata=max_pool6, out_channel=512, kernel_size=2, stride=[2, 1], use_bias=False, name='conv7')  # batch*1*25*512
-        drop_activation7 = self.drop_activation(conv7)  # batch*1*25*512
+        drop_activation7 = self.my_drop_activation(conv7)  # batch*1*25*512
         return drop_activation7
 
     def __map_to_sequence(self, inputdata):

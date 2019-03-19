@@ -18,6 +18,7 @@ import argparse
 import sys
 sys.path.insert(0,'.')
 from crnn_model import crnn_model
+# from crnn_model import crnn_model_drop_activation as crnn_model
 from local_utils import data_utils, log_utils
 from global_configuration import config
 

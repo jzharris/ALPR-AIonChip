@@ -1,0 +1,17 @@
+cp dataset/sample.txt dataset/Train
+echo 'copied original sample.txt'
+
+rm dataset/Train/Tr*
+echo 'removed old augmented dataset'
+
+python3 dataset/data_train_augment.py
+echo 'generated new dataset'
+
+python3 dataset/generate_sample_file.py
+echo 'generated new sample.txt'
+
+mv dataset/Train/output/* dataset/Train
+echo 'moved augmented data to main dataset'
+
+python3 tools/write_text_features.py --dataset_dir dataset/ --save_dir dataset/
+echo 'Write tf file'

@@ -18,7 +18,7 @@ import math
 import sys
 sys.path.insert(0,'.')
 from local_utils import data_utils
-from crnn_model import crnn_model_relu
+from crnn_model import crnn_model
 # from crnn_model import crnn_model as crnn_model_relu      # <-- uncomment to add drop activation to model
 from global_configuration import config
 
@@ -60,7 +60,7 @@ def test_shadownet(dataset_dir, weights_path, is_vis=False, is_recursive=True):
     images_sh = tf.cast(x=images_sh, dtype=tf.float32)
 
     # build shadownet
-    net = crnn_model_relu.ShadowNet(phase='Test', hidden_nums=256, layers_nums=2, seq_length=25, num_classes=37)
+    net = crnn_model.ShadowNet(phase='Test', hidden_nums=256, layers_nums=2, seq_length=25, num_classes=37)
 
     with tf.variable_scope('shadow'):
         net_out = net.build_shadownet(inputdata=images_sh)

@@ -4,3 +4,654 @@ To construct input pipelines, use the `tf.data` module.
 WARNING: 03-12 16:54:20: tf_logging.py:125 * 11432 From C:\Users\zharr\AppData\Local\Programs\Python\Python35\lib\site-packages\tensorflow\python\training\input.py:187: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
 Instructions for updating:
 To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 20:55:17: tf_logging.py:125 * 140378235758336 From tools/train_shadownet.py:51: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From tools/train_shadownet.py:51: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 20:58:24: tf_logging.py:125 * 139676287977216 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From tools/train_shadownet.py:51: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 21:01:09: tf_logging.py:125 * 140367809308416 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 21:01:12: tf_logging.py:125 * 140367809308416 From tools/train_shadownet.py:119: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 21:15:26: tf_logging.py:125 * 140258299610880 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 22:20:41: tf_logging.py:125 * 140683782149888 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 22:31:32: tf_logging.py:125 * 139991349950208 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 22:31:35: tf_logging.py:125 * 139991349950208 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 22:45:16: tf_logging.py:125 * 140369439459072 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 22:45:19: tf_logging.py:125 * 140369439459072 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 22:47:05: tf_logging.py:125 * 140007489074944 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 22:47:08: tf_logging.py:125 * 140007489074944 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-13 23:11:54: tf_logging.py:125 * 140687139493632 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-13 23:11:57: tf_logging.py:125 * 140687139493632 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 12:57:16: tf_logging.py:125 * 140699570579200 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 12:57:38: tf_logging.py:125 * 140380204746496 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 12:57:41: tf_logging.py:125 * 140380204746496 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 13:55:00: tf_logging.py:125 * 139756854208256 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 13:55:03: tf_logging.py:125 * 139756854208256 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 14:24:07: tf_logging.py:125 * 140449966044928 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 14:24:09: tf_logging.py:125 * 140449966044928 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 15:53:01: tf_logging.py:125 * 140333081245440 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 15:53:03: tf_logging.py:125 * 140333081245440 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 15:55:59: tf_logging.py:125 * 140582464644864 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 15:56:00: tf_logging.py:125 * 140582464644864 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 15:56:02: tf_logging.py:125 * 140582464644864 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 19:18:24: tf_logging.py:125 * 140376375764736 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 19:18:27: tf_logging.py:125 * 140376375764736 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 20:03:39: tf_logging.py:125 * 140441565406976 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 20:03:42: tf_logging.py:125 * 140441565406976 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 20:06:01: tf_logging.py:125 * 140364573722368 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 20:06:02: tf_logging.py:125 * 140364573722368 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 20:06:04: tf_logging.py:125 * 140364573722368 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 22:08:03: tf_logging.py:125 * 140448612370176 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 22:08:06: tf_logging.py:125 * 140448612370176 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 22:11:31: tf_logging.py:125 * 140366359340800 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 22:11:34: tf_logging.py:125 * 140366359340800 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-14 22:24:17: tf_logging.py:125 * 140281309558528 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-14 22:24:19: tf_logging.py:125 * 140281309558528 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-15 00:59:59: tf_logging.py:125 * 139712276051712 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-15 01:00:03: tf_logging.py:125 * 139712276051712 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-15 01:41:35: tf_logging.py:125 * 140176860849920 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-15 01:41:37: tf_logging.py:125 * 140176860849920 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-15 08:54:22: tf_logging.py:125 * 140629549164288 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-15 08:54:24: tf_logging.py:125 * 140629549164288 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From ./local_utils/data_utils.py:241: string_input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(string_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:276: input_producer (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensor_slices(input_tensor).shuffle(tf.shape(input_tensor, out_type=tf.int64)[0]).repeat(num_epochs)`. If `shuffle=False`, omit the `.shuffle(...)`.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:188: limit_epochs (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)`.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: QueueRunner.__init__ (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From /home/omead/.local/share/virtualenvs/Deeplearning-OCR-R2rP5zpD/lib/python3.5/site-packages/tensorflow/python/training/input.py:197: add_queue_runner (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From ./local_utils/data_utils.py:242: TFRecordReader.__init__ (from tensorflow.python.ops.io_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.TFRecordDataset`.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From tools/train_shadownet.py:52: shuffle_batch (from tensorflow.python.training.input) is deprecated and will be removed in a future version.
+Instructions for updating:
+Queue-based input pipelines have been replaced by `tf.data`. Use `tf.data.Dataset.shuffle(min_after_dequeue).batch(batch_size)`.
+WARNING: 03-15 14:12:40: tf_logging.py:125 * 140325993281280 From ./crnn_model/crnn_model.py:121: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+WARNING: 03-15 14:12:42: tf_logging.py:125 * 140325993281280 From tools/train_shadownet.py:120: start_queue_runners (from tensorflow.python.training.queue_runner_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+To construct input pipelines, use the `tf.data` module.

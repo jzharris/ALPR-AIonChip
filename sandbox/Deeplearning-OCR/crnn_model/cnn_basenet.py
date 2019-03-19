@@ -11,6 +11,8 @@ The base convolution neural networks mainly implement some useful cnn functions
 import tensorflow as tf
 import numpy as np
 from abc import ABCMeta
+from drop_activation import drop_activation
+
 
 
 class CNNBaseModel(metaclass=ABCMeta):
@@ -83,6 +85,16 @@ class CNNBaseModel(metaclass=ABCMeta):
             ret = nl(tf.nn.bias_add(conv, b, data_format=data_format) if use_bias else conv, name=name)
 
         return ret
+
+    @staticmethod
+    def my_drop_activation(inputdata, name=None):
+        """
+
+        :param name:
+        :param inputdata:
+        :return:
+        """
+        return drop_activation(inputdata)
 
     @staticmethod
     def relu(inputdata, name=None):
