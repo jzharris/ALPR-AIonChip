@@ -21,7 +21,7 @@ white_regex = ['CustomAdam', 'loss', 'training',
                'moving_mean', 'moving_variance', 'DetectionLayer']
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
@@ -159,6 +159,22 @@ def _main_(args):
         else:
             print("No pre-trained weights were loaded from {}".format(config['train']['pretrained_weights']))
 
+        # update grad_mask_consts if first iteration
+        if it == 0 and grad_mask_consts is not None:
+            yolo.grad_mask_consts = grad_mask_consts
+            yolo.recompile(train_imgs=train_imgs,
+                           valid_imgs=valid_imgs,
+                           train_times=config['train']['train_times'],
+                           valid_times=config['valid']['valid_times'],
+                           learning_rate=config['train']['learning_rate'],
+                           batch_size=config['train']['batch_size'],
+                           warmup_epochs=config['train']['warmup_epochs'],
+                           object_scale=config['train']['object_scale'],
+                           no_object_scale=config['train']['no_object_scale'],
+                           coord_scale=config['train']['coord_scale'],
+                           class_scale=config['train']['class_scale'],
+                           debug=config['train']['debug'])
+
         ###############################
         #   Start the training process
         ###############################
@@ -180,7 +196,7 @@ def _main_(args):
                                                        config['train']['saved_weights_name'] + "_it{}.h5".format(it)),
                        debug=config['train']['debug'],
                        verbose=True)
-        else:
+        elif grad_mask_consts is None:
             # perform evaluation in either case (usually performed at end of training setp)
             print('Evaluating pre-trained network')
             yolo.validate(train_imgs=train_imgs,
@@ -208,7 +224,7 @@ def _main_(args):
         # TODO: show that the weights are now unquantized
 
         # quantize the weights
-        quantize_layers(sess, white_regex, verbose=False)
+        quantize_layers(sess, white_regex, verbose=config['quant']['verbose'])
 
         # TODO: check to make sure the weights were properly quantized
 
