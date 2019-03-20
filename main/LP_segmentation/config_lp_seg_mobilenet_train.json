@@ -8,15 +8,12 @@
     },
 
     "train": {
-        "prune_threshold":      0,
-        "prune_network":        false,
         "train_image_folder":   "data/converted_dataset/train/jpeg/",
         "train_annot_folder":   "data/converted_dataset/train/xml/",
         "skip_first_train":     true,
           
         "train_times":          10,
-        "previous_iterations":  0,
-        "pretrained_weights":   "lp_seg_mobilenet.h5",
+        "pretrained_weights":   "trained_models/mobilenet_1/lp_seg_mobilenet.h5",
         "batch_size":           16,
         "learning_rate":        1e-4,
         "nb_epochs":            10,
@@ -30,6 +27,10 @@
         "saved_weights_name":   "lp_seg_mobilenet",
         "debug":                false,
         "verbose":              false
+    },
+
+    "prune": {
+        "prune_network":        false
     },
 
     "valid": {

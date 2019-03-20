@@ -39,7 +39,6 @@ def _main_(args):
     with open(config_path) as config_buffer:
         config = json.loads(config_buffer.read())
 
-    prune_threshold = config['train']['prune_threshold']
     skip_first_train = config['train']['skip_first_train']
 
     ###############################
@@ -68,11 +67,13 @@ def _main_(args):
     print('Training shape:   {}'.format(len(train_imgs)))
     print('Validation shape: {}'.format(len(valid_imgs)))
 
-    if config['train']['prune_network']:
+    if config['prune']['prune_network']:
+
+        prune_threshold = config['prune']['prune_threshold']
 
         # get iterations from train_times:
         iterations = config['train']['train_times']
-        prev_its = config['train']['previous_iterations']
+        prev_its = config['prune']['previous_iterations']
 
         # parent save directory:
         pruned_dir = "pruned_models"
@@ -122,9 +123,9 @@ def _main_(args):
             print("it {}".format(it))
 
             prune_weights_path_prev = os.path.join(save_path,
-                                                   config['train']['pruned_weights_name'] + "_it{}.h5".format(it - 1))
+                                                   config['prune']['pruned_weights_name'] + "_it{}.h5".format(it - 1))
             prune_weights_path_curr = os.path.join(save_path,
-                                                   config['train']['pruned_weights_name'] + "_it{}.h5".format(it))
+                                                   config['prune']['pruned_weights_name'] + "_it{}.h5".format(it))
 
             ###############################
             #   Load the pretrained weights (if any)
@@ -302,7 +303,7 @@ def _main_(args):
             grad_mask_consts = get_mask_consts(sess, white_list, white_regex, verbose=False)
             if grad_mask_consts != {}:
 
-                check_pruned_weights(sess, grad_mask_consts, prune_threshold, config['train']['previous_iterations'] - 1)
+                check_pruned_weights(sess, grad_mask_consts, 0, 0)
 
                 print('Evaluating masked network, before train step:')
                 yolo.validate(train_imgs=train_imgs,

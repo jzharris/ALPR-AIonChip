@@ -123,14 +123,14 @@ def _main_(args):
 
                     if len(best_box) == 0:
                         print('no boxes are chosen')
+                    else:
+                        cropped_image = crop_image(image, best_box[0])
 
-                    cropped_image = crop_image(image, best_box[0])
+                        cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
 
-                    cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
-
-                    # find LP chars to add to sample.txt file
-                    xml = xml_to_dict(os.path.join(image_folder, "xml", "{}.xml".format(file[:-4])))
-                    samples_dict[file] = xml['object']['platetext']
+                        # find LP chars to add to sample.txt file
+                        xml = xml_to_dict(os.path.join(image_folder, "xml", "{}.xml".format(file[:-4])))
+                        samples_dict[file] = xml['object']['platetext']
                 else:
                     image = draw_boxes(image, boxes, config['model']['labels'])
                     if len(boxes) == 0:
