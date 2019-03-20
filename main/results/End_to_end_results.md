@@ -16,7 +16,7 @@
 
 
 ## Test 2
-* YOLOv2 with 2,821,100/3,185,088 (88.5721%) pruned weights, and 0/3,206,976 (0%) quantized weights
+* YOLOv2 with 2,821,100/3,185,088 (88.5721%) pruned weights, and 0/3,185,088 (0%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
 
 ### YOLOv2 accuracies:
