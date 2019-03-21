@@ -11,17 +11,17 @@ import json
 from quantize_network import quantize_layers
 from prune_network import check_pruned_weights, get_mask_consts
 import keras.backend as K
+import tensorflow as tf
 
 ##########################################################################################################
 # run: python train_quantize.py -c config_lp_seg_mobilenet_quant.json 2>&1 | tee quant_models/logs.txt
 ##########################################################################################################
 
 # skip specific types of variables/layers
-white_regex = ['CustomAdam', 'loss', 'training',
-               'moving_mean', 'moving_variance', 'DetectionLayer']
+white_regex = ['CustomAdam', 'training', 'loss', 'moving_mean', 'moving_variance']#'DetectionLayer']
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
@@ -111,6 +111,27 @@ def _main_(args):
                 max_box_per_image=config['model']['max_box_per_image'],
                 anchors=config['model']['anchors'],
                 grad_mask_consts=grad_mask_consts)
+
+    for var in yolo.model.trainable_weights:
+        for white in white_regex:
+            if white in var.name:
+                print('WARNING: trainable weights found in regex, be careful. Found {}'.format(var.name))
+
+    for var in tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES):
+        is_white = False
+        for white in white_regex:
+            if white in var.name:
+                is_white = True
+                break
+        if not is_white: # var is being manipulated
+            not_trainable = True
+            for var_ in yolo.model.trainable_weights:
+                if var.name in var_.name:
+                    not_trainable = False
+                    break
+
+            if not_trainable:
+                print('WARNING: variable not considered trainable by Keras is being manipulated. Found {}'.format(var.name))
 
     ####################################################################################################################
     for it in range(0, iterations):

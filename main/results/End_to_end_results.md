@@ -1,7 +1,7 @@
 # Results of pruning and quantization on the End-to-end system
 
 ## Test 1
-* YOLOv2 with 0/3,206,976 (0%) pruned weights, and 0/3,206,976 (0%) quantized weights
+* YOLOv2 with 0/3,237,726 (0%) pruned weights, and 0/3,237,726 (0%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
 
 ### YOLOv2 accuracies:
@@ -16,7 +16,7 @@
 
 
 ## Test 2
-* YOLOv2 with 2,821,100/3,185,088 (88.5721%) pruned weights, and 0/3,206,976 (0%) quantized weights
+* YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 0/3,237,726 (0%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
 
 ### YOLOv2 accuracies:
@@ -32,7 +32,7 @@
 
 
 ## Test 3
-* YOLOv2 with 2,821,100/3,206,976 (87.9676%) pruned weights, and 3,206,976/3,206,976 (100%) quantized weights
+* YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 3,206,976/3,237,726 (99%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
 
 ### YOLOv2 accuracies:
@@ -44,3 +44,15 @@
 * Acc (2 or fewer mistakes): 98.392284%
 * Acc (1 or fewer mistakes): 95.819938%
 * Acc (No mistakes):         85.852093%
+
+
+## Test 3 (fixed quant)
+* YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 3,237,726/3,237,726 (100%) quantized weights
+* Augmented CRNN with 0% pruned weights, and 0% quantized weights
+
+### YOLOv2 accuracies:
+* mAP: 0.9857
+* Test set boxed: /300 missed LPs (% acc)
+
+### CRNN accuracies:
+* 

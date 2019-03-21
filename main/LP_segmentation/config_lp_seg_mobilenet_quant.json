@@ -13,7 +13,7 @@
         "skip_first_train":     true,
           
         "train_times":          5,
-        "pretrained_weights":   "pruned_models/mobilenet_25it_1p_1/lp_seg_mobilenet_pruned_post-train_it25.h5",
+        "pretrained_weights":   "quant_models/mobilenet_5it_q_2/lp_seg_mobilenet_quant_it1.h5",
         "batch_size":           16,
         "learning_rate":        1e-4,
         "nb_epochs":            5,
