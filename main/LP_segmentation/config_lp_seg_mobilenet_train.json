@@ -29,6 +29,10 @@
         "verbose":              false
     },
 
+    "convert": {
+        "convert_dir":          "./trained_models/"
+    },
+
     "prune": {
         "prune_network":        false
     },

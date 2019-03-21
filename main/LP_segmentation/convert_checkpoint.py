@@ -2,7 +2,7 @@ import os
 
 # disable GPU - not needed
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1" # no need for GPU
 
 import tensorflow as tf
 import keras
@@ -23,8 +23,6 @@ from keras.utils.generic_utils import CustomObjectScope
 # To run: python convert_checkpoint.py -c config_lp_seg_mobilenet_prune.json
 ######################################################################
 
-parent_folder = "./pruned_models"
-
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
 
@@ -42,15 +40,16 @@ def path_leaf(path):
 def _main_(args):
     config_path = args.conf
 
+    with open(config_path) as config_buffer:
+        config = json.loads(config_buffer.read())
+
     # make a output directory to save the files to
+    parent_folder = config['convert']['convert_dir']
     output_folder = "converted_checkpoint"
     output_path = os.path.join(parent_folder, output_folder)
     if os.path.exists(output_path):
         shutil.rmtree(output_path)
     os.makedirs(output_path)
-
-    with open(config_path) as config_buffer:
-        config = json.loads(config_buffer.read())
 
     full_path = config['train']['pretrained_weights']
     checkpoint_name = os.path.splitext(path_leaf(full_path))[0]
@@ -116,14 +115,17 @@ def _main_(args):
                     class_scale=config['train']['class_scale'],
                     debug=config['train']['debug'])
 
-    # Load model, print endpoints
-    # potentially need to update the following: pip install -U git+https://github.com/Microsoft/MMdnn.git@master
-    with CustomObjectScope({# mobilenet custom activations
-                            'relu6': keras.activations.relu,
-                            # custom loss and optimizers
-                            'custom_loss': yolo.custom_loss,
-                            'CustomAdam': CustomAdam}):
-        model = keras.models.load_model(full_path)
+    yolo.model.load_weights(full_path)
+    model = yolo.model
+
+    # # Load model, print endpoints
+    # # potentially need to update the following: pip install -U git+https://github.com/Microsoft/MMdnn.git@master
+    # with CustomObjectScope({# mobilenet custom activations
+    #                         'relu6': keras.activations.relu,
+    #                         # custom loss and optimizers
+    #                         'custom_loss': yolo.custom_loss,
+    #                         'CustomAdam': CustomAdam}):
+    #     model = keras.models.load_model(full_path)
     print('inputs')
     print(model.inputs)
     print('outputs:')

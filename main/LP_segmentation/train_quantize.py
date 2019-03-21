@@ -18,7 +18,7 @@ import tensorflow as tf
 ##########################################################################################################
 
 # skip specific types of variables/layers
-white_regex = ['CustomAdam', 'training', 'loss', 'moving_mean', 'moving_variance']#'DetectionLayer']
+white_regex = ['CustomAdam', 'training', 'loss', 'moving_mean', 'moving_variance'] # for YOLO, ignore these layers to get the ones considered trainable by Keras
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"

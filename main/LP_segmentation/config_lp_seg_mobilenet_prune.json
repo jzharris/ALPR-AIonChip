@@ -29,6 +29,10 @@
         "verbose":              false
     },
 
+    "convert": {
+        "convert_dir":          "./pruned_models/"
+    },
+
     "prune": {
         "prune_threshold":      0.01,
         "prune_network":        true,
