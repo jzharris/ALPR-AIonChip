@@ -7,6 +7,6 @@
     },
 
     "convert": {
-        "convert_dir":          "./quant_models/"
+        "convert_dir":          "../LP_segmentation/quant_models/"
     }
 }

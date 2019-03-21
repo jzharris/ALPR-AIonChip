@@ -41,7 +41,7 @@ def _main_(args):
     output_path = os.path.join(parent_folder, output_folder)
 
     if not os.path.exists(output_path):
-        raise ("ERROR: converted checkpoint not found.")
+        raise Exception("ERROR: converted checkpoint not found at {}".format(output_path))
 
     ###############################
     #   Load the model and encode
@@ -52,3 +52,8 @@ def _main_(args):
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
         encode_layers(sess, white_regex, verbose)
+
+
+if __name__ == '__main__':
+    args = argparser.parse_args()
+    _main_(args)
