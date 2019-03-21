@@ -3,6 +3,7 @@
 ## Test 1
 * YOLOv2 with 0/3,237,726 (0%) pruned weights, and 0/3,237,726 (0%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
+* CRNN ckpt: model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775
 
 ### YOLOv2 accuracies:
 * mAP: 0.9930
@@ -18,6 +19,7 @@
 ## Test 2
 * YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 0/3,237,726 (0%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
+* CRNN ckpt: model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775
 
 ### YOLOv2 accuracies:
 * mAP: 0.9848
@@ -34,6 +36,7 @@
 ## Test 3
 * YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 3,206,976/3,237,726 (99%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
+* CRNN ckpt: model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775
 
 ### YOLOv2 accuracies:
 * mAP: 0.9897
@@ -49,10 +52,14 @@
 ## Test 3 (fixed quant)
 * YOLOv2 with 2,821,100/3,237,726 (87.1321%) pruned weights, and 3,237,726/3,237,726 (100%) quantized weights
 * Augmented CRNN with 0% pruned weights, and 0% quantized weights
+* CRNN ckpt: model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775
 
 ### YOLOv2 accuracies:
 * mAP: 0.9857
-* Test set boxed: /300 missed LPs (% acc)
+* Test set boxed: 1/300 missed LPs (99.7% acc)
 
 ### CRNN accuracies:
-* 
+* Acc (3 or fewer mistakes): 99.358976%
+* Acc (2 or fewer mistakes): 98.717946%
+* Acc (1 or fewer mistakes): 96.153843%
+* Acc (No mistakes):         87.500000%
