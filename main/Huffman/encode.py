@@ -6,7 +6,7 @@ import tensorflow as tf
 from encode_network import encode_layers
 
 ##########################################################################################################
-# run: python encode.py -c config_lp_seg_mobilenet_quant.json 2>&1 | tee quant_models/logs.txt
+# run: python encode.py -c config_encode_yolo.json 2>&1 | tee logs.txt
 ##########################################################################################################
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
