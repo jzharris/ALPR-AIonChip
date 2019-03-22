@@ -36,7 +36,8 @@ class HuffmanCoding:
         self.make_heap(freqs_d)
         self.merge_nodes()
         self.make_codes()
-        return self.codes
+        codebook_size, encoded_size = self.make_stats()
+        return codebook_size, encoded_size
 
     def get_freqs(self):
         unique, freqs = np.unique(self.val_np, return_counts=True)
@@ -79,10 +80,33 @@ class HuffmanCoding:
         root = heapq.heappop(self.heap)
         current_code = ""
         self.make_codes_helper(root, current_code)
+        # pprint(self.codes)
+
+    def make_stats(self):
+        codes = self.codes
+
+        # count how many floats needed for codebook
+        codebook_size = len(codes.keys())
+
+        # count the largest bit size needed for encoded variables
+        longest_str = None
+        for key in codes.keys():
+            if longest_str is None or len(codes[key]) > len(longest_str):
+                longest_str = codes[key]
+        encoded_size = len(longest_str)
+
+        print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
+        print('>>> {} bits needed for encoded variables'.format(encoded_size))
+
+        return codebook_size, encoded_size
 
 
 def encode_layers(sess, white_regex=None, verbose=True):
     print('Encoding network...')
+
+    codebook_sizes = []
+    encoded_bits = []
+
     all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
     weight_count = 0
     layer_count = 0
@@ -103,12 +127,21 @@ def encode_layers(sess, white_regex=None, verbose=True):
             # perform the encoding for the layer
             val_np = sess.run(v)
             encoder = HuffmanCoding(val_np)
-            codes = encoder.encode_np()
-            pprint(codes)
-            exit(0)
+            codebook_size, encoded_size = encoder.encode_np()
+            codebook_sizes.append(codebook_size)
+            encoded_bits.append(encoded_size)
 
             # increment weight count by number of weights in layer
             weight_count += len(val_np.flatten())
             layer_count += 1
 
-    print(">>>\t encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
+    print(">>>")
+    print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
+    print(">>> a total of {} codebooks containing {} 32-bit floating point numbers was created".
+          format(len(codebook_sizes), sum(codebook_sizes)))
+    print(">>> a total of {} bits is required to store the encoded variables".format(sum(encoded_bits)))
+    original_kb = weight_count * 32 / 8000
+    print(">>> original number of bits needed: {} KB".format(original_kb))
+    new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
+    print(">>> new number of bits needed:      {} KB".format(new_kb))
+    print(">>> compression ratio: {}".format(original_kb / new_kb))
