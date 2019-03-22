@@ -45,7 +45,7 @@ class HuffmanCoding:
 
         # return unique, freqs
         freqs_d = dict(zip(unique, freqs))
-        print(freqs_d)
+        # print(freqs_d)
         return freqs_d
 
     def make_heap(self, frequency):
@@ -80,7 +80,7 @@ class HuffmanCoding:
         root = heapq.heappop(self.heap)
         current_code = ""
         self.make_codes_helper(root, current_code)
-        # pprint(self.codes)
+        pprint(self.codes)
 
     def make_stats(self):
         codes = self.codes
@@ -88,12 +88,17 @@ class HuffmanCoding:
         # count how many floats needed for codebook
         codebook_size = len(codes.keys())
 
-        # count the largest bit size needed for encoded variables
-        longest_str = None
-        for key in codes.keys():
-            if longest_str is None or len(codes[key]) > len(longest_str):
-                longest_str = codes[key]
-        encoded_size = len(longest_str)
+        # count the number of bits now needed to store variables
+        encoded_size = 0
+        for val in self.val_np.flatten():
+            encoded_size += len(codes[val])
+
+        # # count the largest bit size needed for encoded variables
+        # longest_str = None
+        # for key in codes.keys():
+        #     if longest_str is None or len(codes[key]) > len(longest_str):
+        #         longest_str = codes[key]
+        # encoded_size = len(longest_str)
 
         print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
@@ -129,19 +134,21 @@ def encode_layers(sess, white_regex=None, verbose=True):
             encoder = HuffmanCoding(val_np)
             codebook_size, encoded_size = encoder.encode_np()
             codebook_sizes.append(codebook_size)
-            encoded_bits.append(encoded_size)
+            encoded_bits.append(encoded_size) # number of bits needed to represent this layer
 
             # increment weight count by number of weights in layer
-            weight_count += len(val_np.flatten())
+            layer_weights = len(val_np.flatten())
+            weight_count += layer_weights
             layer_count += 1
 
     print(">>>")
     print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
-    print(">>> a total of {} codebooks containing {} 32-bit floating point numbers was created".
-          format(len(codebook_sizes), sum(codebook_sizes)))
-    print(">>> a total of {} bits is required to store the encoded variables".format(sum(encoded_bits)))
+    print(">>> a total of {} codebooks containing {} 32-bit floating point numbers ({:.2f} KB) was created".
+          format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
+    print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
+          format(sum(encoded_bits)/8000, np.average(np.array(encoded_bits))/8000))
     original_kb = weight_count * 32 / 8000
-    print(">>> original number of bits needed: {} KB".format(original_kb))
+    print(">>> original number of bits needed: {:.2f} KB".format(original_kb))
     new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
-    print(">>> new number of bits needed:      {} KB".format(new_kb))
-    print(">>> compression ratio: {}".format(original_kb / new_kb))
+    print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
+    print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
