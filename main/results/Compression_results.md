@@ -31,6 +31,7 @@
 >>> new number of bits needed:      1089.97 KB
 >>> compression ratio:              0.5987
 ```
+The compression ratio is very small because the LZ encoded data is very sparse.
 
 ## CRNN compression
 
