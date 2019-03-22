@@ -48,7 +48,7 @@ def _main_(args):
         new_saver = tf.train.import_meta_graph(os.path.join(output_path, '{}.ckpt.meta'.format(input_checkpoint)))
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
-        encode_huff(sess, black_list, verbose)
+        encode_huff(sess, white_regex=black_list, verbose=verbose)
 
 
 if __name__ == '__main__':
