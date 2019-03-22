@@ -23,79 +23,51 @@ class HeapNode:
         return self.freq > other.freq
 
 
-class HuffmanCoding:
+class LempelZivCoding:
     def __init__(self, val_np):
         self.val_np = val_np
-        self.heap = []
-        self.codes = {}
-        self.reverse_mapping = {}
+        self.combinations = {}
 
     def encode_np(self):
         # gather statistics for each value in the np array
-        freqs_d = self.get_freqs()
-        self.make_heap(freqs_d)
-        self.merge_nodes()
-        self.make_codes()
-        codebook_size, encoded_size = self.make_stats()
+        codebook_size, encoded_size = self.make_codes()
         return codebook_size, encoded_size
 
-    def get_freqs(self):
-        unique, freqs = np.unique(self.val_np, return_counts=True)
-        # freqs = freqs / len(self.val_np.flatten())
-
-        # return unique, freqs
-        freqs_d = dict(zip(unique, freqs))
-        pprint(freqs_d)
-        return freqs_d
-
-    def make_heap(self, frequency):
-        for key in frequency:
-            node = HeapNode(key, frequency[key])
-            heapq.heappush(self.heap, node)
-
-    def merge_nodes(self):
-        while (len(self.heap) > 1):
-            node1 = heapq.heappop(self.heap)
-            node2 = heapq.heappop(self.heap)
-
-            merged = HeapNode(None, node1.freq + node2.freq)
-            merged.left = node1
-            merged.right = node2
-
-            heapq.heappush(self.heap, merged)
-
-    def make_codes_helper(self, root, current_code):
-        if (root == None):
-            return
-
-        if (root.char != None):
-            self.codes[root.char] = current_code
-            self.reverse_mapping[current_code] = root.char
-            return
-
-        self.make_codes_helper(root.left, current_code + "0")
-        self.make_codes_helper(root.right, current_code + "1")
-
     def make_codes(self):
-        root = heapq.heappop(self.heap)
-        current_code = ""
-        self.make_codes_helper(root, current_code)
-        # pprint(self.codes)
+        self.combinations = {}
+        # init table to single-variable instances
+        unique = np.unique(self.val_np)
+        code_length = len(unique)
+        for i in range(code_length):
+            self.combinations[str(unique[i])] = i
+        print(self.combinations)
 
-    def make_stats(self):
-        codes = self.codes
+        output_code = []
+        s1 = self.val_np.ravel()
+        p = ''
+        c = ''
+        p += str(s1[0])
+        code = code_length
+        for i in range(len(s1)):
+            if i != len(s1) - 1:
+                c += str(s1[i + 1])
+            if (p + c) in self.combinations:
+                p = p + c
+            else:
+                # print('{}\t{}\t{}\t{}'.format(p, self.combinations[p], p + c, code))
+                output_code.append(self.combinations[p])
+                self.combinations[p + c] = code
+                code += 1
+                p = c
+            c = ''
+        output_code.append(self.combinations[p])
+        print(output_code)
 
-        # count how many floats needed for codebook
-        codebook_size = len(codes.keys())
-
-        # count the number of bits now needed to store variables
-        encoded_size = 0
-        for val in self.val_np.flatten():
-            encoded_size += len(codes[val])
+        codebook_size = code_length # need to store the original unique elements
+        encoded_size = len(output_code) * 8 # need to store 8-bit uints for all the codes
 
         print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
-
         return codebook_size, encoded_size
 
 
@@ -124,7 +96,7 @@ def encode_layers(sess, white_regex=None, verbose=True):
 
             # perform the encoding for the layer
             val_np = sess.run(v)
-            encoder = HuffmanCoding(val_np)
+            encoder = LempelZivCoding(val_np)
             codebook_size, encoded_size = encoder.encode_np()
             codebook_sizes.append(codebook_size)
             encoded_bits.append(encoded_size) # number of bits needed to represent this layer

@@ -3,7 +3,7 @@ import os
 import json
 import tensorflow as tf
 
-from encode_network import encode_layers
+from encode_lz import encode_layers
 
 ##########################################################################################################
 # run: python encode.py -c config_encode_yolo.json 2>&1 | tee logs.txt
@@ -28,12 +28,12 @@ def _main_(args):
         config = json.loads(config_buffer.read())
 
     # skip specific types of variables/layers
-    white_regex = config['huffman']['white_regex']
+    white_regex = config['lempel-ziv']['white_regex']
 
     # checkpoint paths
-    input_checkpoint = config['huffman']['input_checkpoint']
-    encoded_name = config['huffman']['encoded_name']
-    verbose = config['huffman']['verbose']
+    input_checkpoint = config['lempel-ziv']['input_checkpoint']
+    encoded_name = config['lempel-ziv']['encoded_name']
+    verbose = config['lempel-ziv']['verbose']
 
     # output paths
     parent_folder = config['convert']['convert_dir']

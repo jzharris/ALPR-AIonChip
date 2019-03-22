@@ -3,7 +3,7 @@ import os
 import json
 import tensorflow as tf
 
-from encode_network import encode_layers
+from encode_huffman import encode_layers
 
 ##########################################################################################################
 # run: python encode.py -c config_encode_yolo.json 2>&1 | tee logs.txt
