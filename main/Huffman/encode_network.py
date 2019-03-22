@@ -45,7 +45,7 @@ class HuffmanCoding:
 
         # return unique, freqs
         freqs_d = dict(zip(unique, freqs))
-        # print(freqs_d)
+        pprint(freqs_d)
         return freqs_d
 
     def make_heap(self, frequency):
@@ -80,7 +80,7 @@ class HuffmanCoding:
         root = heapq.heappop(self.heap)
         current_code = ""
         self.make_codes_helper(root, current_code)
-        pprint(self.codes)
+        # pprint(self.codes)
 
     def make_stats(self):
         codes = self.codes
@@ -92,13 +92,6 @@ class HuffmanCoding:
         encoded_size = 0
         for val in self.val_np.flatten():
             encoded_size += len(codes[val])
-
-        # # count the largest bit size needed for encoded variables
-        # longest_str = None
-        # for key in codes.keys():
-        #     if longest_str is None or len(codes[key]) > len(longest_str):
-        #         longest_str = codes[key]
-        # encoded_size = len(longest_str)
 
         print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
