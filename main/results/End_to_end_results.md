@@ -10,10 +10,12 @@
 * Test set boxed: 0/300 missed LPs (100% acc)
 
 ### CRNN accuracies:
-* Acc (3 or fewer mistakes): 99.363059%
-* Acc (2 or fewer mistakes): 99.044585%
-* Acc (1 or fewer mistakes): 97.770703%
-* Acc (No mistakes):         89.171976%
+```
+Acc (3 or fewer mistakes): 99.363059%
+Acc (2 or fewer mistakes): 99.044585%
+Acc (1 or fewer mistakes): 97.770703%
+Acc (No mistakes):         89.171976%
+```
 
 
 ## Test 2
@@ -27,10 +29,12 @@
 * Train set boxed: 2/300 missed LPs (100% acc)
 
 ### CRNN accuracies:
-* Acc (3 or fewer mistakes): 99.350649%
-* Acc (2 or fewer mistakes): 98.376626%
-* Acc (1 or fewer mistakes): 97.077924%
-* Acc (No mistakes):         85.389608%
+```
+Acc (3 or fewer mistakes): 99.350649%
+Acc (2 or fewer mistakes): 98.376626%
+Acc (1 or fewer mistakes): 97.077924%
+Acc (No mistakes):         85.389608%
+```
 
 
 ## Test 3
@@ -43,10 +47,12 @@
 * Test set boxed: 1/300 missed LPs (99.7% acc)
 
 ### CRNN accuracies:
-* Acc (3 or fewer mistakes): 99.356914%
-* Acc (2 or fewer mistakes): 98.392284%
-* Acc (1 or fewer mistakes): 95.819938%
-* Acc (No mistakes):         85.852093%
+```
+Acc (3 or fewer mistakes): 99.356914%
+Acc (2 or fewer mistakes): 98.392284%
+Acc (1 or fewer mistakes): 95.819938%
+Acc (No mistakes):         85.852093%
+```
 
 
 ## Test 3 (fixed quant)
@@ -59,7 +65,9 @@
 * Test set boxed: 1/300 missed LPs (99.7% acc)
 
 ### CRNN accuracies:
-* Acc (3 or fewer mistakes): 99.358976%
-* Acc (2 or fewer mistakes): 98.717946%
-* Acc (1 or fewer mistakes): 96.153843%
-* Acc (No mistakes):         87.500000%
+```
+Acc (3 or fewer mistakes): 99.358976%
+Acc (2 or fewer mistakes): 98.717946%
+Acc (1 or fewer mistakes): 96.153843%
+Acc (No mistakes):         87.500000%
+```
