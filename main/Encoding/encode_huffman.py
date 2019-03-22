@@ -28,17 +28,14 @@ def _main_(args):
         config = json.loads(config_buffer.read())
 
     # skip specific types of variables/layers
-    white_regex = config['huffman']['white_regex']
+    black_list = config['black_list']
 
     # checkpoint paths
-    input_checkpoint = config['huffman']['input_checkpoint']
-    encoded_name = config['huffman']['encoded_name']
-    verbose = config['huffman']['verbose']
+    input_checkpoint = config['input_checkpoint']
+    verbose = config['verbose']
 
     # output paths
-    parent_folder = config['convert']['convert_dir']
-    output_folder = "converted_checkpoint"
-    output_path = os.path.join(parent_folder, output_folder)
+    output_path = config['checkpoint_dir']
 
     if not os.path.exists(output_path):
         raise Exception("ERROR: converted checkpoint not found at {}".format(output_path))
@@ -51,7 +48,7 @@ def _main_(args):
         new_saver = tf.train.import_meta_graph(os.path.join(output_path, '{}.ckpt.meta'.format(input_checkpoint)))
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
-        encode_huff(sess, white_regex, verbose)
+        encode_huff(sess, black_list, verbose)
 
 
 if __name__ == '__main__':
