@@ -2,11 +2,11 @@ import sys
 import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
-
+import math
 import heapq
-
 from pprint import pprint
 
+########################################################################################################################
 
 class HeapNode:
     def __init__(self, char, freq):
@@ -154,9 +154,11 @@ def encode_huff(sess, codes=None, white_regex=None, verbose=True):
         codebook_sizes = []
         encoded_bits = []
         codes_count = 0
+        codes_bits = []
 
         for v_name in (tqdm(codes.keys()) if not verbose else codes.keys()):
             codes_count += len(codes[v_name])
+            codes_bits.append(len(codes[v_name]) * math.ceil(math.log(max(codes[v_name]), 2))) # store only the variable size we need per layer
             encoder = HuffmanCoding(np.array(codes[v_name]))
             codebook_size, encoded_size = encoder.encode_np()
             codebook_sizes.append(codebook_size)
@@ -168,7 +170,7 @@ def encode_huff(sess, codes=None, white_regex=None, verbose=True):
               format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
         print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
               format(sum(encoded_bits) / 8000, np.average(np.array(encoded_bits)) / 8000))
-        original_kb = codes_count * 32 / 8000
+        original_kb = sum(codes_bits) / 8000
         print(">>> original number of bits needed to store LZ codes: {:.2f} KB".format(original_kb))
         new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
         print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
@@ -216,14 +218,15 @@ class LempelZivCoding:
             c = ''
 
         if code > 2**32: # assuming 32-bit numbers
-            raise Exception('code is: {}'.format(code))
+            raise Exception('code is: {} which is > 2^23'.format(code))
 
         output_code.append(self.combinations[p])
         print(output_code)
         self.codes = output_code
 
         codebook_size = code_length # need to store the original unique elements
-        encoded_size = len(output_code) * 32 # need to store uint32 variables for all the codes
+        # encoded_size = len(output_code) * 32 # need to store uint32 variables for all the codes
+        encoded_size = len(output_code) * math.ceil(math.log(max(output_code), 2)) # store only the variable size we need per layer
 
         print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
