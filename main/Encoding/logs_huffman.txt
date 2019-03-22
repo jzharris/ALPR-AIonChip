@@ -1,7 +1,7 @@
-2019-03-21 18:10:06.104233: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
-2019-03-21 18:10:06.689952: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
-2019-03-21 18:10:06.692780: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
-2019-03-21 18:10:06.693039: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
+2019-03-21 21:33:09.751735: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+2019-03-21 21:33:10.354759: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2019-03-21 21:33:10.357671: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
+2019-03-21 21:33:10.357915: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
 Encoding network...
 >>> encoding conv1/kernel:0
 {-0.78689027: 1,

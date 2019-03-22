@@ -3,10 +3,10 @@ import os
 import json
 import tensorflow as tf
 
-from encode_lz import encode_layers
+from encode_network import encode_huff
 
 ##########################################################################################################
-# run: python encode.py -c config_encode_yolo.json 2>&1 | tee logs.txt
+# run: python encode_huffman.py -c config_encode_yolo.json 2>&1 | tee logs_huffman.txt
 ##########################################################################################################
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -28,12 +28,12 @@ def _main_(args):
         config = json.loads(config_buffer.read())
 
     # skip specific types of variables/layers
-    white_regex = config['lempel-ziv']['white_regex']
+    white_regex = config['huffman']['white_regex']
 
     # checkpoint paths
-    input_checkpoint = config['lempel-ziv']['input_checkpoint']
-    encoded_name = config['lempel-ziv']['encoded_name']
-    verbose = config['lempel-ziv']['verbose']
+    input_checkpoint = config['huffman']['input_checkpoint']
+    encoded_name = config['huffman']['encoded_name']
+    verbose = config['huffman']['verbose']
 
     # output paths
     parent_folder = config['convert']['convert_dir']
@@ -51,7 +51,7 @@ def _main_(args):
         new_saver = tf.train.import_meta_graph(os.path.join(output_path, '{}.ckpt.meta'.format(input_checkpoint)))
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
-        encode_layers(sess, white_regex, verbose)
+        encode_huff(sess, white_regex, verbose)
 
 
 if __name__ == '__main__':

@@ -6,6 +6,13 @@
         "verbose":              true
     },
 
+    "lempel-ziv": {
+        "input_checkpoint":     "lp_seg_mobilenet_quant_it2",
+        "encoded_name":         "encoded_mobilenet_quant_it2",
+        "white_regex":          ["CustomAdam", "training", "loss", "moving_mean", "moving_variance"],
+        "verbose":              true
+    },
+
     "convert": {
         "convert_dir":          "../LP_segmentation/quant_models/"
     }
