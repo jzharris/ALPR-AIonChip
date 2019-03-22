@@ -44,7 +44,7 @@ class HuffmanCoding:
 
         # return unique, freqs
         freqs_d = dict(zip(unique, freqs))
-        pprint(freqs_d)
+        # pprint(freqs_d)
         return freqs_d
 
     def make_heap(self, frequency):
@@ -80,7 +80,7 @@ class HuffmanCoding:
         self.make_codes_helper(root, current_code)
         # pprint(self.codes)
 
-    def make_stats(self):
+    def make_stats(self, dtype='float'):
         codes = self.codes
 
         # count how many floats needed for codebook
@@ -91,58 +91,88 @@ class HuffmanCoding:
         for val in self.val_np.flatten():
             encoded_size += len(codes[val])
 
-        print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
+        print('>>> {} {} numbers needed for codebook'.format(codebook_size,
+                                                             '32-bit floating point' if dtype=='float' else 'uint8'))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
 
         return codebook_size, encoded_size
 
 
-def encode_huff(sess, white_regex=None, verbose=True):
+def encode_huff(sess, codes=None, white_regex=None, verbose=True):
     print('Encoding network...')
 
-    codebook_sizes = []
-    encoded_bits = []
+    if white_regex is None:
+        white_regex = []
 
-    all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    weight_count = 0
-    layer_count = 0
-    for v in (tqdm(all_vars) if not verbose else all_vars):
-        skip = False
-        for regex in white_regex:
-            if regex in v.name:
-                skip = True
-        if skip:
-            if verbose:
-                print('>>> skipping {}, part of whitelist'.format(v.name))
-                sys.stdout.flush()
-        else:
-            if verbose:
-                print('>>> encoding {}'.format(v.name))
-                sys.stdout.flush()
+    if codes is None:
+        codebook_sizes = []
+        encoded_bits = []
+        weight_count = 0
+        layer_count = 0
 
-            # perform the encoding for the layer
-            val_np = sess.run(v)
-            encoder = HuffmanCoding(val_np)
+        all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+
+        for v in (tqdm(all_vars) if not verbose else all_vars):
+            skip = False
+            for regex in white_regex:
+                if regex in v.name:
+                    skip = True
+            if skip:
+                if verbose:
+                    print('>>> skipping {}, part of whitelist'.format(v.name))
+                    sys.stdout.flush()
+            else:
+                if verbose:
+                    print('>>> encoding {}'.format(v.name))
+                    sys.stdout.flush()
+
+                # perform the encoding for the layer
+                val_np = sess.run(v)
+                encoder = HuffmanCoding(val_np)
+                codebook_size, encoded_size = encoder.encode_np()
+                codebook_sizes.append(codebook_size)
+                encoded_bits.append(encoded_size) # number of bits needed to represent this layer
+
+                # increment weight count by number of weights in layer
+                layer_weights = len(val_np.flatten())
+                weight_count += layer_weights
+                layer_count += 1
+
+        print(">>>")
+        print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
+        print(">>> a total of {} codebooks containing {} 32-bit floating point numbers ({:.2f} KB) was created".
+              format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
+        print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
+              format(sum(encoded_bits) / 8000, np.average(np.array(encoded_bits)) / 8000))
+        original_kb = weight_count * 32 / 8000
+        print(">>> original number of bits needed: {:.2f} KB".format(original_kb))
+        new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
+        print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
+        print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
+
+    else: # assuming first compression is from LZ
+        codebook_sizes = []
+        encoded_bits = []
+        codes_count = 0
+
+        for v_name in (tqdm(codes.keys()) if not verbose else codes.keys()):
+            codes_count += len(codes[v_name])
+            encoder = HuffmanCoding(np.array(codes[v_name]))
             codebook_size, encoded_size = encoder.encode_np()
             codebook_sizes.append(codebook_size)
             encoded_bits.append(encoded_size) # number of bits needed to represent this layer
 
-            # increment weight count by number of weights in layer
-            layer_weights = len(val_np.flatten())
-            weight_count += layer_weights
-            layer_count += 1
-
-    print(">>>")
-    print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
-    print(">>> a total of {} codebooks containing {} 32-bit floating point numbers ({:.2f} KB) was created".
-          format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
-    print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
-          format(sum(encoded_bits)/8000, np.average(np.array(encoded_bits))/8000))
-    original_kb = weight_count * 32 / 8000
-    print(">>> original number of bits needed: {:.2f} KB".format(original_kb))
-    new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
-    print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
-    print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
+        print(">>>")
+        print(">>> encoded a total of {} LZ codebooks, and {} LZ codes".format(len(codes.keys()), codes_count))
+        print(">>> a total of {} codebooks containing {} uint32 numbers ({:.2f} KB) was created".
+              format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
+        print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
+              format(sum(encoded_bits) / 8000, np.average(np.array(encoded_bits)) / 8000))
+        original_kb = codes_count * 32 / 8000
+        print(">>> original number of bits needed to store LZ codes: {:.2f} KB".format(original_kb))
+        new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
+        print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
+        print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
 
 ########################################################################################################################
 
@@ -150,6 +180,7 @@ class LempelZivCoding:
     def __init__(self, val_np):
         self.val_np = val_np
         self.combinations = {}
+        self.codes = None
 
     def encode_np(self):
         # gather statistics for each value in the np array
@@ -183,11 +214,16 @@ class LempelZivCoding:
                 code += 1
                 p = c
             c = ''
+
+        if code > 2**32: # assuming 32-bit numbers
+            raise Exception('code is: {}'.format(code))
+
         output_code.append(self.combinations[p])
         print(output_code)
+        self.codes = output_code
 
         codebook_size = code_length # need to store the original unique elements
-        encoded_size = len(output_code) * 8 # need to store 8-bit uints for all the codes
+        encoded_size = len(output_code) * 32 # need to store uint32 variables for all the codes
 
         print('>>> {} 32-bit floating point numbers needed for codebook'.format(codebook_size))
         print('>>> {} bits needed for encoded variables'.format(encoded_size))
@@ -197,6 +233,7 @@ class LempelZivCoding:
 def encode_lz(sess, white_regex=None, verbose=True):
     print('Encoding network...')
 
+    codes = {}
     codebook_sizes = []
     encoded_bits = []
 
@@ -223,6 +260,7 @@ def encode_lz(sess, white_regex=None, verbose=True):
             codebook_size, encoded_size = encoder.encode_np()
             codebook_sizes.append(codebook_size)
             encoded_bits.append(encoded_size) # number of bits needed to represent this layer
+            codes[v.name] = encoder.codes
 
             # increment weight count by number of weights in layer
             layer_weights = len(val_np.flatten())
@@ -240,3 +278,5 @@ def encode_lz(sess, white_regex=None, verbose=True):
     new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
     print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
     print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
+
+    return codes # can be used to chain encoders
