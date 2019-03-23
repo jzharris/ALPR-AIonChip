@@ -49,11 +49,12 @@ def _main_(args):
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
         # first stage of encoding: Huffman
-        codes = encode_huff(sess, white_regex=black_list, verbose=verbose) #TODO
-        # print(codes)
+        codebook_kb, codes_kb, original_kb, codes = encode_huff(sess, white_regex=black_list, verbose=verbose)
 
         # second stage of encoding: Huffman
-        encode_lz(sess, codes=codes, verbose=verbose) #TODO
+        encode_lz(sess, codes=codes, codebook_kb=codebook_kb, codes_kb=codes_kb, original_kb=original_kb, verbose=verbose)
+
+        # final analysis: incorporate both
 
 
 if __name__ == '__main__':
