@@ -126,6 +126,7 @@ def encode_huff(sess, codes=None, white_regex=None, verbose=0):
         encoded_bits = []
         weight_count = 0
         layer_count = 0
+        # codes_bits = []
 
         all_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
 
@@ -156,19 +157,47 @@ def encode_huff(sess, codes=None, white_regex=None, verbose=0):
                 weight_count += layer_weights
                 layer_count += 1
 
+                # # calculate the variable sizes of the codes in this layer
+                # codes_bits.append(len(codes[v.name]) * math.ceil(math.log(max(codes[v.name]), 2))) # store only the variable size we need per layer
+
         print(">>>")
         print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
-        print(">>> a total of {} codebooks containing {} 32-bit floating point numbers ({:.2f} KB) was created".
-              format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
-        print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
-              format(sum(encoded_bits) / 8000, np.average(np.array(encoded_bits)) / 8000))
-        original_kb = weight_count * 32 / 8000
-        print(">>> original number of bits needed: {:.2f} KB".format(original_kb))
-        new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
-        print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
-        print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
+        print(">>> a total of {} codebooks containing {} 32-bit floating point numbers was created".
+              format(len(codebook_sizes), sum(codebook_sizes)))
 
-        return codes # can be used to chain encoders
+        quant_vals_kb = (256 * layer_count) * 32 / 8000 # the 256 32-bit floating point values available per layer
+        quant_weights_kb = weight_count * 8 / 8000 # the amount of space it takes to represent the quantized weights
+        original_kb = quant_vals_kb + quant_weights_kb
+        print(">>>")
+        print(">>>                         quantized values: {:.2f} KB".format(quant_vals_kb))
+        print(">>>      + the quantized code representation: {:.2f} KB".format(quant_weights_kb))
+        print(">>> = bits needed to store quantized network: {:.2f} KB".format(original_kb))
+
+        codebook_kb = sum(codebook_sizes) * 32 / 8000
+        # codes_kb = sum(codes_bits) / 8000
+        codes_kb = sum(encoded_bits) / 8000
+        new_kb = codebook_kb + codes_kb
+
+        print(">>>")
+        print(">>>                         bits in codebook: {:.2f} KB".format(codebook_kb))
+        print(">>>       + the huffman codes representation: {:.2f} KB".format(codes_kb))
+        print(">>>   = bits needed to store huffman network: {:.2f} KB".format(new_kb))
+        print(">>>")
+
+        compression_ratio = original_kb / new_kb
+        print(">>>                        compression ratio: {:.4f}".format(compression_ratio))
+
+        # weight_kb = (weight_count * 8 + 256 * 32) / 8000
+        # print(">>> original number of bits needed to store weights:    {:.2f} KB".format(weight_kb))
+        # codebook_kb = sum(codebook_sizes) * 32 / 8000
+        # print(">>> number of bits needed to store codebook:            {:.2f} KB".format(codebook_kb))
+        # # compressed_weights = sum(encoded_bits)/8000
+        # codes_kb = sum(codes_bits) / 8000
+        # print(">>> new number of bits needed to store weights (codes): {:.2f} KB".format(codes_kb))
+        # compression_ratio = (weight_kb + codebook_kb) / (codebook_kb + codes_kb)
+        # print(">>> compression ratio:                                  {:.4f}".format(compression_ratio))
+
+        return weight_kb, compressed_kb, codes # can be used to chain encoders
 
     else: # assuming previous compression is from LZ
         codebook_sizes = []
@@ -260,7 +289,7 @@ class LempelZivCoding:
         return codebook_size, encoded_size
 
 
-def encode_lz(sess, codes=None, white_regex=None, verbose=2):
+def encode_lz(sess, codes=None, weight_kb=None, compressed_kb=None, white_regex=None, verbose=2):
     if codes is None:
         print('LZ encoding network...')
     else:
@@ -343,5 +372,16 @@ def encode_lz(sess, codes=None, white_regex=None, verbose=2):
         original_kb = sum(codes_bits) / 8000
         print(">>> original number of bits needed to store LZ codes: {:.2f} KB".format(original_kb))
         new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
-        print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
-        print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
+        print(">>> new number of bits needed:                        {:.2f} KB".format(new_kb))
+        print(">>> compression ratio:                                {:.4f}".format(original_kb / new_kb))
+
+        # also print final analysis of overall compression ratio
+        print()
+        print("Overall compression results:")
+        print(">>>")
+        print(">>> original number of bits needed to store layer weights: {:.2f} KB".format(weight_kb))
+        print(">>> new number of bits needed to store layer weights:      {:.2f} KB".format(compressed_kb))
+        print(">>> original number of bits needed to store codes:         {:.2f} KB".format(original_kb))
+        print(">>> new number of bits needed to store codes:              {:.2f} KB".format(new_kb))
+        overall_ratio = (weight_kb + original_kb) / (compressed_kb + new_kb)
+        print(">>> overall compression ratio:                             {:.4f}".format(overall_ratio))
