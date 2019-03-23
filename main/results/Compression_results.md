@@ -35,3 +35,16 @@ The compression ratio is very small because the LZ encoded data is very sparse.
 
 ## CRNN compression
 
+```
+
+```
+
+### Lempel-Ziv-Welch encoding
+```
+
+```
+
+### Huffman encoding on LZ codes
+```
+
+```
