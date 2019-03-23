@@ -6,9 +6,8 @@ import math
 import heapq
 from pprint import pprint
 
-
-
 ########################################################################################################################
+# printing stats from compression
 
 def first_encoding_stats(layer_count, weight_count, codebook_sizes, code_bits, first_encoder="huff"):
     if first_encoder != "huff":
@@ -94,6 +93,7 @@ def second_encoding_stats(codebook_kb, codes_kb, original_kb, prev_codes, prev_c
     print(">>>                      compression ratio:   {:.4f}".format(compression_ratio))
 
 ########################################################################################################################
+# huffman encoding
 
 class HeapNode:
     def __init__(self, char, freq):
@@ -244,40 +244,6 @@ def encode_huff(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=N
                 weight_count += layer_weights
                 layer_count += 1
 
-                # # calculate the variable sizes of the codes in this layer
-                # codes_bits.append(len(codes[v.name]) * math.ceil(math.log(max(codes[v.name]), 2))) # store only the variable size we need per layer
-
-        # print(">>>")
-        # print(">>> encoded a total of {} layers, and {} weights".format(layer_count, weight_count))
-        # codebook_count = len(codebook_sizes)
-        # codes_count = sum(codebook_sizes)
-        # codebook_size = codes_count * 32 / 8000
-        # print(">>> a total of {} codebooks containing {} values ({:.2f} KB) was created".format(codebook_count,
-        #                                                                                         codes_count,
-        #                                                                                         codebook_size))
-        #
-        # quant_vals_kb = (256 * layer_count) * 32 / 8000 # the 256 32-bit floating point values available per layer
-        # quant_weights_kb = weight_count * 8 / 8000 # the amount of space it takes to represent the quantized weights
-        # original_kb = quant_vals_kb + quant_weights_kb
-        # print(">>>")
-        # print(">>>                       quantized values:   {:.2f} KB".format(quant_vals_kb))
-        # print(">>>      the quantized code representation: + {:.2f} KB".format(quant_weights_kb))
-        # print(">>> bits needed to store quantized network: = {:.2f} KB".format(original_kb))
-        #
-        # codebook_kb = sum(codebook_sizes) * 32 / 8000
-        # codes_kb = sum(encoded_bits) / 8000
-        # new_kb = codebook_kb + codes_kb
-        #
-        # print(">>>")
-        # print(">>>                       bits in codebook:   {:.2f} KB".format(codebook_kb))
-        # print(">>>       the huffman codes representation: + {:.2f} KB".format(codes_kb))
-        # print(">>>   bits needed to store huffman network: = {:.2f} KB".format(new_kb))
-        # print(">>>")
-        #
-        # compression_ratio = original_kb / new_kb
-        # print(">>>                      compression ratio:   {:.4f}".format(compression_ratio))
-        # print(">>>")
-
         codebook_kb, codes_kb, original_kb = first_encoding_stats(layer_count, weight_count, codebook_sizes, code_bits, first_encoder="huff")
         return codebook_kb, codes_kb, original_kb, codes  # can be used to chain encoders
 
@@ -293,25 +259,10 @@ def encode_huff(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=N
             codebook_sizes.append(codebook_size) # number of variables in the codebook for this layer
             code_bits.append(encoded_size) # number of bits needed to represent this layer
 
-            # # calculate the variable sizes of the codes in this layer
-            # code_bits.append(len(codes[v_name]) * math.ceil(math.log(max(codes[v_name]), 2))) # store only the variable size we need per layer
-
-        # print(">>>")
-        # print(">>> encoded a total of {} LZ codebooks, and {} LZ codes".format(len(codes.keys()), codes_count))
-        # print(">>> a total of {} codebooks containing {} uint32 numbers ({:.2f} KB) was created".
-        #       format(len(codebook_sizes), sum(codebook_sizes), sum(codebook_sizes) * 32 / 8000))
-        # print(">>> a total of {:.2f} KB are required to store the encoded variables ({:.2f} KB per layer on average)".
-        #       format(sum(encoded_bits) / 8000, np.average(np.array(encoded_bits)) / 8000))
-        # original_kb = sum(codes_bits) / 8000
-        # print(">>> original number of bits needed to store LZ codes: {:.2f} KB".format(original_kb))
-        # new_kb = (sum(codebook_sizes) * 32 + sum(encoded_bits)) / 8000
-        # print(">>> new number of bits needed:      {:.2f} KB".format(new_kb))
-        # print(">>> compression ratio:              {:.4f}".format(original_kb / new_kb))
-        # print(">>>")
-
         second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder="lziv")
 
 ########################################################################################################################
+# lziv encoding
 
 class LempelZivCoding:
     def __init__(self, val_np, verbose=0):
@@ -436,45 +387,5 @@ def encode_lz(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=Non
             # calculate the variable sizes of the codes in this layer
             # codes_bits.append(len(codes[v_name]) * math.ceil(math.log(max(codes[v_name]), 2))) # store only the variable size we need per layer
             code_bits.append(sum([x.bit_length() for x in codes[v_name]]))
-
-        # print(">>>")
-        # huffbooks = len(codes.keys())
-        # print(">>> encoded a total of {} Huffman codebooks, and {} Huffman codes".format(huffbooks, codes_count))
-        # codebook_count = len(codebook_sizes)
-        # codes_count = sum(codebook_sizes)
-        # codebook_size = codes_count * 32 / 8000
-        # print(">>> a total of {} codebooks containing {} values ({:.2f} KB) was created".format(codebook_count,
-        #                                                                                         codes_count,
-        #                                                                                         codebook_size))
-        #
-        # # codebook_kb = sum(codebook_sizes) * 32 / 8000
-        # # codes_kb = sum(encoded_bits) / 8000
-        # huff_kb = codebook_kb + codes_kb
-        #
-        # print(">>>")
-        # print(">>>               bits in huffman codebook:   {:.2f} KB".format(codebook_kb))
-        # print(">>>       the huffman codes representation: + {:.2f} KB".format(codes_kb))
-        # print(">>>   bits needed to store huffman network: = {:.2f} KB".format(huff_kb))
-        #
-        # codebook_kb = sum(codebook_sizes) * 32 / 8000
-        # codes_kb = sum(code_bits) / 8000
-        # new_kb = codebook_kb + codes_kb
-        #
-        # print(">>>")
-        # print(">>>                    bits in lz codebook:   {:.2f} KB".format(codebook_kb))
-        # print(">>>            the lz codes representation: + {:.2f} KB".format(codes_kb))
-        # print(">>>        bits needed to store lz network: = {:.2f} KB".format(new_kb))
-        # print(">>>")
-        #
-        # compression_ratio = huff_kb / new_kb
-        # print(">>>                        compression ratio: {:.4f}".format(compression_ratio))
-        # print(">>>")
-        #
-        # print("Determining overall compression ratio...")
-        # print(">>>")
-        # print(">>>   bits needed to store quantized network: {:.2f} KB".format(original_kb))
-        # print(">>>          bits needed to store lz network: {:.2f} KB".format(new_kb))
-        # compression_ratio = original_kb / new_kb
-        # print(">>>                      compression ratio:   {:.4f}".format(compression_ratio))
 
         second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder="huff")
