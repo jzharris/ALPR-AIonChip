@@ -2,5 +2,5 @@
     "input_checkpoint":     "shadownet_2019-02-14-03-49-38",
     "checkpoint_dir":       "../../sandbox/model/shadownet",
     "black_list":           [],
-    "verbose":              true
+    "verbose":              0
 }

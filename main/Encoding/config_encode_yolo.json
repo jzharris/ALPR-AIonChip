@@ -2,5 +2,5 @@
     "input_checkpoint":     "lp_seg_mobilenet_quant_it2",
     "checkpoint_dir":       "../LP_segmentation/quant_models/converted_checkpoint",
     "black_list":           ["CustomAdam", "training", "loss", "moving_mean", "moving_variance"],
-    "verbose":              true
+    "verbose":              0
 }
