@@ -47,12 +47,15 @@ def first_encoding_stats(layer_count, weight_count, codebook_sizes, code_bits, f
     return codebook_kb, codes_kb, original_kb
 
 
-def second_encoding_stats(codebook_kb, codes_kb, original_kb, prev_codes, prev_codes_count, prev_codebook_sizes, code_bits, first_encoder="huff"):
-    if first_encoder == "huff":
-        second_encoder = "lziv"
-    else:
+def second_encoding_stats(codebook_kb, codes_kb, original_kb, prev_codes, prev_codes_count, prev_codebook_sizes, code_bits, first_encoder="huff", second_encoder="opposite"):
+    if first_encoder != "huff":
         first_encoder = "lziv"
-        second_encoder = "huff"
+
+    if second_encoder == "opposite":
+        if first_encoder == "huff":
+            second_encoder = "lziv"
+        else:
+            second_encoder = "huff"
 
     print(">>>")
     prevbooks = len(prev_codes.keys())
@@ -199,11 +202,15 @@ class HuffmanCoding:
             print(self.codes)
 
 
-def encode_huff(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2):
+def encode_huff(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2,
+                first_encoder='lziv'):
     if codes is None:
         print('Huffman encoding network...')
     else:
-        print('Huffman encoding LZ codes...')
+        if first_encoder == 'huff':
+            print('Huffman encoding Huffman codes...')
+        else:
+            print('Huffman encoding LZ codes...')
 
     if white_regex is None:
         white_regex = []
@@ -260,7 +267,7 @@ def encode_huff(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=N
             codebook_sizes.append(codebook_size) # number of variables in the codebook for this layer
             code_bits.append(encoded_size) # number of bits needed to represent this layer
 
-        second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder="lziv")
+        second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder=first_encoder, second_encoder="huff")
 
 ########################################################################################################################
 # lziv encoding
@@ -325,11 +332,15 @@ class LempelZivCoding:
         return codebook_size, encoded_size
 
 
-def encode_lziv(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2):
+def encode_lziv(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2,
+                first_encoder='huff'):
     if codes is None:
         print('LZ encoding network...')
     else:
-        print('LZ encoding Huffman codes...')
+        if first_encoder == 'lziv':
+            print('LZ encoding LZ codes...')
+        else:
+            print('LZ encoding Huffman codes...')
 
     if white_regex is None:
         white_regex = []
@@ -389,4 +400,4 @@ def encode_lziv(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=N
             # codes_bits.append(len(codes[v_name]) * math.ceil(math.log(max(codes[v_name]), 2))) # store only the variable size we need per layer
             code_bits.append(sum([x.bit_length() for x in codes[v_name]]))
 
-        second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder="huff")
+        second_encoding_stats(codebook_kb, codes_kb, original_kb, codes, codes_count, codebook_sizes, code_bits, first_encoder=first_encoder, second_encoder="lziv")
