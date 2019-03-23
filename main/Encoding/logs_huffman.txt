@@ -1,12 +1,19 @@
-2019-03-22 18:24:25.153119: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
-2019-03-22 18:24:25.759469: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
-2019-03-22 18:24:25.762318: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
-2019-03-22 18:24:25.762575: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
+2019-03-22 22:06:29.552143: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+2019-03-22 22:06:30.172696: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2019-03-22 22:06:30.175537: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
+2019-03-22 22:06:30.175793: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
 Huffman encoding network...
 >>>
 >>> encoded a total of 83 layers, and 3237726 weights
->>> a total of 83 codebooks containing 9859 32-bit floating point numbers (39.44 KB) was created
->>> a total of 674.22 KB are required to store the encoded variables (8.12 KB per layer on average)
->>> original number of bits needed: 12950.90 KB
->>> new number of bits needed:      713.65 KB
->>> compression ratio:              18.1474
+>>> a total of 83 codebooks containing 9859 values (39.44 KB) was created
+>>>
+>>>                       quantized values:   84.99 KB
+>>>      the quantized code representation: + 3237.73 KB
+>>> bits needed to store quantized network: = 3322.72 KB
+>>>
+>>>                       bits in codebook:   39.44 KB
+>>>          the huff codes representation: + 674.22 KB
+>>>      bits needed to store huff network: = 713.65 KB
+>>>
+>>>                      compression ratio:   4.6559
+>>>

@@ -1,12 +1,19 @@
-2019-03-22 18:24:48.663712: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
-2019-03-22 18:24:49.266355: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
-2019-03-22 18:24:49.269392: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
-2019-03-22 18:24:49.269631: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
+2019-03-22 22:06:53.796549: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2
+2019-03-22 22:06:54.397015: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2019-03-22 22:06:54.399937: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: DESKTOP-F9LB11E
+2019-03-22 22:06:54.400199: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: DESKTOP-F9LB11E
 LZ encoding network...
 >>>
 >>> encoded a total of 83 layers, and 3237726 weights
->>> a total of 83 codebooks containing 9859 32-bit floating point numbers (39.44 KB) was created
->>> a total of 652.58 KB are required to store the encoded variables (7.86 KB per layer on average)
->>> original number of bits needed: 12950.90 KB
->>> new number of bits needed:      692.01 KB
->>> compression ratio:              18.7149
+>>> a total of 83 codebooks containing 9859 values (39.44 KB) was created
+>>>
+>>>                       quantized values:   84.99 KB
+>>>      the quantized code representation: + 3237.73 KB
+>>> bits needed to store quantized network: = 3322.72 KB
+>>>
+>>>                       bits in codebook:   39.44 KB
+>>>          the lziv codes representation: + 652.58 KB
+>>>      bits needed to store lziv network: = 692.01 KB
+>>>
+>>>                      compression ratio:   4.8015
+>>>

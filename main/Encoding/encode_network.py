@@ -37,7 +37,7 @@ def first_encoding_stats(layer_count, weight_count, codebook_sizes, code_bits, f
     print(">>>")
     print(">>>                       bits in codebook:   {:.2f} KB".format(codebook_kb))
     print(">>>          the {} codes representation: + {:.2f} KB".format(first_encoder, codes_kb))
-    print(">>>   bits needed to store huffman network: = {:.2f} KB".format(new_kb))
+    print(">>>      bits needed to store {} network: = {:.2f} KB".format(first_encoder, new_kb))
     print(">>>")
 
     compression_ratio = original_kb / new_kb
@@ -87,10 +87,11 @@ def second_encoding_stats(codebook_kb, codes_kb, original_kb, prev_codes, prev_c
 
     print("Determining overall compression ratio...")
     print(">>>")
-    print(">>> bits needed to store quantized network: {:.2f} KB".format(original_kb))
-    print(">>>      bits needed to store {} network: {:.2f} KB".format(second_encoder, new_kb))
+    print(">>> bits needed to store quantized network:   {:.2f} KB".format(original_kb))
+    print(">>>      bits needed to store {} network:   {:.2f} KB".format(second_encoder, new_kb))
     compression_ratio = original_kb / new_kb
     print(">>>                      compression ratio:   {:.4f}".format(compression_ratio))
+    print(">>>")
 
 ########################################################################################################################
 # huffman encoding
@@ -324,7 +325,7 @@ class LempelZivCoding:
         return codebook_size, encoded_size
 
 
-def encode_lz(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2):
+def encode_lziv(sess, codes=None, codebook_kb=None, codes_kb=None, original_kb=None, white_regex=None, verbose=2):
     if codes is None:
         print('LZ encoding network...')
     else:

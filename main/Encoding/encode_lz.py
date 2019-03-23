@@ -3,7 +3,7 @@ import os
 import json
 import tensorflow as tf
 
-from encode_network import encode_lz
+from encode_network import encode_lziv
 
 ##########################################################################################################
 # run: python encode_lz.py -c config_encode_yolo.json 2>&1 | tee logs_lz.txt
@@ -48,7 +48,7 @@ def _main_(args):
         new_saver = tf.train.import_meta_graph(os.path.join(output_path, '{}.ckpt.meta'.format(input_checkpoint)))
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
-        encode_lz(sess, white_regex=black_list, verbose=verbose)
+        encode_lziv(sess, white_regex=black_list, verbose=verbose)
 
 
 if __name__ == '__main__':

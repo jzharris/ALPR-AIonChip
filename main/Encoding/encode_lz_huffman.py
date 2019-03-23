@@ -3,7 +3,7 @@ import os
 import json
 import tensorflow as tf
 
-from encode_network import encode_lz, encode_huff
+from encode_network import encode_lziv, encode_huff
 
 ##########################################################################################################
 # run: python encode_lz_huffman.py -c config_encode_yolo.json 2>&1 | tee logs_lz_huffman.txt
@@ -49,11 +49,11 @@ def _main_(args):
         new_saver.restore(sess, tf.train.latest_checkpoint(output_path))
 
         # first stage of encoding: LZ
-        codes = encode_lz(sess, white_regex=black_list, verbose=verbose)
-        # print(codes)
+        codebook_kb, codes_kb, original_kb, codes = encode_lziv(sess, white_regex=black_list, verbose=verbose)
 
         # second stage of encoding: Huffman
-        encode_huff(sess, codes=codes, verbose=verbose)
+        encode_huff(sess, codes=codes, codebook_kb=codebook_kb, codes_kb=codes_kb, original_kb=original_kb,
+                  verbose=verbose)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import os
 import json
 import tensorflow as tf
 
-from encode_network import encode_lz, encode_huff
+from encode_network import encode_lziv, encode_huff
 
 ##########################################################################################################
 # run: python encode_huffman_lz.py -c config_encode_yolo.json 2>&1 | tee logs_huffman_lz.txt
@@ -52,9 +52,7 @@ def _main_(args):
         codebook_kb, codes_kb, original_kb, codes = encode_huff(sess, white_regex=black_list, verbose=verbose)
 
         # second stage of encoding: Huffman
-        encode_lz(sess, codes=codes, codebook_kb=codebook_kb, codes_kb=codes_kb, original_kb=original_kb, verbose=verbose)
-
-        # final analysis: incorporate both
+        encode_lziv(sess, codes=codes, codebook_kb=codebook_kb, codes_kb=codes_kb, original_kb=original_kb, verbose=verbose)
 
 
 if __name__ == '__main__':
