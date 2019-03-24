@@ -13,10 +13,10 @@
 
 ### CRNN accuracies:
 ```
-Acc (3 or fewer mistakes): 99.363059%
-Acc (2 or fewer mistakes): 99.044585%
-Acc (1 or fewer mistakes): 97.770703%
-Acc (No mistakes):         89.171976%
+Acc (3 or fewer mistakes): 100.000000%
+Acc (2 or fewer mistakes): 99.679488%
+Acc (1 or fewer mistakes): 98.076922%
+Acc (No mistakes):         88.782054%
 ```
 
 
@@ -32,10 +32,10 @@ Acc (No mistakes):         89.171976%
 
 ### CRNN accuracies:
 ```
-Acc (3 or fewer mistakes): 99.350649%
-Acc (2 or fewer mistakes): 98.376626%
-Acc (1 or fewer mistakes): 97.077924%
-Acc (No mistakes):         85.389608%
+Acc (3 or fewer mistakes): 100.000000%
+Acc (2 or fewer mistakes): 99.022800%
+Acc (1 or fewer mistakes): 97.719872%
+Acc (No mistakes):         85.993487%
 ```
 
 
@@ -46,14 +46,6 @@ Acc (No mistakes):         85.389608%
 
 ### YOLOv2 accuracies:
 * mAP: 0.9897
-
-### CRNN accuracies:
-```
-Acc (3 or fewer mistakes): 99.356914%
-Acc (2 or fewer mistakes): 98.392284%
-Acc (1 or fewer mistakes): 95.819938%
-Acc (No mistakes):         85.852093%
-```
 
 
 ## Test 3 (fixed quant)
@@ -68,8 +60,8 @@ Acc (No mistakes):         85.852093%
 
 ### CRNN accuracies:
 ```
-Acc (3 or fewer mistakes): 99.358976%
-Acc (2 or fewer mistakes): 98.717946%
-Acc (1 or fewer mistakes): 96.153843%
-Acc (No mistakes):         87.500000%
+Acc (3 or fewer mistakes): 99.676377%
+Acc (2 or fewer mistakes): 99.029124%
+Acc (1 or fewer mistakes): 96.440130%
+Acc (No mistakes):         87.055016%
 ```
