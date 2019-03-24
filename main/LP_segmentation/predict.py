@@ -7,10 +7,10 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 from preprocessing import parse_annotation
-from utils import draw_boxes, crop_image
+from utils import draw_boxes, crop_image, bbox_iou2
 from frontend import YOLO
 import json
-import xml.etree.ElementTree
+from xml.etree import ElementTree
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -34,7 +34,25 @@ def xml_to_dict(path):
         if len(node)==0:
             return node.text
         return {child.tag:xml_to_dict_recursive(child) for child in node}
-    return xml_to_dict_recursive(xml.etree.ElementTree.parse(path).getroot())
+    return xml_to_dict_recursive(ElementTree.parse(path).getroot())
+
+
+def xml_to_dict2(path):
+    def xml_to_dict_recursive(node):
+        if len(node)==0:
+            return node.text
+        return {child.tag:xml_to_dict_recursive(child) for child in node}
+    tree = ElementTree.parse(path)
+    parsed_objs = []
+    for node in tree.iter('annotation'):
+        objects = node.findall('object')
+        for i, object in enumerate(objects):
+            parsed = xml_to_dict_recursive(object)
+            parsed_objs.append(parsed)
+
+    xml_dict = xml_to_dict(path)
+    xml_dict['object'] = parsed_objs
+    return xml_dict
 
 
 def _main_(args):
@@ -80,6 +98,8 @@ def _main_(args):
 
     # dictionary of exported images used to generate sample.txt file:
     samples_dict = {}
+    found_boxes = 0
+    total_boxes = 0
 
     for root, dirs, files in os.walk(os.path.join(image_folder, "jpeg")):
         for file in tqdm(files):
@@ -114,23 +134,40 @@ def _main_(args):
                 boxes = yolo.predict(image)
 
                 if crop:
-                    best_box = []
-                    for box in boxes:
-                        if len(best_box) == 0:
-                            best_box.append(box)
-                        elif box.get_score() > best_box[0].get_score():
-                            best_box[0] = box
+                    xml_path = os.path.join(image_folder, "xml", "{}.xml".format(file[:-4]))
 
-                    if len(best_box) == 0:
-                        print('no boxes are chosen')
-                    else:
-                        cropped_image = crop_image(image, best_box[0])
+                    # give benefit of the doubt to the bounding boxes, and add them if they overlap very well with the other bb's
 
-                        cv2.imwrite(detected_path[:-4] + '' + detected_path[-4:], cropped_image)
+                    # find LP chars to add to sample.txt file
+                    xml = xml_to_dict2(xml_path)
+                    objects = xml['object']
+                    # if len(objects) > 1:
+                    #     for object in objects:
+                    #         print(object)
+                    #     exit(0)
 
-                        # find LP chars to add to sample.txt file
-                        xml = xml_to_dict(os.path.join(image_folder, "xml", "{}.xml".format(file[:-4])))
-                        samples_dict[file] = xml['object']['platetext']
+                    # iterate over every bounding box:
+                    z = 0
+                    total_boxes += len(objects)
+                    for truth_object in objects:
+                        truth_box = truth_object['bndbox']
+                        box_found = False
+                        for box in boxes:
+                            iou = bbox_iou2(image, truth_box, box)
+
+                            if iou > 0.0:
+                                # the boxes overlap, this must be truth. Crop this part of the image
+                                filename = os.path.splitext(file)[0]
+                                ext = os.path.splitext(file)[1]
+                                output_key = '{}_{}{}'.format(filename, z, ext)
+                                samples_dict[output_key] = truth_object['platetext']
+
+                                output_file = detected_path[:-4] + '_{}'.format(z) + detected_path[-4:]
+                                cropped_image = crop_image(image, box)
+                                cv2.imwrite(output_file, cropped_image)
+                                found_boxes += 1
+                                z += 1
+                                break
                 else:
                     image = draw_boxes(image, boxes, config['model']['labels'])
                     if len(boxes) == 0:
@@ -142,8 +179,13 @@ def _main_(args):
         # write sample.txt file:
         print('writing sample.txt file to {}'.format(os.path.join(detected_folder, 'sample.txt')))
         with open(os.path.join(detected_folder, 'sample.txt'), 'w+') as samples_txt:
-            for key in samples_dict.keys():
-                samples_txt.write("{} {}\n".format(key, samples_dict[key]))
+            for idx, key in enumerate(samples_dict.keys()):
+                if samples_dict[key]:
+                    if idx > 0:
+                        samples_txt.write("\n")
+                    samples_txt.write("{} {}".format(key, samples_dict[key]))
+
+        print('accuracy of cropping: {}/{} = {}%'.format(found_boxes, total_boxes, found_boxes / total_boxes * 100))
 
 if __name__ == '__main__':
     args = argparser.parse_args()

@@ -6,8 +6,10 @@
 * CRNN ckpt: model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775
 
 ### YOLOv2 accuracies:
+
 * mAP: 0.9930
-* Test set boxed: 0/300 missed LPs (100% acc)
+* Train set acc: 1792/1856 = 96.55%
+* Test set acc: 306/308 = 99.35%
 
 ### CRNN accuracies:
 ```
@@ -25,8 +27,8 @@ Acc (No mistakes):         89.171976%
 
 ### YOLOv2 accuracies:
 * mAP: 0.9848
-* Test set boxed: 0/300 missed LPs (100% acc)
-* Train set boxed: 2/300 missed LPs (100% acc)
+* Train set acc: 1806/1856 = 97.31%
+* Test set acc: 304/308 = 98.70%
 
 ### CRNN accuracies:
 ```
@@ -44,7 +46,6 @@ Acc (No mistakes):         85.389608%
 
 ### YOLOv2 accuracies:
 * mAP: 0.9897
-* Test set boxed: 1/300 missed LPs (99.7% acc)
 
 ### CRNN accuracies:
 ```
@@ -62,7 +63,8 @@ Acc (No mistakes):         85.852093%
 
 ### YOLOv2 accuracies:
 * mAP: 0.9857
-* Test set boxed: 1/300 missed LPs (99.7% acc)
+* Train set acc: 1819/1856 = 98.01%
+* Test set acc: 306/308 = 99.35%
 
 ### CRNN accuracies:
 ```

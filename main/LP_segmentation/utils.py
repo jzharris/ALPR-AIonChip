@@ -55,6 +55,25 @@ def bbox_iou(box1, box2):
     
     return float(intersect) / union
 
+def bbox_iou2(image, truth_box, box2):
+    image_h, image_w, _ = image.shape
+
+    box1_xmin = int(truth_box['xmin']) / image_w
+    box1_xmax = int(truth_box['xmax']) / image_w
+    box1_ymin = int(truth_box['ymin']) / image_h
+    box1_ymax = int(truth_box['ymax']) / image_h
+    intersect_w = _interval_overlap([box1_xmin, box1_xmax], [box2.xmin, box2.xmax])
+    intersect_h = _interval_overlap([box1_ymin, box1_ymax], [box2.ymin, box2.ymax])
+
+    intersect = intersect_w * intersect_h
+
+    w1, h1 = box1_xmax - box1_xmin, box1_ymax - box1_ymin
+    w2, h2 = box2.xmax - box2.xmin, box2.ymax - box2.ymin
+
+    union = w1 * h1 + w2 * h2 - intersect
+
+    return float(intersect) / union
+
 def draw_boxes(image, boxes, labels):
     image_h, image_w, _ = image.shape
 
