@@ -33,5 +33,5 @@ To find the path to a trained model, simply look in ./model/shadownet. It includ
 
 To test on a trained model, simply call the following command:
 ```
-python tools/test_shadownet.py --dataset_dir dataset/ --weights_path model/shadownet/shadownet_2019-02-14-03-49-38.ckpt-6076
+python tools/test_shadownet.py --dataset_dir dataset/ --weights_path model/shadownet/checkpoints/final_checkpoints/ckpt1/best.ckpt
 ```

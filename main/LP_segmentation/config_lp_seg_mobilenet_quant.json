@@ -47,7 +47,7 @@
     },
 
     "predict": {
-        "input":                "data/converted_dataset/train",
+        "input":                "data/converted_dataset/test",
         "output_folder":        "quant",
         "crop":                 true,
         "pretrained_weights":   "quant_models/mobilenet_5it_q_3/lp_seg_mobilenet_quant_it2.h5"
