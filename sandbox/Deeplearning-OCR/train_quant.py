@@ -237,7 +237,8 @@ dataset_dir = "dataset"
 #weights_path = "model/shadownet/shadownet_2019-02-14-03-49-38.ckpt-6076"
 #weights_path = "model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775"
 #weights_path = "model/shadownet/checkpoints/working/best"
-weights_path = "model/shadownet/checkpoints/working_pruning2/best.ckpt"
+weights_path = "model/shadownet/checkpoints/final_checkpoints/ckpt1/best.ckpt"
+# weights_path = "model/shadownet/checkpoints/working_pruning2/best.ckpt"
 if not ops.exists(dataset_dir):
     raise ValueError('{:s} doesn\'t exist'.format(dataset_dir))
 train_shadownet_quant(dataset_dir, weights_path)

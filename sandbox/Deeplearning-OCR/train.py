@@ -187,8 +187,9 @@ dataset_dir = "dataset"
 #start_iter=0
 #weights_path='model/shadownet/checkpoints/working_quant/best.ckpt'
 #weights_path = "model/shadownet/shadownet_2019-03-15-14-12-41.ckpt-46775"
+weights_path = "model/shadownet/checkpoints/final_checkpoints/ckpt1/best.ckpt"
 start_iter = 17
-weights_path = "model/shadownet/checkpoints/model_post_training.ckpt-%d" % (start_iter-1)
+# weights_path = "model/shadownet/checkpoints/model_post_training.ckpt-%d" % (start_iter-1)
 if not ops.exists(dataset_dir):
     raise ValueError('{:s} doesn\'t exist'.format(dataset_dir))
 if not ops.exists(weights_path+".index"):
