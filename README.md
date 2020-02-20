@@ -8,21 +8,21 @@ Run `train_prune.py`, calling something similar to `python train_prune.py -c con
 
 The following steps are performed:
 1. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L142) 
-Load pretrained weights (based on `config['train']['pretrained_weights']` from the json file)
+Load pretrained weights (based on `config['train']['pretrained_weights']` from the json file).
 2. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L148)
 Create a mask (we count any weights that are initially 0 as being pruned from a previous iteration). We use this mask to determine which weights to prune this iteration.
 3. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L171)
-Recompile the YOLOv2 network with the loaded weights
+Recompile the YOLOv2 network with the loaded weights.
 4. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L190)
-Train for `config['train']['nb_epochs']` number of epochs (no pruning, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
+Train for `config['train']['nb_epochs']` number of epochs (no pruning, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask).
 5. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L229)
 Perform pruning on the network using [prune_layers](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/prune_network.py#L57) 
 function. We add to the mask with any new weights that are zero after this process.
 6. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L238)
-Save the new weights to a file
+Save the new weights to a file.
 7. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L136)
-Load the new weights
-8. Repeat steps 3 through 7 for `config['train']['train_times']` number of times
+Load the new weights.
+8. Repeat steps 3 through 7 for `config['train']['train_times']` number of times.
 
 ### Quantization explanation - YOLOv2 segmentation
 
@@ -30,20 +30,20 @@ Run `train_quantize.py`, calling something similar to `python train_quantize.py 
 
 The following steps are performed:
 1. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L158) 
-Load pretrained weights (based on `config['train']['pretrained_weights']` from the json file)
+Load pretrained weights (based on `config['train']['pretrained_weights']` from the json file).
 2. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L163)
 Create a mask (we count any weights that are initially 0 as being pruned from a previous iteration). Quantization does not use a mask, but we load one in case the network was pruned previously.
 3. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L186)
-Recompile the YOLOv2 network with the loaded weights
+Recompile the YOLOv2 network with the loaded weights.
 4. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L204)
-Train for `config['train']['nb_epochs']` number of epochs (no quantization, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
+Train for `config['train']['nb_epochs']` number of epochs (no quantization, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask).
 5. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L248)
 Perform quantization on the network using [quantize_layers](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/quantize_network.py#L43) 
-function
+function.
 6. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L254)
-Save the new weights to a file
+Save the new weights to a file.
 7. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L149)
-Load the new quantized weights
+Load the new quantized weights.
 8. Repeat steps 3 through 7 for `config['train']['train_times']` number of times
 
 ### Running the main project
