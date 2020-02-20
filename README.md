@@ -36,7 +36,7 @@ Create a mask (we count any weights that are initially 0 as being pruned from a 
 3. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L186)
 Recompile the YOLOv2 network with the loaded weights
 4. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L204)
-Train for `config['train']['nb_epochs']` number of epochs (no pruning, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
+Train for `config['train']['nb_epochs']` number of epochs (no quantization, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
 5. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L248)
 Perform quantization on the network using [quantize_layers](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/quantize_network.py#L43) 
 function
