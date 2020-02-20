@@ -16,7 +16,8 @@ Recompile the YOLOv2 network with the loaded weights
 4. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L190)
 Train for `config['train']['nb_epochs']` number of epochs (no pruning, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
 5. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L229)
-Perform pruning on the network using `prune_layers` function. We add to the mask with any new weights that are zero after this process.
+Perform pruning on the network using [prune_layers](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/prune_network.py#L57) 
+function. We add to the mask with any new weights that are zero after this process.
 6. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L238)
 Save the new weights to a file
 7. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_prune.py#L136)
@@ -37,7 +38,8 @@ Recompile the YOLOv2 network with the loaded weights
 4. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L204)
 Train for `config['train']['nb_epochs']` number of epochs (no pruning, just training). We train the YOLOv2 network with a custom Adam Optimizer that takes the weight mask into account ('freezing' the pruned weights in the mask)
 5. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L248)
-Perform quantization on the network using `quantize_layers` function
+Perform quantization on the network using [quantize_layers](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/quantize_network.py#L43) 
+function
 6. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L254)
 Save the new weights to a file
 7. [[Ref]](https://github.com/jzharris/AIonChip_HOZ/blob/8e813e824f2357bc2d6422eceeb049377ce88917/main/LP_segmentation/train_quantize.py#L149)
