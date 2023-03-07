@@ -1,4 +1,4 @@
-# ECE 209AS AI on Chip
+# Automatic License Plate Recognition Pruned for AI on Chip
 
 ## Final Project
 
